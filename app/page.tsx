@@ -1,9 +1,6 @@
 import Image from "next/image";
+import NotFound from "./not-found";
 
 export default function Home() {
-  return (
-    <div className="bg-red-500 h-screen flex items-center justify-center">
-      <p className="text-4xl font-extrabold text-white">Hello Tailwind!</p>
-    </div>
-  );
+  return <NotFound />;
 }

@@ -45,6 +45,9 @@ module.exports = {
           50: "#F9F9F9",
         },
       },
+      fontFamily: {
+        sans: ["Outfit", "sans-serif"],
+      },
     },
     fontWeight: {
       regular: "400",
