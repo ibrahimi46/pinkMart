@@ -14,7 +14,7 @@ const NotFound = () => {
           Page not found
         </h1>
         <p className="">
-          The page you're looking for isn't available. Try to search
+          The page you&apos;re looking for isn&apos;t available. Try to search
           <br /> again or use the go back button below.
         </p>
         <button className="bg-primary-600 text-white font-semibold py-2 px-40 rounded-lg">
