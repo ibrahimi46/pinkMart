@@ -5,6 +5,8 @@ const assets = {
     arrow_right: "/icons/arrow_right.svg",
     arrow_right_gray: "/icons/arrow_right_gray.svg",
     check: "/icons/check.svg",
+    email: "/icons/mail.svg",
+    phone: "/icons/phone.svg",
   },
   onboarding: {
     step1: {
@@ -19,6 +21,10 @@ const assets = {
     },
   },
   logo: "/icons/logo.svg",
+  socials: {
+    google: "/icons/google.svg",
+    meta: "/icons/meta.svg",
+  },
 };
 
 export default assets;
