@@ -1,13 +1,31 @@
 import Image from "next/image";
 import assets from "@/assets";
 
-interface Step2ItemProps {
-  name: string;
+interface Step2Props {
+  step2Selected: string;
+  setStep2Selected: (name: string) => void;
 }
 
-const Step2Item = ({ name }: Step2ItemProps) => {
+interface Step2ItemProps {
+  name: string;
+  step2Selected: string;
+  setStep2Selected: (name: string) => void;
+}
+
+const Step2Item = ({
+  name,
+  step2Selected,
+  setStep2Selected,
+}: Step2ItemProps) => {
   return (
-    <button className="bg-black-100 group flex gap-2 rounded-full px-4 py-2 justify-center focus:bg-primary-100 focus:border-primary-500 focus:border cursor-pointer transition-all duration-200">
+    <button
+      onClick={() => setStep2Selected(name)}
+      className={`flex gap-2 border rounded-full px-4 py-2 justify-center cursor-pointer transition-all duration-200 ${
+        step2Selected === name
+          ? "bg-primary-100 border-purple-500 border"
+          : "bg-black-100"
+      }`}
+    >
       <p className="whitespace-nowrap">{name}</p>
       <Image
         src={assets.icons.check}
@@ -20,7 +38,7 @@ const Step2Item = ({ name }: Step2ItemProps) => {
   );
 };
 
-const Step2 = () => {
+const Step2 = ({ step2Selected, setStep2Selected }: Step2Props) => {
   return (
     <div className="flex-1 gap-10">
       <div className="flex">
@@ -29,12 +47,36 @@ const Step2 = () => {
             What are your goals with PinkMart?
           </h1>
           <div className="flex flex-wrap gap-4">
-            <Step2Item name="Save time on shopping" />
-            <Step2Item name="Eat healthier" />
-            <Step2Item name="Try new recipes" />
-            <Step2Item name="Save money" />
-            <Step2Item name="Simplify meal planning" />
-            <Step2Item name="Reduce food waste" />
+            <Step2Item
+              name="Save time on shopping"
+              step2Selected={step2Selected}
+              setStep2Selected={setStep2Selected}
+            />
+            <Step2Item
+              name="Eat healthier"
+              step2Selected={step2Selected}
+              setStep2Selected={setStep2Selected}
+            />
+            <Step2Item
+              name="Try new recipes"
+              step2Selected={step2Selected}
+              setStep2Selected={setStep2Selected}
+            />
+            <Step2Item
+              name="Save money"
+              step2Selected={step2Selected}
+              setStep2Selected={setStep2Selected}
+            />
+            <Step2Item
+              name="Simplify meal planning"
+              step2Selected={step2Selected}
+              setStep2Selected={setStep2Selected}
+            />
+            <Step2Item
+              name="Reduce food waste"
+              step2Selected={step2Selected}
+              setStep2Selected={setStep2Selected}
+            />
           </div>
         </div>
         <div className="flex-1 hidden lg:flex items-center justify-center">

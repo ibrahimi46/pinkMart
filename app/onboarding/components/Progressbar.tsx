@@ -2,10 +2,10 @@ import React from "react";
 
 interface ProgressbarProps {
   step: number;
-  total: number;
 }
 
-const Progressbar = ({ step, total }: ProgressbarProps) => {
+const Progressbar = ({ step }: ProgressbarProps) => {
+  const total = 5;
   const percentage = (step / total) * 100;
   return (
     <div className="bg-black-100 h-3 rounded-full w-4/5">

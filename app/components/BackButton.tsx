@@ -2,10 +2,18 @@ import Link from "next/link";
 import Image from "next/image";
 import assets from "@/assets";
 
-const BackButton = () => {
+interface BackButtonProps {
+  handleBack?: () => void;
+}
+
+const BackButton = ({ handleBack, ...props }: BackButtonProps) => {
   return (
     <>
       <Link
+        onClick={(e) => {
+          e.preventDefault;
+          handleBack?.();
+        }}
         href="#"
         className="flex items-center justify-center h-8 w-8 rounded-full border border-black-200 hover:border-black-600 hover:border transition-all duration-200"
       >
