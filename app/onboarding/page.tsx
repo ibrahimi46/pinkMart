@@ -2,8 +2,7 @@ import React from "react";
 import BackButton from "../components/BackButton";
 import Progressbar from "./components/Progressbar";
 import OnboardingBtn from "./components/OnboardingBtn";
-import Step2 from "./components/Step2";
-import Step1 from "./components/Step1";
+import Step3 from "./components/Step3";
 
 const Onboarding = () => {
   return (
@@ -12,7 +11,7 @@ const Onboarding = () => {
         <BackButton />
         <Progressbar step={5} total={10} />
       </div>
-      <Step2 />
+      <Step3 />
       <OnboardingBtn />
     </main>
   );
