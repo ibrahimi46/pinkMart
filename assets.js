@@ -18,6 +18,7 @@ const assets = {
       chicken: "/images/chicken.png",
     },
   },
+  logo: "/icons/logo.svg",
 };
 
 export default assets;

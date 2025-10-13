@@ -9,6 +9,7 @@ import Step2 from "./components/Step2";
 import Step3 from "./components/Step3";
 import Step4 from "./components/Step4";
 import Step5 from "./components/Step5";
+import OnboardLoadingPage from "./OnboardLoadingPage";
 
 const Onboarding = () => {
   const [step, setStep] = useState<number>(1);
