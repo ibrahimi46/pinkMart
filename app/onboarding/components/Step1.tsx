@@ -10,7 +10,7 @@ const Step1Item = ({ name, source }: Step1ItemProps) => {
   return (
     <button
       className="bg-black-100 rounded-2xl h-36 justify-center flex flex-col gap-2 
-    items-center focus:bg-primary-100 focus:border-primary-500 focus:border cursor-pointer"
+    items-center focus:bg-primary-100 focus:border-primary-500 focus:border cursor-pointer transition-all duration-200"
     >
       <Image src={source} height={44} width={44} alt="items photo" />
       <p>{name}</p>
@@ -20,7 +20,7 @@ const Step1Item = ({ name, source }: Step1ItemProps) => {
 
 const Step1 = () => {
   return (
-    <div className="flex flex-1 gap-10 mt-6">
+    <div className="flex gap-10">
       <div className="flex flex-col gap-6 flex-1">
         <h1 className="text-h8 sm:text-h6 font-bold">
           What kind of meals do you prefer?

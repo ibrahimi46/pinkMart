@@ -4,6 +4,7 @@ const assets = {
     arrow_left: "/icons/arrow_left.svg",
     arrow_right: "/icons/arrow_right.svg",
     arrow_right_gray: "/icons/arrow_right_gray.svg",
+    check: "/icons/check.svg",
   },
   onboarding: {
     step1: {

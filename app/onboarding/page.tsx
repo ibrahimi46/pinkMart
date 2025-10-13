@@ -2,19 +2,18 @@ import React from "react";
 import BackButton from "../components/BackButton";
 import Progressbar from "./components/Progressbar";
 import OnboardingBtn from "./components/OnboardingBtn";
+import Step2 from "./components/Step2";
 import Step1 from "./components/Step1";
 
 const Onboarding = () => {
   return (
-    <main className="h-screen mx-6 sm:mx-40 py-14">
+    <main className="min-h-screen mx-6 sm:mx-40 py-16 sm:h-full flex flex-col gap-10">
       <div className="flex flex-col gap-4">
         <BackButton />
         <Progressbar step={5} total={10} />
       </div>
-      <Step1 />
-      <div className="mt-24">
-        <OnboardingBtn />
-      </div>
+      <Step2 />
+      <OnboardingBtn />
     </main>
   );
 };
