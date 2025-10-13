@@ -61,7 +61,7 @@ const SignUp = () => {
             <div className="flex justify-center mt-4">
               <p className="text-body-sm">
                 Already have an account?
-                <Link href="#" className="text-primary-600 font-semibold">
+                <Link href="login" className="text-primary-600 font-semibold">
                   &nbsp;&nbsp;Login
                 </Link>
               </p>

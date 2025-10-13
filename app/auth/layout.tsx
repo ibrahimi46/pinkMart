@@ -1,13 +1,7 @@
 import AuthNavbar from "./components/AuthNavbar";
-import SignUp from "./sign-up/page";
 
-const layout = () => {
-  return (
-    <main>
-      <AuthNavbar />
-      <SignUp />
-    </main>
-  );
+const layout = ({ children }: { children: React.ReactElement }) => {
+  return <AuthNavbar>{children}</AuthNavbar>;
 };
 
 export default layout;
