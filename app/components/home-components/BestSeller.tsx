@@ -43,7 +43,7 @@ const BestSeller = () => {
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const { scrollLeft, clientHeight } = scrollRef.current;
+      const { scrollLeft } = scrollRef.current;
       const scrollAmount = 160;
       scrollRef.current.scrollTo({
         left:

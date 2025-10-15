@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavbarGlobal from "./components/NavbarGlobal";
 import { usePathname } from "next/navigation";
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
       >
         {!isAuthPage && <NavbarGlobal />}
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
