@@ -38,6 +38,20 @@ const assets = {
       frame4: "/images/home-images/two-column-grid-images/frame4.png",
       frame5: "/images/home-images/two-column-grid-images/frame5.png",
     },
+    category_strip: {
+      drinks: "/images/home-images/category-strip/drinks.png",
+      carrot: "/images/home-images/category-strip/carrot.png",
+      cans: "/images/home-images/category-strip/cans.png",
+      cheese: "/images/home-images/category-strip/cheese.png",
+      yoghurt: "/images/home-images/category-strip/yoghurt.png",
+      watermelon: "/images/home-images/category-strip/watermelon.png",
+      cake: "/images/home-images/category-strip/cake.png",
+      bread: "/images/home-images/category-strip/bread.png",
+      snacks: "/images/home-images/category-strip/snacks.png",
+      apple: "/images/home-images/category-strip/apple.png",
+      vegetables: "/images/home-images/category-strip/vegetables.png",
+      candy: "/images/home-images/category-strip/candy.png",
+    },
   },
 };
 

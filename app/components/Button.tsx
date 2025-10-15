@@ -21,7 +21,7 @@ const Button = ({
   return (
     <Link href={href}>
       <div
-        className={`bg-black-100 py-4 flex 
+        className={`bg-black-100 py-2 flex 
       items-center justify-center gap-2 rounded-full ${extraStyles}`}
       >
         {iconPosition === "left" && icon && (

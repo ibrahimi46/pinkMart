@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import scrollbarHide from "tailwind-scrollbar-hide";
+
 module.exports = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}", // all files in app folder
@@ -72,5 +74,5 @@ module.exports = {
       "body-sm": ["12px", { lineHeight: "1.6" }],
     },
   },
-  plugins: [],
+  plugins: [scrollbarHide],
 };

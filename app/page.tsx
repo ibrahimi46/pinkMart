@@ -1,10 +1,12 @@
 import BestSeller from "./components/home-components/BestSeller";
+import CategoryStrip from "./components/home-components/CategoryStrip";
 import TwoColumnGrid from "./components/home-components/TwoColumnGrid";
 
 export default function Home() {
   return (
-    <main className="bg-primary-50 px-20 py-10 flex flex-col gap-16">
+    <main className="md:px-20 px-6 py-6 md:py-10 flex flex-col gap-4">
       <TwoColumnGrid />
+      <CategoryStrip />
       <BestSeller />
     </main>
   );
