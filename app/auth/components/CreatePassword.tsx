@@ -48,6 +48,7 @@ const CreatePassword = () => {
             iconPosition="right"
             extraStyles="bg-primary-600 h-8"
             textStyles="text-black-50 text-body-md"
+            href=""
           />
           <div className="flex flex-col gap-3">
             <PasswordCheckItem

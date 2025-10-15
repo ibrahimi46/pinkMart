@@ -16,6 +16,7 @@ const Login = () => {
                   iconPosition="left"
                   extraStyles="rounded-lg w-24 py-1 px-3 gap-[6px] border bg-black-200"
                   textStyles="text-body-md"
+                  href=""
                 />
                 <Button
                   name="Phone"
@@ -23,6 +24,7 @@ const Login = () => {
                   iconPosition="left"
                   extraStyles="rounded-lg w-24 py-1 px-3 gap-[6px] border bg-black-200"
                   textStyles="text-body-md"
+                  href=""
                 />
               </div>
               <div>
@@ -40,6 +42,7 @@ const Login = () => {
               iconPosition="right"
               extraStyles="bg-primary-600 h-10"
               textStyles="text-black-100"
+              href=""
             />
           </div>
           <p>Or</p>
@@ -50,12 +53,14 @@ const Login = () => {
               iconPosition="left"
               textStyles="text-primary-600"
               extraStyles="h-12 text-body-md"
+              href=""
             />
             <Button
               name="Sign in with Google"
               icon={assets.socials.google}
               iconPosition="left"
               extraStyles="h-12 text-body-md"
+              href=""
             />
           </div>
         </div>

@@ -7,6 +7,7 @@ interface ButtonProps {
   extraStyles?: string;
   iconPosition?: "left" | "right";
   textStyles?: string;
+  href: string;
 }
 
 const Button = ({
@@ -15,9 +16,10 @@ const Button = ({
   extraStyles,
   iconPosition,
   textStyles,
+  href,
 }: ButtonProps) => {
   return (
-    <Link href="#">
+    <Link href={href}>
       <div
         className={`bg-black-100 py-4 flex 
       items-center justify-center gap-2 rounded-full ${extraStyles}`}
