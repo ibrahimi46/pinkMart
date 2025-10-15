@@ -5,7 +5,7 @@ import Button from "./Button";
 const NavbarGlobal = () => {
   return (
     <>
-      <div className="bg-black-100 h-32 sm:h-20 flex flex-col justify-center border-b-2">
+      <div className="bg-black-100 h-32 sm:h-20 mb-6 md:py-10 flex flex-col justify-center border-b-2">
         <div className="bg-orange-50 h-24 sm:h-12 flex items-start sm:items-center justify-between md:px-16 px-3 py-2">
           {/** */}
           <div className=" gap-6 hidden lg:flex">
