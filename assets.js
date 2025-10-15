@@ -11,6 +11,7 @@ const assets = {
     search: "/icons/Search.svg",
     cart: "/icons/cart.svg",
     double_user: "/icons/double_user.svg",
+    hamburger_menu: "/icons/hamburger_menu.svg",
   },
   onboarding: {
     step1: {

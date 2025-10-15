@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>Landing Page</div>;
+  return <main className="bg-primary-50">land</main>;
 }
