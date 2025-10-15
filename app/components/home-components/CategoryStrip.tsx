@@ -18,7 +18,7 @@ const categories = [
 
 const CategoryStrip = () => {
   return (
-    <div className="flex gap-4 h-20 items-center overflow-auto scrollbar-hide">
+    <div className="flex justify-center flex-wrap gap-4 sm:flex-nowrap sm:overflow-x-auto h-auto sm:h-20 items-center scrollbar-hide">
       {categories.map((item, idx) => (
         <Button
           key={idx}
@@ -27,7 +27,7 @@ const CategoryStrip = () => {
           iconPosition="left"
           href=""
           textStyles="text-body-md"
-          extraStyles="px-6 bg-black-50"
+          extraStyles="h-10 min-w-14 max-w-28 px-6 bg-black-50"
         />
       ))}
     </div>
