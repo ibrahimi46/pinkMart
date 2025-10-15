@@ -11,7 +11,7 @@ const ForwardButton = ({ handleForward, ...props }: ForwardButtonProps) => {
     <>
       <Link
         onClick={(e) => {
-          e.preventDefault;
+          e.preventDefault();
           handleForward?.();
         }}
         href="#"

@@ -5,7 +5,7 @@ import CheckoutBtn from "./CheckoutBtn";
 
 const OrderSummary = () => {
   return (
-    <div className="bg-white w-80 p-6 rounded-3xl border border-black-100 flex flex-col gap-4">
+    <div className="bg-white w-80 p-6 rounded-3xl h-72 border border-black-100 flex flex-col gap-4">
       <p className="text-body-sm text-center">
         Free delivery + saving $3.00 on this order...
       </p>

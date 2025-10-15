@@ -6,6 +6,10 @@ import ForwardButton from "../ForwardButton";
 import Image from "next/image";
 import { useRef } from "react";
 
+interface BestSellerProps {
+  title: string;
+}
+
 interface CardsItemProps {
   name: string;
   icon: string;
@@ -38,7 +42,7 @@ const CardsItem = ({
   );
 };
 
-const BestSeller = () => {
+const BestSeller = ({ title }: BestSellerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -58,7 +62,7 @@ const BestSeller = () => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-between items-end">
-        <h1 className="text-body-lg font-bold">Best Seller</h1>
+        <h1 className="text-body-lg font-bold">{title}</h1>
         <div className="flex items-center gap-6">
           <Button
             name="View All(+40)"

@@ -7,7 +7,7 @@ export default function Home() {
     <main className="md:px-20 px-6 mb-6  flex flex-col gap-10 md:gap-4">
       <TwoColumnGrid />
       <CategoryStrip />
-      <BestSeller />
+      <BestSeller title="Best Seller" />
     </main>
   );
 }

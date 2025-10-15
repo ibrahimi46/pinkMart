@@ -16,6 +16,8 @@ const assets = {
     checkout_white: "/icons/checkout_white.svg",
     calender: "/icons/calender.svg",
     cart_purple: "/icons/cart_purple.svg",
+    plus: "/icons/plus.svg",
+    delete: "/icons/delete.svg",
   },
   onboarding: {
     step1: {

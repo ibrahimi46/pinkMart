@@ -11,7 +11,7 @@ const BackButton = ({ handleBack, ...props }: BackButtonProps) => {
     <>
       <Link
         onClick={(e) => {
-          e.preventDefault;
+          e.preventDefault();
           handleBack?.();
         }}
         href="#"
