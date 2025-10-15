@@ -7,6 +7,10 @@ const assets = {
     check: "/icons/check.svg",
     email: "/icons/mail.svg",
     phone: "/icons/phone.svg",
+    location: "/icons/Location.svg",
+    search: "/icons/Search.svg",
+    cart: "/icons/cart.svg",
+    double_user: "/icons/double_user.svg",
   },
   onboarding: {
     step1: {

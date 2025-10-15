@@ -20,7 +20,7 @@ const Button = ({
     <Link href="#">
       <div
         className={`bg-black-100 py-4 flex 
-      items-center justify-center gap-3 rounded-full ${extraStyles}`}
+      items-center justify-center gap-2 rounded-full ${extraStyles}`}
       >
         {iconPosition === "left" && icon && (
           <Image src={icon} height={20} width={20} alt="" />
