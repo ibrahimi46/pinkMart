@@ -52,6 +52,11 @@ const assets = {
       vegetables: "/images/home-images/category-strip/vegetables.png",
       candy: "/images/home-images/category-strip/candy.png",
     },
+    best_sellers: {
+      img1: "/images/home-images/best-seller/img1.png",
+      img2: "/images/home-images/best-seller/img2.png",
+      img3: "/images/home-images/best-seller/img3.png",
+    },
   },
 };
 
