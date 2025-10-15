@@ -30,6 +30,15 @@ const assets = {
     google: "/icons/google.svg",
     meta: "/icons/meta.svg",
   },
+  home: {
+    two_column_grid: {
+      frame1: "/images/home-images/two-column-grid-images/frame1.png",
+      frame2: "/images/home-images/two-column-grid-images/frame2.png",
+      frame3: "/images/home-images/two-column-grid-images/frame3.png",
+      frame4: "/images/home-images/two-column-grid-images/frame4.png",
+      frame5: "/images/home-images/two-column-grid-images/frame5.png",
+    },
+  },
 };
 
 export default assets;
