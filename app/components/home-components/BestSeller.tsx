@@ -63,7 +63,7 @@ const BestSeller = ({ title }: BestSellerProps) => {
     <div className="flex flex-col gap-6">
       <div className="flex justify-between items-end">
         <h1 className="text-body-lg font-bold">{title}</h1>
-        <div className="flex items-center gap-6">
+        <div className="sm:flex hidden items-center gap-6">
           <Button
             name="View All(+40)"
             icon={assets.icons.arrow_right}
