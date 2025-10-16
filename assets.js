@@ -18,6 +18,7 @@ const assets = {
     cart_purple: "/icons/cart_purple.svg",
     plus: "/icons/plus.svg",
     delete: "/icons/delete.svg",
+    close: "/icons/close.svg",
   },
   onboarding: {
     step1: {

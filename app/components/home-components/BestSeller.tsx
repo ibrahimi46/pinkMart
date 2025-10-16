@@ -68,7 +68,6 @@ const BestSeller = ({ title }: BestSellerProps) => {
             name="View All(+40)"
             icon={assets.icons.arrow_right}
             iconPosition="right"
-            href=""
             textStyles="text-body-sm"
             extraStyles="px-4 border border-primary-600 bg-black-50 h-8"
           />
