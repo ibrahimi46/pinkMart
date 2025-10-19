@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { users as usersTable } from "@/db/schema";
 import bcrypt from "bcrypt";
+import { eq } from "drizzle-orm";
 
 
 export async function POST(req: NextRequest) {
@@ -27,6 +28,35 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({error: "Email already exists"}, {status: 400})
         }
         console.error(error);
+        return NextResponse.json({error: "An error occured"}, {status: 500})
+    }
+}
+
+
+
+export async function GET(req: NextRequest) {
+    try {
+        const id = req.nextUrl.searchParams.get("id");
+        const user = id ?
+        await db.select({
+                id: usersTable.id,
+                fullName: usersTable.fullName,
+                email: usersTable.email,
+                phone: usersTable.phone,
+                isAdmin: usersTable.isAdmin,
+                createdAt: usersTable.createdAt,
+            }).from(usersTable).where(eq(usersTable.id, Number(id)))
+         : await db.select({
+                id: usersTable.id,
+                fullName: usersTable.fullName,
+                email: usersTable.email,
+                phone: usersTable.phone,
+                isAdmin: usersTable.isAdmin,
+                createdAt: usersTable.createdAt,
+            }).from(usersTable);
+        return NextResponse.json({user})
+    }
+    catch(error) {
         return NextResponse.json({error: "An error occured"}, {status: 500})
     }
 }
