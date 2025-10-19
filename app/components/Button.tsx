@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 interface ButtonProps {
   name: string;
@@ -17,7 +16,7 @@ const Button = ({
   textStyles,
 }: ButtonProps) => {
   return (
-    <div
+    <button
       className={`bg-black-100 py-2 flex 
       items-center justify-center gap-2 rounded-full ${extraStyles}`}
     >
@@ -28,7 +27,7 @@ const Button = ({
       {iconPosition === "right" && icon && (
         <Image src={icon} height={20} width={20} alt="" />
       )}
-    </div>
+    </button>
   );
 };
 
