@@ -1,6 +1,7 @@
 import Image from "next/image";
 import assets from "@/assets";
 import Button from "./Button";
+import Link from "next/link";
 
 const NavbarGlobal = () => {
   return (
@@ -9,12 +10,14 @@ const NavbarGlobal = () => {
         <div className="bg-orange-50 h-24 sm:h-12 flex items-start sm:items-center justify-between md:px-16 px-3 py-2">
           {/** */}
           <div className=" gap-6 hidden lg:flex">
-            <div className="flex items-center h-10 cursor-pointer">
-              <Image src={assets.logo} width={48} height={48} alt="" />
-              <h1 className="text-h7 text-primary-600 font-bold mb-1">
-                PinkMart
-              </h1>
-            </div>
+            <Link href={"/"}>
+              <div className="flex items-center h-10 cursor-pointer">
+                <Image src={assets.logo} width={48} height={48} alt="" />
+                <h1 className="text-h7 text-primary-600 font-bold mb-1">
+                  PinkMart
+                </h1>
+              </div>
+            </Link>
             <div className="flex gap-1 items-center">
               <Image
                 src={assets.icons.location}
@@ -86,23 +89,25 @@ const NavbarGlobal = () => {
           </div>
 
           <div className="items-center hidden lg:flex md:gap-4">
-            <Button
-              name="Cart"
-              icon={assets.icons.cart}
-              iconPosition="left"
-              textStyles="text-body-md"
-              extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
-              href=""
-            />
+            <Link href={"/cart"}>
+              <Button
+                name="Cart"
+                icon={assets.icons.cart}
+                iconPosition="left"
+                textStyles="text-body-md"
+                extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
+              />
+            </Link>
 
-            <Button
-              name="Login"
-              icon={assets.icons.double_user}
-              iconPosition="left"
-              textStyles="text-body-md"
-              extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
-              href="/auth/login"
-            />
+            <Link href={"/auth/login"}>
+              <Button
+                name="Login"
+                icon={assets.icons.double_user}
+                iconPosition="left"
+                textStyles="text-body-md"
+                extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
+              />
+            </Link>
           </div>
         </div>
       </div>
