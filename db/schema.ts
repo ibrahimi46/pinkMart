@@ -13,7 +13,7 @@ export const products = pgTable("products", {
 export const users = pgTable("users", {
     id: serial("id").primaryKey(),
     fullName: text("full_name").notNull(),
-    email: text("email").notNull().unique(),
+    email: text("email").unique(),
     password: text("password"),
     googleId: text("google_id"),
     phone: text("phone").unique(),

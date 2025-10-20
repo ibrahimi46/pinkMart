@@ -6,6 +6,8 @@ interface ButtonProps {
   extraStyles?: string;
   iconPosition?: "left" | "right";
   textStyles?: string;
+  handleOnClick?: () => void;
+  btnDisabled?: boolean;
 }
 
 const Button = ({
@@ -14,9 +16,15 @@ const Button = ({
   extraStyles,
   iconPosition,
   textStyles,
+  btnDisabled,
+  handleOnClick,
 }: ButtonProps) => {
   return (
     <button
+      disabled={btnDisabled}
+      onClick={() => {
+        handleOnClick?.();
+      }}
       className={`bg-black-100 py-2 flex 
       items-center justify-center gap-2 rounded-full ${extraStyles}`}
     >
