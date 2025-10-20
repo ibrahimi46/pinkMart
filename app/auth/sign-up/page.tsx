@@ -29,18 +29,11 @@ const SignUp = () => {
           password: password,
         }),
       });
-      console.log(email);
-      console.log(phone);
-      console.log(password);
-      console.log(fullName);
-      console.log(res);
       const data = await res.json();
-
-      console.log(data);
       if (!res.ok) throw new Error(data.error || "Failed to sign up");
       window.location.href = "/auth/login";
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

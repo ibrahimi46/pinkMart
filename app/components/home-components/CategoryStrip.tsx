@@ -1,3 +1,4 @@
+"use client";
 import Button from "../Button";
 import assets from "@/assets";
 
@@ -25,7 +26,6 @@ const CategoryStrip = () => {
           name={item.name}
           icon={item.icon}
           iconPosition="left"
-          href=""
           textStyles="text-body-md"
           extraStyles="h-10 min-w-14 max-w-28 px-6 bg-black-50"
         />
