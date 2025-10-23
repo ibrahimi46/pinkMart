@@ -46,7 +46,7 @@ const adminMenu = [
 
 const MyAccount = () => {
   const [activeSection, setActiveSection] = useState<string>("admin-dashboard");
-  const [isAdmin, setIsAdmin] = useState<boolean>(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const renderSection = () => {
     switch (activeSection) {

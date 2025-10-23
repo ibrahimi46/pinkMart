@@ -7,6 +7,8 @@ export const products = pgTable("products", {
     category: text("category").notNull(),
     price: numeric("price").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
+    stock: numeric("stock").default("0").notNull(),
+    imageUrl: text("image_url"),
 })
 
 

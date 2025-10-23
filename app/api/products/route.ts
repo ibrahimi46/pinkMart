@@ -24,7 +24,7 @@ export async function POST(req:NextRequest) {
         if (!decoded.isAdmin) {
             return NextResponse.json({error: "Unauthorised to add product"}, {status: 401})
         } else {
-            const {name, description, category, price} = await req.json();
+            const {name, description, category, price, stock, image_url} = await req.json();
 
         if (!name || !category || !price) {
             return NextResponse.json({error: "Missing required fields"}, {status: 400})
@@ -34,7 +34,9 @@ export async function POST(req:NextRequest) {
             name,
             category,
             description, 
-            price
+            price,
+            stock: stock || 0,
+            imageUrl: image_url || null
         })
 
         return NextResponse.json({success: true, message: "Product added!"})
