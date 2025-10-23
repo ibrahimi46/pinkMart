@@ -28,6 +28,8 @@ const assets = {
     logout: "/icons/logout.svg",
     edit: "/icons/edit.svg",
     receipt_purple: "/icons/receipt_purple.svg",
+    export: "/icons/export.svg",
+    receipt: "/icons/receipt.svg",
   },
   onboarding: {
     step1: {
