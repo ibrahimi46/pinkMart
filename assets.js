@@ -30,6 +30,10 @@ const assets = {
     receipt_purple: "/icons/receipt_purple.svg",
     export: "/icons/export.svg",
     receipt: "/icons/receipt.svg",
+    card_purple: "/icons/card_purple.svg",
+    paypal: "/icons/paypal.svg",
+    mastercard: "/icons/mastercard.svg",
+    bin_purple: "/icons/bin_purple.svg",
   },
   onboarding: {
     step1: {

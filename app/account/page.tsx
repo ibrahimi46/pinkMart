@@ -5,6 +5,7 @@ import assets from "@/assets";
 import Image from "next/image";
 import MyAccountComp from "./components/MyAccountComp";
 import OrdersComp from "./components/OrdersComp";
+import Payments from "./components/Payments";
 
 const MyAccount = () => {
   const [activeSection, setActiveSection] = useState<string>("orders");
@@ -15,6 +16,8 @@ const MyAccount = () => {
         return <MyAccountComp />;
       case "orders":
         return <OrdersComp />;
+      case "payments":
+        return <Payments />;
     }
   };
   return (
@@ -58,13 +61,6 @@ const MyAccount = () => {
             icon={assets.icons.payment}
             textStyles="text-body-md"
             handleOnClick={() => setActiveSection("payments")}
-          />
-          <Button
-            name="Notifications"
-            iconPosition="left"
-            icon={assets.icons.notification}
-            textStyles="text-body-md"
-            handleOnClick={() => setActiveSection("notifications")}
           />
           <hr className="border-black-200 my-2 border-t-1 w-full" />
           <Button
