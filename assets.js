@@ -19,6 +19,14 @@ const assets = {
     plus: "/icons/plus.svg",
     delete: "/icons/delete.svg",
     close: "/icons/close.svg",
+    account: "/icons/account.svg",
+    orders: "/icons/orders.svg",
+    payment: "/icons/payments.svg",
+    notification: "/icons/notification.svg",
+    help: "/icons/help.svg",
+    settings: "/icons/setting.svg",
+    logout: "/icons/logout.svg",
+    edit: "/icons/edit.svg",
   },
   onboarding: {
     step1: {
