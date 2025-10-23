@@ -4,18 +4,21 @@ import Button from "../components/Button";
 import assets from "@/assets";
 import Image from "next/image";
 import MyAccountComp from "./components/MyAccountComp";
+import OrdersComp from "./components/OrdersComp";
 
 const MyAccount = () => {
-  const [activeSection, setActiveSection] = useState<string>("account-details");
+  const [activeSection, setActiveSection] = useState<string>("orders");
 
   const renderSection = () => {
     switch (activeSection) {
       case "account-details":
         return <MyAccountComp />;
+      case "orders":
+        return <OrdersComp />;
     }
   };
   return (
-    <main className="flex gap-6 px-8">
+    <main className="flex gap-6 px-8 h-screen w-screen">
       {/** left sidebar */}
       <div className="hidden md:flex w-1/4 max-w-64 py-2 h-[550px] items-start justify-between flex-col">
         <div className="flex w-full flex-col items-start p-4 bg-black-100 rounded-2xl">
@@ -89,7 +92,8 @@ const MyAccount = () => {
         </div>
       </div>
 
-      <div className="flex-1 bg-primary-200">{renderSection()}</div>
+      {/**right area */}
+      <div className="flex-1 min-w-0">{renderSection()}</div>
     </main>
   );
 };

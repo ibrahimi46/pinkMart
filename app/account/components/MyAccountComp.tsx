@@ -20,7 +20,8 @@ const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
 
 const MyAccountComp = () => {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 py-2">
+      <h1 className="font-bold mb-2">Account Details</h1>
       <AccDetailItems field1="Full Name" field2="John Doe" />
       <AccDetailItems field1="Mobile Number" field2="+44 843234442" />
       <AccDetailItems field1="Email Address" field2="johndoe@gmail.com" />

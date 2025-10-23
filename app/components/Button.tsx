@@ -8,6 +8,7 @@ interface ButtonProps {
   textStyles?: string;
   handleOnClick?: () => void;
   btnDisabled?: boolean;
+  iconStyle?: string;
 }
 
 const Button = ({
@@ -18,6 +19,7 @@ const Button = ({
   textStyles,
   btnDisabled,
   handleOnClick,
+  iconStyle,
 }: ButtonProps) => {
   return (
     <button
@@ -29,11 +31,11 @@ const Button = ({
       items-center justify-center gap-2 rounded-full ${extraStyles}`}
     >
       {iconPosition === "left" && icon && (
-        <Image src={icon} height={20} width={20} alt="" />
+        <Image src={icon} height={20} width={20} alt="" className={iconStyle} />
       )}
       <p className={`font-semibold ${textStyles}`}>{name}</p>
       {iconPosition === "right" && icon && (
-        <Image src={icon} height={20} width={20} alt="" />
+        <Image src={icon} height={20} width={20} alt="" className={iconStyle} />
       )}
     </button>
   );

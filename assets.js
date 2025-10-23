@@ -27,6 +27,7 @@ const assets = {
     settings: "/icons/setting.svg",
     logout: "/icons/logout.svg",
     edit: "/icons/edit.svg",
+    receipt_purple: "/icons/receipt_purple.svg",
   },
   onboarding: {
     step1: {
