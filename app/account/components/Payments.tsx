@@ -149,7 +149,8 @@ const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
 
 const Payments = () => {
   const [paymentMethods, setPaymentMethods] = useState<object>({});
-  const [showAddPaymentModal, setShowAddPaymentModal] = useState<boolean>(true);
+  const [showAddPaymentModal, setShowAddPaymentModal] =
+    useState<boolean>(false);
   return (
     <div>
       {paymentMethods ? (

@@ -6,6 +6,7 @@ import Image from "next/image";
 import MyAccountComp from "./components/MyAccountComp";
 import OrdersComp from "./components/OrdersComp";
 import Payments from "./components/Payments";
+import MyAddresses from "./components/MyAddresses";
 
 const MyAccount = () => {
   const [activeSection, setActiveSection] = useState<string>("orders");
@@ -18,6 +19,8 @@ const MyAccount = () => {
         return <OrdersComp />;
       case "payments":
         return <Payments />;
+      case "addresses":
+        return <MyAddresses />;
     }
   };
   return (

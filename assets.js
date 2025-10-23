@@ -34,6 +34,7 @@ const assets = {
     paypal: "/icons/paypal.svg",
     mastercard: "/icons/mastercard.svg",
     bin_purple: "/icons/bin_purple.svg",
+    location_purple: "/icons/location_purple.svg",
   },
   onboarding: {
     step1: {
