@@ -7,9 +7,46 @@ import MyAccountComp from "./components/MyAccountComp";
 import OrdersComp from "./components/OrdersComp";
 import Payments from "./components/Payments";
 import MyAddresses from "./components/MyAddresses";
+import AdminDashboard from "./(admin)/AdminDashboard";
+import ManageProducts from "./(admin)/ManageProducts";
+import ManageOrders from "./(admin)/ManageOrders";
+import ManageUsers from "./(admin)/ManageUsers";
+import Analytics from "./(admin)/Analytics";
+
+const userMenu = [
+  {
+    name: "Account Details",
+    icon: assets.icons.account,
+    key: "account-details",
+  },
+  { name: "My Orders", icon: assets.icons.orders, key: "orders" },
+  { name: "Addresses", icon: assets.icons.location, key: "addresses" },
+  { name: "Payments", icon: assets.icons.payment, key: "payments" },
+];
+
+const adminMenu = [
+  {
+    name: "Admin Dashboard",
+    icon: assets.icons.dashboard,
+    key: "admin-dashboard",
+  },
+  {
+    name: "Manage Products",
+    icon: assets.icons.products,
+    key: "manage-products",
+  },
+  { name: "Manage Orders", icon: assets.icons.orders, key: "manage-orders" },
+  { name: "Manage Users", icon: assets.icons.users, key: "manage-users" },
+  {
+    name: "Analytics & Reports",
+    icon: assets.icons.analytics,
+    key: "analytics",
+  },
+];
 
 const MyAccount = () => {
-  const [activeSection, setActiveSection] = useState<string>("orders");
+  const [activeSection, setActiveSection] = useState<string>("admin-dashboard");
+  const [isAdmin, setIsAdmin] = useState<boolean>(true);
 
   const renderSection = () => {
     switch (activeSection) {
@@ -21,6 +58,16 @@ const MyAccount = () => {
         return <Payments />;
       case "addresses":
         return <MyAddresses />;
+      case "admin-dashboard":
+        return <AdminDashboard />;
+      case "manage-products":
+        return <ManageProducts />;
+      case "manage-orders":
+        return <ManageOrders />;
+      case "manage-users":
+        return <ManageUsers />;
+      case "analytics":
+        return <Analytics />;
     }
   };
   return (
@@ -37,34 +84,32 @@ const MyAccount = () => {
             />
             <p>John Doe</p>
           </div>
-          <Button
-            name="Account Details"
-            iconPosition="left"
-            icon={assets.icons.account}
-            textStyles="text-body-md"
-            handleOnClick={() => setActiveSection("account-details")}
-          />
-          <Button
-            name="My Orders"
-            iconPosition="left"
-            icon={assets.icons.orders}
-            textStyles="text-body-md"
-            handleOnClick={() => setActiveSection("orders")}
-          />
-          <Button
-            name="Addresses"
-            iconPosition="left"
-            icon={assets.icons.location}
-            textStyles="text-body-md"
-            handleOnClick={() => setActiveSection("addresses")}
-          />
-          <Button
-            name="Payments"
-            iconPosition="left"
-            icon={assets.icons.payment}
-            textStyles="text-body-md"
-            handleOnClick={() => setActiveSection("payments")}
-          />
+          {!isAdmin
+            ? userMenu.map((user) => (
+                <>
+                  <Button
+                    key={user.key}
+                    name={user.name}
+                    iconPosition="left"
+                    icon={user.icon}
+                    textStyles="text-body-md"
+                    handleOnClick={() => setActiveSection(user.key)}
+                  />
+                </>
+              ))
+            : adminMenu.map((item) => (
+                <>
+                  <Button
+                    key={item.key}
+                    name={item.name}
+                    iconPosition="left"
+                    icon={item.icon}
+                    textStyles="text-body-md"
+                    handleOnClick={() => setActiveSection(item.key)}
+                  />
+                </>
+              ))}
+
           <hr className="border-black-200 my-2 border-t-1 w-full" />
           <Button
             name="Settings"

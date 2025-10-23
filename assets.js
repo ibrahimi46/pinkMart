@@ -35,6 +35,11 @@ const assets = {
     mastercard: "/icons/mastercard.svg",
     bin_purple: "/icons/bin_purple.svg",
     location_purple: "/icons/location_purple.svg",
+    admin: "/icons/admin.svg",
+    products: "/icons/products.svg",
+    users: "/icons/users.svg",
+    analytics: "/icons/analytics.svg",
+    dashboard: "/icons/dashboard.svg",
   },
   onboarding: {
     step1: {
