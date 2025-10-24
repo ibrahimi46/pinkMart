@@ -1,4 +1,4 @@
-import { pgTable, serial, text, numeric, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, numeric, timestamp, boolean, integer } from "drizzle-orm/pg-core";
 
 export const products = pgTable("products", {
     id: serial("id").primaryKey(),
@@ -25,15 +25,15 @@ export const users = pgTable("users", {
 
 export const cart = pgTable("cart", {
     id: serial("id").primaryKey().notNull(),
-    user_id: numeric("user_id").notNull(),
+    user_id: integer("user_id").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull()
 })
 
 
 export const cartItems = pgTable("cartItems", {
     id: serial("id").primaryKey().notNull(),
-    cartId: numeric("cart_id").notNull(),
-    productId: numeric("product_id").notNull(),
+    cartId: integer("cart_id").notNull(),
+    productId: integer("product_id").notNull(),
     quantity: numeric("quantity").default("0").notNull(),
     addedAt: timestamp("added_at").defaultNow().notNull()
 

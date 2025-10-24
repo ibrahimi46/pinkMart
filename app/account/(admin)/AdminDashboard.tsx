@@ -46,7 +46,7 @@ const RecentOrderItem = () => {
 
 const AdminDashboard = () => {
   return (
-    <div className="mt-2 flex flex-col gap-6">
+    <div className="mt-2 flex flex-col gap-6 h-full overflow-y-scroll scrollbar-hide">
       <h1 className="font-semibold">Admin Dashboard</h1>
       <div className="">
         {/** sales user products */}
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
           <DashboardInfoItem name="Products" count="140" />
         </div>
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between h-">
         <h1 className="font-semibold">Recent Orders</h1>
         <Button
           name="View All(+40)"
