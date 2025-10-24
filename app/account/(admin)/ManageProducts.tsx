@@ -19,7 +19,6 @@ const ProductItem = ({
   category,
   price,
   createdAt,
-  orderId,
   handleDelete,
 }: ProductItemProps) => {
   return (
@@ -54,9 +53,13 @@ const ProductItem = ({
 
 interface AddProductFormProps {
   setShowAddProductForm: (value: boolean) => void;
+  fetchProducts: () => void;
 }
 
-const AddProductForm = ({ setShowAddProductForm }: AddProductFormProps) => {
+const AddProductForm = ({
+  setShowAddProductForm,
+  fetchProducts,
+}: AddProductFormProps) => {
   const [productName, setProductName] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [category, setCategory] = useState<string | null>(null);
@@ -64,6 +67,7 @@ const AddProductForm = ({ setShowAddProductForm }: AddProductFormProps) => {
   const [stockQuantity, setStockQuantity] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [productAdded, setProductAdded] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,6 +107,7 @@ const AddProductForm = ({ setShowAddProductForm }: AddProductFormProps) => {
       });
 
       console.log("product added successfully");
+      setProductAdded(true);
     } catch (err) {
       console.error("Failed to upload form", err);
     } finally {
@@ -117,7 +122,12 @@ const AddProductForm = ({ setShowAddProductForm }: AddProductFormProps) => {
       ) : (
         <>
           <div className="flex gap-4 items-center">
-            <BackButton handleBack={() => setShowAddProductForm(false)} />
+            <BackButton
+              handleBack={() => {
+                setShowAddProductForm(false);
+                if (productAdded) fetchProducts();
+              }}
+            />
             <h1 className="font-semibold">Add Product</h1>
           </div>
           <div className="mt-4 border border-black-200 rounded-3xl p-4 flex flex-col gap-4">
@@ -223,6 +233,7 @@ const ManageProducts = () => {
     console.log("clicked");
 
     try {
+      setLoading(true);
       await fetch(`/api/products/${id}`, {
         method: "DELETE",
         headers: {
@@ -233,30 +244,35 @@ const ManageProducts = () => {
       setProducts((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/products");
+      const data = await res.json();
+      setProducts(data.products);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("/api/products");
-        const data = await res.json();
-        setProducts(data.products);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
 
   return (
     <div className="mt-2 flex flex-col gap-6">
       {showAddProductForm ? (
-        <AddProductForm setShowAddProductForm={setShowAddProductForm} />
+        <AddProductForm
+          setShowAddProductForm={setShowAddProductForm}
+          fetchProducts={fetchProducts}
+        />
       ) : (
         <>
           <h1 className="font-semibold">Manage Products</h1>
@@ -271,21 +287,27 @@ const ManageProducts = () => {
               handleOnClick={() => setShowAddProductForm(true)}
             />
           </div>
-          <div className="p-4 rounded-3xl border border-black-200 flex flex-col gap-6 sm:gap-4 h-[950px] overflow-y-scroll scrollbar-hide">
-            {products &&
-              products.map((product) => {
-                return (
-                  <ProductItem
-                    key={product.id}
-                    name={product.name}
-                    category={product.category}
-                    orderId={product.id}
-                    price={product.price}
-                    createdAt={product.createdAt}
-                    handleDelete={() => handleDelete(product.id)}
-                  />
-                );
-              })}
+          <div className="p-4 rounded-3xl border border-black-200 flex flex-col gap-6 sm:gap-4 h-auto overflow-y-scroll scrollbar-hide">
+            {loading ? (
+              <Loading />
+            ) : (
+              <>
+                {products &&
+                  products.map((product) => {
+                    return (
+                      <ProductItem
+                        key={product.id}
+                        name={product.name}
+                        category={product.category}
+                        orderId={product.id}
+                        price={product.price}
+                        createdAt={product.createdAt}
+                        handleDelete={() => handleDelete(product.id)}
+                      />
+                    );
+                  })}
+              </>
+            )}
           </div>
         </>
       )}

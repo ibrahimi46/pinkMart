@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import assets from "@/assets";
 import Image from "next/image";
@@ -46,8 +46,14 @@ const adminMenu = [
 ];
 
 const MyAccount = () => {
-  const [activeSection, setActiveSection] = useState<string>("admin-dashboard");
+  const [activeSection, setActiveSection] = useState<string>("");
   const { logout, user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      setActiveSection(user.isAdmin ? "admin-dashboard" : "account-details");
+    }
+  }, [user]);
 
   const renderSection = () => {
     switch (activeSection) {
@@ -83,7 +89,7 @@ const MyAccount = () => {
               width={50}
               alt="pfp"
             />
-            <p>John Doe</p>
+            <p>{user?.full_name}</p>
           </div>
           {!user?.isAdmin
             ? userMenu.map((user) => (

@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode"
 interface User { 
     userId: string
     isAdmin: boolean
+    full_name?: string
 }
 
 
