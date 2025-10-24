@@ -42,6 +42,7 @@ const assets = {
     dashboard: "/icons/dashboard.svg",
     bin: "/icons/bin.svg",
     upload: "/icons/upload.svg",
+    signup: "/icons/signup.svg",
   },
   onboarding: {
     step1: {

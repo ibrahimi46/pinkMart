@@ -4,14 +4,14 @@ import Button from "./Button";
 import Link from "next/link";
 import { useUser } from "../utils/useUser";
 
-const NavbarGlobal = () => {
+const NavbarGlobal = ({ toggleSidebar }) => {
   const { isLoggedIn } = useUser();
   return (
     <>
       <div className="bg-black-100 h-32 sm:h-20 mb-6 md:py-10 flex flex-col justify-center border-b-2">
         <div className="bg-orange-50 h-24 sm:h-12 flex items-start sm:items-center justify-between md:px-16 px-3 py-2">
           {/** */}
-          <div className=" gap-6 hidden lg:flex">
+          <div className=" gap-6 hidden md:flex">
             <Link href={"/"}>
               <div className="flex items-center h-10 cursor-pointer">
                 <Image src={assets.logo} width={48} height={48} alt="" />
@@ -31,7 +31,10 @@ const NavbarGlobal = () => {
             </div>
           </div>
 
-          <div className="lg:hidden border border-black-400 p-2 rounded-full hover:bg-black-100 transition-all duration-300 cursor-pointer">
+          <div
+            onClick={toggleSidebar}
+            className="md:hidden border border-black-400 p-2 rounded-full hover:bg-black-100 transition-all duration-300 cursor-pointer"
+          >
             <Image
               src={assets.icons.hamburger_menu}
               height={20}
@@ -40,7 +43,7 @@ const NavbarGlobal = () => {
             />
           </div>
 
-          <div className="lg:w-80 xl:flex-1 sm:flex hidden w-56 sm:w-2/3 md:max-w-2xl items-center gap-2 rounded-3xl p-2 border-primary-500 border">
+          <div className="lg:w-80 xl:flex-1 sm:flex hidden w-56 sm:w-72 md:max-w-2xl items-center gap-2 rounded-3xl p-2 border-primary-500 border">
             <Image
               src={assets.icons.search}
               height={20}
@@ -80,14 +83,16 @@ const NavbarGlobal = () => {
             </div>
           </div>
 
-          <div className="lg:hidden bg-primary-500 p-2 rounded-full">
-            <Image
-              src={assets.icons.cart}
-              height={20}
-              width={20}
-              alt="search"
-              className="filter invert"
-            />
+          <div className=" bg-primary-500 lg:hidden p-2 rounded-full">
+            <Link href={"/cart"}>
+              <Image
+                src={assets.icons.cart}
+                height={20}
+                width={20}
+                alt="search"
+                className="filter invert"
+              />
+            </Link>
           </div>
 
           <div className="items-center hidden lg:flex md:gap-4">

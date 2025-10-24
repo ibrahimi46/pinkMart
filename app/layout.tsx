@@ -6,6 +6,8 @@ import "./globals.css";
 import NavbarGlobal from "./components/NavbarGlobal";
 import { usePathname } from "next/navigation";
 import Footer from "./components/Footer";
+import { useState } from "react";
+import Sidebar from "./components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,13 +31,24 @@ export default function RootLayout({
 }>) {
   const pathName = usePathname();
   const isAuthPage = pathName.startsWith("/auth");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-screen bg-black-50`}
       >
-        {!isAuthPage && <NavbarGlobal />}
+        {!isAuthPage && (
+          <>
+            <NavbarGlobal
+              toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+            />
+            <Sidebar
+              isOpen={isSidebarOpen}
+              closeSidebar={() => setIsSidebarOpen(false)}
+            />
+          </>
+        )}
         <main>{children}</main>
         <Footer />
       </body>

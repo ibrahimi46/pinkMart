@@ -6,7 +6,7 @@ import Image from "next/image";
 import CartItem from "./components/CartItem";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import DeliveryDateModal from "./components/DeliveryDateModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useCart from "@/app/utils/useCart";
 import useProducts from "@/app/utils/useProducts";
 
@@ -14,11 +14,6 @@ const Cart = () => {
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const { cartItems, removeFromCart, updateCart } = useCart();
   const { products } = useProducts();
-
-  useEffect(() => {
-    console.log(cartItems);
-    console.log(products);
-  }, [cartItems, products]);
 
   return (
     <main className="lg:flex md:px-20 px-6 mb-6 gap-12">
