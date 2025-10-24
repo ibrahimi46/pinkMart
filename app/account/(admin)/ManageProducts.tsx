@@ -11,6 +11,7 @@ interface ProductItemProps {
   price: number;
   createdAt: string;
   orderId: number;
+  handleDelete: () => void;
 }
 
 const ProductItem = ({
@@ -19,6 +20,7 @@ const ProductItem = ({
   price,
   createdAt,
   orderId,
+  handleDelete,
 }: ProductItemProps) => {
   return (
     <div className="bg-black-100 rounded-3xl items-center p-4 flex flex-col gap-4 justify-between sm:flex sm:flex-row">
@@ -39,7 +41,10 @@ const ProductItem = ({
           {new Date(createdAt).toLocaleDateString()}
         </p>
       </div>
-      <div className="flex items-center sm:w-28 md:w-32 w-full gap-2 bg-primary-100 p-2 justify-center rounded-3xl border border-primary-600">
+      <div
+        onClick={() => handleDelete()}
+        className="flex cursor-pointer items-center sm:w-28 md:w-32 w-full gap-2 bg-primary-100 p-2 justify-center rounded-3xl border border-primary-600"
+      >
         <Image src={assets.icons.bin} height={20} width={20} alt="edit" />
         <p>Delete</p>
       </div>
@@ -140,9 +145,10 @@ const AddProductForm = ({ setShowAddProductForm }: AddProductFormProps) => {
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Select category</option>
-                  <option value="fruits">Fruits</option>
-                  <option value="snacks">Snacks</option>
-                  <option value="meat">Meat</option>
+                  <option value="Fruits">Fruits</option>
+                  <option value="Snacks">Snacks</option>
+                  <option value="Meat">Meat</option>
+                  <option value="Vegetables">Vegetables</option>
                 </select>
               </div>
               <input
@@ -211,6 +217,25 @@ const ManageProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const handleDelete = async (id: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    console.log("clicked");
+
+    try {
+      await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -257,6 +282,7 @@ const ManageProducts = () => {
                     orderId={product.id}
                     price={product.price}
                     createdAt={product.createdAt}
+                    handleDelete={() => handleDelete(product.id)}
                   />
                 );
               })}
