@@ -1,9 +1,12 @@
 import Image from "next/image";
 import assets from "@/assets";
+import useFullUserDetails from "@/app/utils/useFullUserDetails";
+import { useUser } from "@/app/utils/useUser";
+import { useEffect } from "react";
 
 interface AccDetailItems {
-  field1: string;
-  field2: string;
+  field1?: string;
+  field2?: string;
 }
 
 const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
@@ -19,12 +22,19 @@ const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
 };
 
 const MyAccountComp = () => {
+  const { user } = useUser();
+  const { userDetails } = useFullUserDetails(user?.userId || null);
+
+  useEffect(() => {
+    console.log(userDetails);
+  });
+
   return (
     <div className="flex flex-col gap-3 mt-2">
       <h1 className="font-bold mb-2">Account Details</h1>
-      <AccDetailItems field1="Full Name" field2="John Doe" />
-      <AccDetailItems field1="Mobile Number" field2="+44 843234442" />
-      <AccDetailItems field1="Email Address" field2="johndoe@gmail.com" />
+      <AccDetailItems field1="Full Name" field2={userDetails?.fullName} />
+      <AccDetailItems field1="Mobile Number" field2={userDetails?.phone} />
+      <AccDetailItems field1="Email Address" field2={userDetails?.email} />
     </div>
   );
 };

@@ -35,8 +35,6 @@ export async function POST(req: NextRequest) {
     }
 }
 
-
-
 export async function GET(req: NextRequest) {
     try {
         const id = req.nextUrl.searchParams.get("id");
