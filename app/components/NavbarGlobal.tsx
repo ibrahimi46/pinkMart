@@ -91,28 +91,29 @@ const NavbarGlobal = () => {
           </div>
 
           <div className="items-center hidden lg:flex md:gap-4">
-            <Link href={"/cart"}>
-              <Button
-                name="Cart"
-                icon={assets.icons.cart}
-                iconPosition="left"
-                textStyles="text-body-md"
-                extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
-              />
-            </Link>
-
             {isLoggedIn ? (
-              <Link
-                href={"/account"}
-                className="bg-black-100 p-2 rounded-full border border-primary-600"
-              >
-                <Image
-                  src={assets.icons.account}
-                  height={20}
-                  width={20}
-                  alt="pfp"
-                />
-              </Link>
+              <>
+                <Link href={"/cart"}>
+                  <Button
+                    name="Cart"
+                    icon={assets.icons.cart}
+                    iconPosition="left"
+                    textStyles="text-body-md"
+                    extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
+                  />
+                </Link>
+                <Link
+                  href={"/account"}
+                  className="bg-black-100 p-2 rounded-full border border-primary-600"
+                >
+                  <Image
+                    src={assets.icons.account}
+                    height={20}
+                    width={20}
+                    alt="pfp"
+                  />
+                </Link>
+              </>
             ) : (
               <Link href={"/auth/login"}>
                 <Button

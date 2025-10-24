@@ -47,8 +47,7 @@ const adminMenu = [
 
 const MyAccount = () => {
   const [activeSection, setActiveSection] = useState<string>("admin-dashboard");
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const { logout } = useUser();
+  const { logout, user } = useUser();
 
   const renderSection = () => {
     switch (activeSection) {
@@ -86,7 +85,7 @@ const MyAccount = () => {
             />
             <p>John Doe</p>
           </div>
-          {!isAdmin
+          {!user?.isAdmin
             ? userMenu.map((user) => (
                 <>
                   <Button
