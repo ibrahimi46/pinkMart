@@ -6,6 +6,7 @@ import ForwardButton from "../ForwardButton";
 import Image from "next/image";
 import { useRef } from "react";
 import useProducts from "@/app/utils/useProducts";
+import useCart from "@/app/utils/useCart";
 
 interface BestSellerProps {
   title: string;
@@ -17,6 +18,7 @@ interface CardsItemProps {
   currentPrice: number;
   oldPrice: number;
   capacity: number;
+  addToCart: () => void;
 }
 
 const CardsItem = ({
@@ -25,6 +27,7 @@ const CardsItem = ({
   currentPrice,
   oldPrice,
   capacity,
+  addToCart,
 }: CardsItemProps) => {
   return (
     <div className="flex flex-col gap-2">
@@ -46,6 +49,7 @@ const CardsItem = ({
         className="hidden sm:flex gap-2 bg-primary-600 px-2 border py-1 rounded-full justify-center
       transition-all duration-300 hover:bg-primary-500 hover:border hover:border-primary-700
       "
+        onClick={addToCart}
       >
         <Image
           src={assets.icons.cart}
@@ -65,6 +69,8 @@ const CardsItem = ({
 const BestSeller = ({ title }: BestSellerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { products } = useProducts();
+  const { addToCart } = useCart();
+  const defaultQuantity = 1;
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -109,6 +115,10 @@ const BestSeller = ({ title }: BestSellerProps) => {
                 currentPrice={parseInt(item.price)}
                 oldPrice={3.99}
                 capacity={item.stock}
+                addToCart={() => {
+                  addToCart(item.id, defaultQuantity);
+                  console.log("clicked");
+                }}
               />
             );
           })}

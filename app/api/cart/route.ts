@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     // add or update
     
     if (existingItem.length) {
-        await db.update(CartItemsTable).set({quantity: existingItem[0].quantity + quantity}).where(eq(CartItemsTable.id, existingItem[0].id))
+        await db.update(CartItemsTable).set({quantity: Number(existingItem[0].quantity) + quantity}).where(eq(CartItemsTable.id, existingItem[0].id))
     } else {
         await db.insert(CartItemsTable).values({cartId, productId, quantity})
     }
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
 
         let decoded;
         if (token) {
-            decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as {userId: number, isAdmin: boolean}
+            decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: number, isAdmin: boolean}
         }
 
 
@@ -102,7 +102,7 @@ export async function PUT(req:NextRequest) {
     const token = authHeader.split(" ")[1];
     let decoded;
     if (token) {
-        decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as {userId: number};
+        decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: number};
     }
     if (!decoded) return;
 
