@@ -12,7 +12,7 @@ import useProducts from "@/app/utils/useProducts";
 
 const Cart = () => {
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, updateCart } = useCart();
   const { products } = useProducts();
 
   useEffect(() => {
@@ -91,6 +91,8 @@ const Cart = () => {
                   key={product.id}
                   product={product}
                   removeFromCart={removeFromCart}
+                  quantity={cartItem.quantity}
+                  updateCart={updateCart}
                 />
               ) : null;
             })}

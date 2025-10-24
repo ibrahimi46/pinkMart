@@ -13,9 +13,16 @@ interface ProductProps {
     imageUrl: string;
   };
   removeFromCart: (productId: number) => void;
+  updateCart: (productId: number, quantity: number) => void;
+  quantity: number;
 }
 
-const CartItem = ({ product, removeFromCart }: ProductProps) => {
+const CartItem = ({
+  product,
+  removeFromCart,
+  quantity,
+  updateCart,
+}: ProductProps) => {
   return (
     <>
       <div className="flex justify-between mt-4">
@@ -39,7 +46,7 @@ const CartItem = ({ product, removeFromCart }: ProductProps) => {
           </div>
         </div>
         {/**right */}
-        <div className="text-body-md items-end flex gap-4 last sm:items-center">
+        <div className="text-body-md items-end w-52  flex gap-4 last sm:items-center">
           <div className="flex gap-4 bg-black-100 items-center rounded-3xl p-1">
             <div className="bg-white p-1 rounded-full">
               <Image
@@ -47,15 +54,23 @@ const CartItem = ({ product, removeFromCart }: ProductProps) => {
                 height={14}
                 width={14}
                 alt="delete"
+                onClick={() => {
+                  updateCart(product.id, Number(quantity) - 1);
+                }}
               />
             </div>
-            <p>1</p>
+            <div className="w-2 flex items-center justify-center">
+              <p>{quantity}</p>
+            </div>
             <div className="p-1 bg-primary-600 rounded-full">
               <Image
                 src={assets.icons.plus}
                 height={14}
                 width={14}
                 alt="plus"
+                onClick={() => {
+                  updateCart(product.id, Number(quantity) + 1);
+                }}
               />
             </div>
           </div>
@@ -65,7 +80,9 @@ const CartItem = ({ product, removeFromCart }: ProductProps) => {
           >
             Remove
           </p>
-          <p className="hidden sm:block">$25.98</p>
+          <p className="hidden sm:block">
+            ${(Number(product.price) * quantity).toFixed(2)}
+          </p>
         </div>
       </div>
       <hr className="mt-4 border-gray-100" />
