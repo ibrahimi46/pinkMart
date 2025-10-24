@@ -94,3 +94,52 @@ export async function GET(req: NextRequest) {
 
 }
 
+export async function PUT(req:NextRequest) {
+   try {
+ const authHeader = req.headers.get("authorization");
+    if (!authHeader) return NextResponse.json({error: "Missing token"}, {status: 401})
+
+    const token = authHeader.split(" ")[1];
+    let decoded;
+    if (token) {
+        decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as {userId: number};
+    }
+    if (!decoded) return;
+
+    const cart = await db.select().from(CartTable).where(eq(CartTable.user_id, decoded?.userId))
+    const userCart = cart[0];
+    const {productId, quantity} = await req.json();
+    await db.update(CartItemsTable).set({quantity}).where(and(eq(CartItemsTable.cartId, userCart.id), eq(CartItemsTable.productId, productId)))
+    return NextResponse.json({ success: true, message: "Quantity updated" });
+
+   } catch(err) {
+    console.error(err);
+    return NextResponse.json({error: "Failed to update cart"}, {status: 400})
+   }
+}
+
+
+export async function DELETE(req:NextRequest) {
+   try {
+ const authHeader = req.headers.get("authorization");
+    if (!authHeader) return NextResponse.json({error: "Missing token"}, {status: 401})
+
+    const token = authHeader.split(" ")[1];
+    let decoded;
+    if (token) {
+        decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as {userId: number};
+    }
+
+    if (!decoded) return;
+    const cart = await db.select().from(CartTable).where(eq(CartTable.user_id, decoded?.userId))
+    const userCart = cart[0];
+
+    const {productId} = await req.json();
+    await db.delete(CartItemsTable).where(and(eq(CartItemsTable.cartId, userCart.id), eq(CartItemsTable.productId, productId)))
+    return NextResponse.json({ success: true, message: "Item Deleted Successfully!" });
+
+   } catch(err) {
+    console.error(err);
+    return NextResponse.json({error: "Failed to delete item."}, {status: 400})
+   }
+}
