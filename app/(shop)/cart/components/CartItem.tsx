@@ -1,25 +1,40 @@
 import Image from "next/image";
 import assets from "@/assets";
+import useCart from "@/app/utils/useCart";
 
-const CartItem = () => {
+interface ProductProps {
+  product: {
+    id: number;
+    name: string;
+    description: string;
+    category: string;
+    price: string;
+    stock: number;
+    imageUrl: string;
+  };
+  removeFromCart: (productId: number) => void;
+}
+
+const CartItem = ({ product, removeFromCart }: ProductProps) => {
   return (
     <>
       <div className="flex justify-between mt-4">
         <div className="flex gap-2">
           <div className="bg-primary-100 flex items-center justify-center md:p-3 p-1 h-10  rounded-xl">
             <Image
-              src={assets.home.category_strip.carrot}
+              src={product.imageUrl}
               height={40}
               width={40}
               alt=""
-              className="h-5 w-5 sm:h-5 sm:w-5 md:h-10 md:w-10"
+              className="h-5 w-5 sm:h-5 sm:w-5 md:h-10 md:w-10 rounded-full"
             />
           </div>
           <div className="flex flex-col gap-2 text-body-sm sm:text-body-md">
-            <p>Sweet Green Seedless Grapes 1.5-2 Kg</p>
+            <p>{product?.name}</p>
             <div className="flex gap-2 text-body-sm">
-              <p className="text-primary-600">$95.00</p>
-              <p className="text-black-300 line-through">$99.99</p>
+              <p className="text-primary-600">
+                ${parseFloat(product?.price).toFixed(2)}
+              </p>
             </div>
           </div>
         </div>
@@ -44,7 +59,10 @@ const CartItem = () => {
               />
             </div>
           </div>
-          <p className="text-primary-600 text-body-sm font-semibold hidden sm:block">
+          <p
+            className="text-primary-600 text-body-sm font-semibold hidden sm:block cursor-pointer"
+            onClick={() => removeFromCart(product.id)}
+          >
             Remove
           </p>
           <p className="hidden sm:block">$25.98</p>

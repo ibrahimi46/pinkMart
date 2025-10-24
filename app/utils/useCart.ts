@@ -22,14 +22,14 @@ const useCart = (): UseCartReturn => {
   const [loading, setLoading] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
 
-  // ✅ safely get token client-side
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       setToken(localStorage.getItem("token"));
     }
   }, []);
 
-  // ✅ Fetch cart
+  
   const fetchCart = useCallback(async () => {
     if (!token) return;
     setLoading(true);
@@ -48,7 +48,7 @@ const useCart = (): UseCartReturn => {
     }
   }, [token]);
 
-  // ✅ Add to cart
+  
   const addToCart = useCallback(
     async (productId: number, quantity: number) => {
       if (!token) return;
@@ -72,7 +72,7 @@ const useCart = (): UseCartReturn => {
     [token, fetchCart]
   );
 
-  // ✅ Remove from cart
+  
   const removeFromCart = useCallback(
     async (productId: number) => {
       if (!token) return;
@@ -96,6 +96,7 @@ const useCart = (): UseCartReturn => {
         setCartItems((prev) =>
           prev.filter((item) => item.productId !== productId)
         );
+        fetchCart();
       } catch (err) {
         console.error("Error removing from cart:", err);
       } finally {
@@ -105,7 +106,7 @@ const useCart = (): UseCartReturn => {
     [token]
   );
 
-  // ✅ Update quantity
+  
   const updateCart = useCallback(
     async (productId: number, quantity: number) => {
       if (!token) return;
@@ -128,6 +129,12 @@ const useCart = (): UseCartReturn => {
     },
     [token, fetchCart]
   );
+
+  useEffect(() => {
+    if (token) {
+      fetchCart();
+    }
+  }, [token, fetchCart]);
 
   return {
     cartItems,

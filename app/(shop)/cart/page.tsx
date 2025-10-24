@@ -6,10 +6,19 @@ import Image from "next/image";
 import CartItem from "./components/CartItem";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import DeliveryDateModal from "./components/DeliveryDateModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useCart from "@/app/utils/useCart";
+import useProducts from "@/app/utils/useProducts";
 
 const Cart = () => {
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
+  const { cartItems, removeFromCart } = useCart();
+  const { products } = useProducts();
+
+  useEffect(() => {
+    console.log(cartItems);
+    console.log(products);
+  }, [cartItems, products]);
 
   return (
     <main className="lg:flex md:px-20 px-6 mb-6 gap-12">
@@ -72,9 +81,19 @@ const Cart = () => {
 
         <div className="bg-white border  border-black-100 rounded-xl p-4">
           <h2 className="text-black-400 font-bold text-body-md">Items Name</h2>
-          <CartItem />
-          <CartItem />
-          <CartItem />
+          {cartItems &&
+            cartItems.map((cartItem) => {
+              const product = products.find(
+                (item) => item.id === cartItem.productId
+              );
+              return product ? (
+                <CartItem
+                  key={product.id}
+                  product={product}
+                  removeFromCart={removeFromCart}
+                />
+              ) : null;
+            })}
         </div>
         <BestSeller title="Recommendations" />
       </div>

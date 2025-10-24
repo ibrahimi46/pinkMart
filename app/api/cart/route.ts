@@ -127,7 +127,7 @@ export async function DELETE(req:NextRequest) {
     const token = authHeader.split(" ")[1];
     let decoded;
     if (token) {
-        decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as {userId: number};
+        decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: number};
     }
 
     if (!decoded) return;
