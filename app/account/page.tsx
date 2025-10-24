@@ -93,7 +93,7 @@ const MyAccount = () => {
           </div>
           {!user?.isAdmin
             ? userMenu.map((user) => (
-                <>
+                <div key={user.key}>
                   <Button
                     key={user.key}
                     name={user.name}
@@ -102,7 +102,7 @@ const MyAccount = () => {
                     textStyles="text-body-md"
                     handleOnClick={() => setActiveSection(user.key)}
                   />
-                </>
+                </div>
               ))
             : adminMenu.map((item) => (
                 <div key={item.key}>

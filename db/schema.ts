@@ -22,3 +22,19 @@ export const users = pgTable("users", {
     isAdmin: boolean("is_admin").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 })
+
+export const cart = pgTable("cart", {
+    id: serial("id").primaryKey().notNull(),
+    user_id: numeric("user_id").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull()
+})
+
+
+export const cartItems = pgTable("cartItems", {
+    id: serial("id").primaryKey().notNull(),
+    cartId: numeric("cart_id").notNull(),
+    productId: numeric("product_id").notNull(),
+    quantity: numeric("quantity").default("0").notNull(),
+    addedAt: timestamp("added_at").defaultNow().notNull()
+
+})
