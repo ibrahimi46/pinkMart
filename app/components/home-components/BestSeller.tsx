@@ -5,6 +5,7 @@ import assets from "@/assets";
 import ForwardButton from "../ForwardButton";
 import Image from "next/image";
 import { useRef } from "react";
+import useProducts from "@/app/utils/useProducts";
 
 interface BestSellerProps {
   title: string;
@@ -63,6 +64,7 @@ const CardsItem = ({
 
 const BestSeller = ({ title }: BestSellerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { products } = useProducts();
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -97,111 +99,19 @@ const BestSeller = ({ title }: BestSellerProps) => {
         </div>
       </div>
       <div className="flex gap-4 overflow-auto scrollbar-hide" ref={scrollRef}>
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
-        <CardsItem
-          name="Strawberry"
-          icon={assets.home.best_sellers.img2}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={38}
-        />
-        <CardsItem
-          name="Lemon"
-          icon={assets.home.best_sellers.img3}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={87}
-        />
-        <CardsItem
-          name="Lemon"
-          icon={assets.home.best_sellers.img3}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={87}
-        />
-        <CardsItem
-          name="Lemon"
-          icon={assets.home.best_sellers.img3}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={87}
-        />
-        <CardsItem
-          name="Lemon"
-          icon={assets.home.best_sellers.img3}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={87}
-        />
-        <CardsItem
-          name="Lemon"
-          icon={assets.home.best_sellers.img3}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={87}
-        />
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
-        <CardsItem
-          name="Orange"
-          icon={assets.home.best_sellers.img1}
-          currentPrice={2.71}
-          oldPrice={3.99}
-          capacity={180}
-        />
+        {products &&
+          products.map((item) => {
+            return (
+              <CardsItem
+                key={item.id}
+                name={item.name}
+                icon={item.imageUrl}
+                currentPrice={parseInt(item.price)}
+                oldPrice={3.99}
+                capacity={item.stock}
+              />
+            );
+          })}
       </div>
     </div>
   );
