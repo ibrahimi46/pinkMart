@@ -1,25 +1,42 @@
 import Image from "next/image";
 import assets from "@/assets";
 import Button from "@/app/components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BackButton from "@/app/components/BackButton";
 import Loading from "@/app/components/Loading";
 
-const ProductItem = () => {
+interface ProductItemProps {
+  name: string;
+  category: string;
+  price: number;
+  createdAt: string;
+  orderId: number;
+}
+
+const ProductItem = ({
+  name,
+  category,
+  price,
+  createdAt,
+  orderId,
+}: ProductItemProps) => {
   return (
     <div className="bg-black-100 rounded-3xl items-center p-4 flex flex-col gap-4 justify-between sm:flex sm:flex-row">
       <div className="flex justify-between sm:flex-col text-body-sm sm:text-body-md">
         <p>
-          <b>Name: </b>Orange
+          <b>Name: </b>
+          {name}
         </p>
         <p>
-          <b>Category: </b>Fruits
+          <b>Category: </b>
+          {category}
         </p>
         <p>
-          <b>Price: </b>$4.99
+          <b>Price: </b>${price}
         </p>
         <p>
-          <b>Created At: </b>23/09/2024
+          <b>Created At: </b>
+          {new Date(createdAt).toLocaleDateString()}
         </p>
       </div>
       <div className="flex items-center sm:w-28 md:w-32 w-full gap-2 bg-primary-100 p-2 justify-center rounded-3xl border border-primary-600">
@@ -178,8 +195,38 @@ const AddProductForm = ({ setShowAddProductForm }: AddProductFormProps) => {
   );
 };
 
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  stock: number;
+  imageUrl: string;
+  createdAt: string;
+}
+
 const ManageProducts = () => {
-  const [showAddProductForm, setShowAddProductForm] = useState<boolean>(true);
+  const [showAddProductForm, setShowAddProductForm] = useState<boolean>(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/products");
+        const data = await res.json();
+        setProducts(data.products);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="mt-2 flex flex-col gap-6">
@@ -200,16 +247,19 @@ const ManageProducts = () => {
             />
           </div>
           <div className="p-4 rounded-3xl border border-black-200 flex flex-col gap-6 sm:gap-4 h-[950px] overflow-y-scroll scrollbar-hide">
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
+            {products &&
+              products.map((product) => {
+                return (
+                  <ProductItem
+                    key={product.id}
+                    name={product.name}
+                    category={product.category}
+                    orderId={product.id}
+                    price={product.price}
+                    createdAt={product.createdAt}
+                  />
+                );
+              })}
           </div>
         </>
       )}

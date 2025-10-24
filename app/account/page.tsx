@@ -99,16 +99,15 @@ const MyAccount = () => {
                 </>
               ))
             : adminMenu.map((item) => (
-                <>
+                <div key={item.key}>
                   <Button
-                    key={item.key}
                     name={item.name}
                     iconPosition="left"
                     icon={item.icon}
                     textStyles="text-body-md"
                     handleOnClick={() => setActiveSection(item.key)}
                   />
-                </>
+                </div>
               ))}
 
           <hr className="border-black-200 my-2 border-t-1 w-full" />
