@@ -12,6 +12,7 @@ import ManageProducts from "./(admin)/ManageProducts";
 import ManageOrders from "./(admin)/ManageOrders";
 import ManageUsers from "./(admin)/ManageUsers";
 import Analytics from "./(admin)/Analytics";
+import { useUser } from "../utils/useUser";
 
 const userMenu = [
   {
@@ -47,6 +48,7 @@ const adminMenu = [
 const MyAccount = () => {
   const [activeSection, setActiveSection] = useState<string>("admin-dashboard");
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const { logout } = useUser();
 
   const renderSection = () => {
     switch (activeSection) {
@@ -132,6 +134,7 @@ const MyAccount = () => {
             icon={assets.icons.logout}
             iconPosition="left"
             extraStyles="w-full h-16 border border-black-300"
+            handleOnClick={logout}
           />
         </div>
       </div>
