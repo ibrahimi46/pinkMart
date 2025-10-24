@@ -3,6 +3,7 @@ import assets from "@/assets";
 import Button from "@/app/components/Button";
 import { useState } from "react";
 import BackButton from "@/app/components/BackButton";
+import Loading from "@/app/components/Loading";
 
 const ProductItem = () => {
   return (
@@ -34,68 +35,152 @@ interface AddProductFormProps {
 }
 
 const AddProductForm = ({ setShowAddProductForm }: AddProductFormProps) => {
+  const [productName, setProductName] = useState<string | null>(null);
+  const [description, setDescription] = useState<string | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
+  const [price, setPrice] = useState<string | null>(null);
+  const [stockQuantity, setStockQuantity] = useState<number | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return "Please select an image";
+    setLoading(true);
+
+    // try upload
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch(`/api/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      const imageUrl = data.imageUrl;
+
+      const token = localStorage.getItem("token");
+
+      await fetch("/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: productName,
+          category,
+          description,
+          price: parseFloat(price || "0"),
+          stock: stockQuantity || 0,
+          image_url: imageUrl,
+        }),
+      });
+
+      console.log("product added successfully");
+    } catch (err) {
+      console.error("Failed to upload form", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
-      <div className="flex gap-4 items-center">
-        <BackButton handleBack={() => setShowAddProductForm(false)} />
-        <h1 className="font-semibold">Add Product</h1>
-      </div>
-      <div className="mt-4 border border-black-200 rounded-3xl p-4 flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Product Name"
-          className="p-3 bg-black-100 rounded-3xl border border-black-200"
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          className="p-3 bg-black-100 rounded-3xl border border-black-200"
-        />
-        <div className="flex flex-col gap-4 md:flex-row md:justify-between">
-          <div className="flex items-center gap-4">
-            <label htmlFor="" className="font-semibold hidden sm:block">
-              Category:
-            </label>
-            <select
-              name="Category"
-              id="category"
-              className="p-3 bg-black-100 rounded-3xl border border-black-200 w-full"
-            >
-              <option value="fruits">Fruits</option>
-              <option value="snacks">Snacks</option>
-            </select>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex gap-4 items-center">
+            <BackButton handleBack={() => setShowAddProductForm(false)} />
+            <h1 className="font-semibold">Add Product</h1>
           </div>
-          <input
-            type="number"
-            placeholder="Price"
-            className="p-3 bg-black-100 rounded-3xl border border-black-200 min-w-0"
-          />
-          <input
-            type="number"
-            placeholder="Stock Quantity"
-            className="p-3 bg-black-100 rounded-3xl border border-black-200 min-w-0"
-          />
-        </div>
-        <div className="bg-primary-100 rounded-3xl p-4 flex flex-col gap-3 items-center justify-center">
-          <Image
-            src={assets.icons.upload}
-            height={40}
-            width={40}
-            alt="upload"
-          />
-          <p>Upload Image</p>
-        </div>
+          <div className="mt-4 border border-black-200 rounded-3xl p-4 flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Product Name"
+              className="p-3 bg-black-100 rounded-3xl border border-black-200"
+              onChange={(e) => setProductName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Description"
+              className="p-3 bg-black-100 rounded-3xl border border-black-200"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <div className="flex flex-col gap-4 md:flex-row md:justify-between">
+              <div className="flex items-center gap-4">
+                <label htmlFor="" className="font-semibold hidden sm:block">
+                  Category:
+                </label>
+                <select
+                  name="Category"
+                  id="category"
+                  className="p-3 bg-black-100 rounded-3xl border border-black-200 w-full"
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  <option value="">Select category</option>
+                  <option value="fruits">Fruits</option>
+                  <option value="snacks">Snacks</option>
+                  <option value="meat">Meat</option>
+                </select>
+              </div>
+              <input
+                type="number"
+                placeholder="Price"
+                className="p-3 bg-black-100 rounded-3xl border border-black-200 min-w-0"
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Stock Quantity"
+                className="p-3 bg-black-100 rounded-3xl border border-black-200 min-w-0"
+                onChange={(e) => setStockQuantity(parseInt(e.target.value))}
+              />
+            </div>
+            <div className="bg-primary-100 rounded-3xl p-4 flex flex-col gap-3 items-center justify-center">
+              <Image
+                src={assets.icons.upload}
+                height={40}
+                width={40}
+                alt="upload"
+              />
+              <p>Upload Image</p>
+              <label
+                htmlFor="file-upload"
+                className="bg-black-100 px-2 py-1 rounded-3xl border border-primary-600 cursor-pointer"
+              >
+                Select an image
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                className="hidden"
+                onChange={(e) => {
+                  setFile(e.target.files?.[0] || null);
+                }}
+              />
+            </div>
 
-        <button className="bg-primary-600 text-white py-2 rounded-3xl mt-4">
-          Submit
-        </button>
-      </div>
+            <button
+              className="bg-primary-600 text-white py-2 rounded-3xl mt-4"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
 
 const ManageProducts = () => {
   const [showAddProductForm, setShowAddProductForm] = useState<boolean>(true);
+
   return (
     <div className="mt-2 flex flex-col gap-6">
       {showAddProductForm ? (
