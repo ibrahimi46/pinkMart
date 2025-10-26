@@ -42,7 +42,7 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
               </div>
               {user.isAdmin ? (
                 <>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 text-body-md">
                     <Link href={"/auth/login"}>
                       <Button
                         name="Admin Dashboard"
