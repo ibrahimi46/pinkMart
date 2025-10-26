@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import useCart from "@/app/utils/useCart";
 import useProducts from "@/app/utils/useProducts";
 import { generateDeliveryDates } from "@/app/utils/generateDeliveryDates";
+import useOrder from "@/app/utils/useOrder";
 
 interface DeliveryDates {
   date: Date;
@@ -22,7 +23,7 @@ const Cart = () => {
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
-  const { cartItems, removeFromCart, updateCart, cartTotal } = useCart();
+  const { cartItems, removeFromCart, updateCart } = useCart();
   const { products } = useProducts();
 
   useEffect(() => {
@@ -161,7 +162,7 @@ const Cart = () => {
       </div>
 
       <div className="mt-8">
-        <OrderSummary cartTotal={cartTotal} />
+        <OrderSummary selectedDeliveryDate={selectedDeliveryDate} />
       </div>
     </main>
   );

@@ -1,4 +1,3 @@
-import { products } from "@/db/schema";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface CartItem {
