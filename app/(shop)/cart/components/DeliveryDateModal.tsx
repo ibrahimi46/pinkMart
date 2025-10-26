@@ -4,22 +4,49 @@ import Image from "next/image";
 interface DateSelectorProps {
   day: string;
   date: string;
+  handleClick: () => void;
+  selectedDeliveryDate: string;
 }
 
-const DateSelector = ({ day, date }: DateSelectorProps) => {
+const DateSelector = ({
+  day,
+  date,
+  handleClick,
+  selectedDeliveryDate,
+}: DateSelectorProps) => {
   return (
-    <div className="flex flex-col border cursor-pointer hover:border hover:border-black-700 border-black-100 hover:bg-black-100 transition-all duration-300 items-center justify-center bg-black-50 h-[70px] w-20 rounded-xl">
+    <div
+      onClick={handleClick}
+      className={`flex flex-col border cursor-pointer hover:border hover:border-black-700 border-black-100 hover:bg-black-100 transition-all duration-300 
+        items-center justify-center bg-black-50 h-[70px] w-20 rounded-xl
+        ${selectedDeliveryDate === date ? "border border-black-500" : ""}
+        `}
+    >
       <p className="text-black-500 text-body-md">{day}</p>
       <p className="text-black-300 text-body-sm">{date}</p>
     </div>
   );
 };
 
+interface DeliveryDatesProps {
+  date: Date;
+  dayName: string;
+  dateStr: string;
+  fullDate: string;
+}
 interface DeliveryDateModalProps {
   handleCloseModal: (st: boolean) => void;
+  deliveryDates: DeliveryDatesProps[];
+  setSelectedDeliveryDate: (date: string) => void;
+  selectedDeliveryDate: string;
 }
 
-const DeliveryDateModal = ({ handleCloseModal }: DeliveryDateModalProps) => {
+const DeliveryDateModal = ({
+  handleCloseModal,
+  deliveryDates,
+  setSelectedDeliveryDate,
+  selectedDeliveryDate,
+}: DeliveryDateModalProps) => {
   return (
     <div className="bg-white p-5 w-[550px] h-auto rounded-3xl flex flex-col gap-4 relative">
       <div
@@ -33,13 +60,20 @@ const DeliveryDateModal = ({ handleCloseModal }: DeliveryDateModalProps) => {
       <div>
         <p className="text-body-md mb-4">Select date</p>
         <div className="flex flex-wrap gap-4  font-semibold">
-          <DateSelector day="Mon" date="08/07" />
-          <DateSelector day="Mon" date="08/07" />
-          <DateSelector day="Mon" date="08/07" />
-          <DateSelector day="Mon" date="08/07" />
-          <DateSelector day="Mon" date="08/07" />
-          <DateSelector day="Mon" date="08/07" />
-          <DateSelector day="Mon" date="08/07" />
+          {deliveryDates.map((item, idx) => {
+            return (
+              <DateSelector
+                key={idx}
+                date={item.dateStr}
+                day={item.dayName}
+                selectedDeliveryDate={selectedDeliveryDate}
+                handleClick={() => {
+                  setSelectedDeliveryDate(item.dateStr);
+                  console.log(selectedDeliveryDate);
+                }}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

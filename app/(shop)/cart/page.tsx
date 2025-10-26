@@ -6,14 +6,29 @@ import Image from "next/image";
 import CartItem from "./components/CartItem";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import DeliveryDateModal from "./components/DeliveryDateModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCart from "@/app/utils/useCart";
 import useProducts from "@/app/utils/useProducts";
+import { generateDeliveryDates } from "@/app/utils/generateDeliveryDates";
+
+interface DeliveryDates {
+  date: Date;
+  dayName: string;
+  dateStr: string;
+  fullDate: string;
+}
 
 const Cart = () => {
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
+  const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
+  const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
   const { cartItems, removeFromCart, updateCart } = useCart();
   const { products } = useProducts();
+
+  useEffect(() => {
+    const dates = generateDeliveryDates(2, 10);
+    setDeliveryDates(dates);
+  }, []);
 
   return (
     <main className="lg:flex md:px-20 px-6 mb-6 gap-12">
@@ -28,7 +43,12 @@ const Cart = () => {
         
         `}
       >
-        <DeliveryDateModal handleCloseModal={setIsPickDeliveryDate} />
+        <DeliveryDateModal
+          handleCloseModal={setIsPickDeliveryDate}
+          setSelectedDeliveryDate={setSelectedDeliveryDate}
+          deliveryDates={deliveryDates}
+          selectedDeliveryDate={selectedDeliveryDate}
+        />
       </div>
 
       <div className="flex-1 overflow-hidden flex flex-col gap-6">
@@ -65,7 +85,11 @@ const Cart = () => {
             }}
           >
             <Button
-              name="Wed 123"
+              name={
+                deliveryDates.length > 0
+                  ? deliveryDates[0].dateStr
+                  : "Loading..."
+              }
               iconPosition="left"
               icon={assets.icons.calender}
               extraStyles="px-6 border border-primary-600"
@@ -127,7 +151,9 @@ const Cart = () => {
           }}
         >
           <Button
-            name="Wed 123"
+            name={
+              deliveryDates.length > 0 ? deliveryDates[0].dateStr : "Loading..."
+            }
             iconPosition="left"
             icon={assets.icons.calender}
             extraStyles="px-3 border border-primary-600"
