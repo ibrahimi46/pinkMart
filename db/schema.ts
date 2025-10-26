@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text, numeric, timestamp, boolean, integer } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, numeric, timestamp, boolean, integer, varchar } from "drizzle-orm/pg-core";
 
 export const products = pgTable("products", {
     id: serial("id").primaryKey(),
@@ -55,6 +55,19 @@ export const orderItems = pgTable("orderItems", {
     productId: integer("product_id").notNull(),
     quantity: integer("quantity").notNull().default(0),
     priceAtPurchase: numeric("price_at_purchase").notNull(),
+})
+
+
+export const paymentMethods = pgTable("paymentMethods", {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").notNull(),
+    type: varchar("type").notNull(),          
+    provider: varchar("provider").notNull(),  
+    cardNumber: varchar("card_number").notNull(),
+    expiryDate: varchar("expiry_date").notNull(), 
+    cvv: varchar("cvv").notNull(),
+    isDefault: boolean("is_default").default(false),
+    createdAt: timestamp("created_at").defaultNow(),
 })
 
 
