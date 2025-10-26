@@ -6,23 +6,11 @@ interface DateSelectorProps {
   date: string;
 }
 
-interface TimeSelectorProps {
-  time: string;
-}
-
 const DateSelector = ({ day, date }: DateSelectorProps) => {
   return (
     <div className="flex flex-col border cursor-pointer hover:border hover:border-black-700 border-black-100 hover:bg-black-100 transition-all duration-300 items-center justify-center bg-black-50 h-[70px] w-20 rounded-xl">
       <p className="text-black-500 text-body-md">{day}</p>
       <p className="text-black-300 text-body-sm">{date}</p>
-    </div>
-  );
-};
-
-const TimeSelector = ({ time }: TimeSelectorProps) => {
-  return (
-    <div className="border hover:border hover:border-black-700  hover:bg-black-100 transition-all duration-300 cursor-pointer border-black-100 text-nowrap w-20 flex justify-center py-2 rounded-3xl">
-      <p className="text-body-sm font-semibold">{time}</p>
     </div>
   );
 };
@@ -53,13 +41,6 @@ const DeliveryDateModal = ({ handleCloseModal }: DeliveryDateModalProps) => {
           <DateSelector day="Mon" date="08/07" />
           <DateSelector day="Mon" date="08/07" />
         </div>
-      </div>
-      <p className="text-body-md">Select delivery time slot on 07 August</p>
-      <div className="flex flex-wrap gap-3">
-        <TimeSelector time="12:00 PM" />
-        <TimeSelector time="12:00 PM" />
-        <TimeSelector time="12:00 PM" />
-        <TimeSelector time="12:00 PM" />
       </div>
     </div>
   );

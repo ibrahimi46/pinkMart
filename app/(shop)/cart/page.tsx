@@ -19,11 +19,11 @@ const Cart = () => {
     <main className="lg:flex md:px-20 px-6 mb-6 gap-12">
       <div
         className={`fixed bottom-0 left-0 right-0 sm:inset-0 sm:bg-black-200 border-t-black-200 
-        rounded-t-3xl border z-50 bg-opacity-50 transform transition-all duration-300 flex sm:items-center sm:justify-center
+        rounded-t-3xl border z-50  transform transition-all duration-300 flex sm:items-center sm:justify-center
         ${
           isPickDeliveryDate
-            ? "translate-y-0 opacity-100 pointer-events-auto"
-            : "translate-y-full opacity-50 pointer-events-none"
+            ? "translate-y-0  pointer-events-auto"
+            : "translate-y-full  pointer-events-none"
         }
         
         `}
