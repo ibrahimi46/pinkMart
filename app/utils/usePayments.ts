@@ -59,7 +59,26 @@ const usePayments = () => {
         }
     }
 
-    return {addPaymentMethod, getPaymentMethods, methods, loading}
+    const deletePayment = async (id: number) => {
+        if (!token) return;
+        try {
+            setLoading(true);
+            const res = await fetch(`/api/paymentMethods/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await res.json();
+            return data;
+        } catch(err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return {addPaymentMethod, getPaymentMethods, deletePayment, methods, loading}
 }
 
 export default usePayments

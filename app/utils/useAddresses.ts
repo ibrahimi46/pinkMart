@@ -67,7 +67,26 @@ const useAddresses = () => {
         }
     };
 
-    return { addresses, addAddress, getAddresses, loading };
+    const deleteAddress = async (id: number) => {
+    if (!token) return;
+    try {
+        setLoading(true);
+        const res = await fetch(`/api/addresses/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await res.json();
+        return data;
+    } catch(err) {
+        console.error(err);
+    } finally {
+        setLoading(false);
+    }
+}
+
+    return { addresses, addAddress, getAddresses, deleteAddress, loading };
 };
 
 export default useAddresses;
