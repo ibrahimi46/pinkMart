@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         const order = await db.insert(OrderTable).values({
             userId: decoded.userId,
             totalAmount: cartTotal,
-            deliveryDate: selectedDeliveryDate
+            deliveryDate: new Date(selectedDeliveryDate)
 
         }).returning();
 

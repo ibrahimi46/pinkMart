@@ -5,9 +5,13 @@ import assets from "@/assets";
 
 interface OrderSummaryProps {
   selectedDeliveryDate: string;
+  handleStepNext: (step: string) => void;
 }
 
-const OrderSummary = ({ selectedDeliveryDate }: OrderSummaryProps) => {
+const OrderSummary = ({
+  selectedDeliveryDate,
+  handleStepNext,
+}: OrderSummaryProps) => {
   const { placeOrder } = useOrder();
   const { cartTotal, cartItems } = useCart();
 
@@ -34,13 +38,11 @@ const OrderSummary = ({ selectedDeliveryDate }: OrderSummaryProps) => {
         <h1 className="text-body-lg font-bold">Subtotal</h1>
         <p className="mr-4">${finalCheckoutPrice}</p>
       </div>
-      <div className="bg-primary-600 flex justify-between px-4 py-2 text-body-md rounded-full w-64">
-        <div
-          className="flex gap-2 text-black-50"
-          onClick={() =>
-            placeOrder({ cartItems, selectedDeliveryDate, finalCheckoutPrice })
-          }
-        >
+      <div
+        className="bg-primary-600 flex justify-between w-full px-4 py-2 text-body-md cursor-pointer rounded-full md:w-64"
+        onClick={() => handleStepNext("checkout")}
+      >
+        <div className="flex gap-2 text-black-50">
           <Image
             height={20}
             width={20}

@@ -45,7 +45,7 @@ const CartItem = ({
           </div>
         </div>
         {/**right */}
-        <div className="text-body-md items-end w-52  flex gap-4 last sm:items-center">
+        <div className="text-body-md w-52 justify-end flex gap-4 items-center last sm:items-center">
           <div className="flex gap-4 bg-black-100 items-center rounded-3xl p-1">
             <div className="bg-white p-1 rounded-full">
               <Image
