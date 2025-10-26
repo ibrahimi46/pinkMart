@@ -22,7 +22,7 @@ const Cart = () => {
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
-  const { cartItems, removeFromCart, updateCart } = useCart();
+  const { cartItems, removeFromCart, updateCart, cartTotal } = useCart();
   const { products } = useProducts();
 
   useEffect(() => {
@@ -86,9 +86,7 @@ const Cart = () => {
           >
             <Button
               name={
-                deliveryDates.length > 0
-                  ? deliveryDates[0].dateStr
-                  : "Loading..."
+                selectedDeliveryDate || deliveryDates[0]?.dateStr || "Loading"
               }
               iconPosition="left"
               icon={assets.icons.calender}
@@ -152,7 +150,7 @@ const Cart = () => {
         >
           <Button
             name={
-              deliveryDates.length > 0 ? deliveryDates[0].dateStr : "Loading..."
+              selectedDeliveryDate || deliveryDates[0]?.dateStr || "Loading"
             }
             iconPosition="left"
             icon={assets.icons.calender}
@@ -163,7 +161,7 @@ const Cart = () => {
       </div>
 
       <div className="mt-8">
-        <OrderSummary />
+        <OrderSummary cartTotal={cartTotal} />
       </div>
     </main>
   );

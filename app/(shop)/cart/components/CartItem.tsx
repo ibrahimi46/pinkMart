@@ -1,6 +1,5 @@
 import Image from "next/image";
 import assets from "@/assets";
-import useCart from "@/app/utils/useCart";
 
 interface ProductProps {
   product: {

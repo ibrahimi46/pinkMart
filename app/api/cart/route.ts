@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { cart as CartTable, cartItems as CartItemsTable } from "@/db/schema";
+import { cart as CartTable, cartItems as CartItemsTable, products, cartItems } from "@/db/schema";
 import jwt from "jsonwebtoken"
 import {eq, and} from "drizzle-orm";
 
@@ -55,14 +55,11 @@ export async function POST(req: NextRequest) {
     }
 }
 
-
 export async function GET(req: NextRequest) {
     try {
         const authHeader = req.headers.get("authorization");
         if (!authHeader) return NextResponse.json({error: "Missing token"}, {status:400})
-
         const token = authHeader.split(" ")[1];
-
         let decoded;
         if (token) {
             decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: number, isAdmin: boolean}
@@ -71,8 +68,8 @@ export async function GET(req: NextRequest) {
 
         // check if user has a cart 
         if (!decoded || !decoded.userId) {
-      return NextResponse.json({error: "Invalid token"}, {status: 401});
-    }
+            return NextResponse.json({error: "Invalid token"}, {status: 401});
+        }
         const cart = await db.select().from(CartTable).where(eq(CartTable.user_id, decoded?.userId));
         const userCart = cart[0];
         if (!cart.length) {
@@ -82,7 +79,13 @@ export async function GET(req: NextRequest) {
 
         // fetch cart 
 
-        const cartProducts = await db.select().from(CartItemsTable).where(eq(CartItemsTable.cartId, userCart.id));
+        const cartProducts = await db.select({
+            id: CartItemsTable.id,
+            cartId: CartItemsTable.cartId,
+            productId: CartItemsTable.productId,
+            quantity: CartItemsTable.quantity,
+            price: products.price
+        }).from(CartItemsTable).innerJoin(products, eq(products.id, CartItemsTable.productId)).where(eq(CartItemsTable.cartId, userCart.id));
         return NextResponse.json({items: cartProducts}, {status: 200})
 
 

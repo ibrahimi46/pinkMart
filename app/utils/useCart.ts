@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { products } from "@/db/schema";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface CartItem {
   id: number;
@@ -6,11 +7,13 @@ interface CartItem {
   productId: number;
   quantity: number;
   addedAt: string;
+  price: string
 }
 
 interface UseCartReturn {
   loading: boolean;
   cartItems: CartItem[];
+  cartTotal: number;
   refetchCart: () => Promise<void>;
   addToCart: (productId: number, quantity: number) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
@@ -28,6 +31,7 @@ const useCart = (): UseCartReturn => {
       setToken(localStorage.getItem("token"));
     }
   }, []);
+
 
   
   const fetchCart = useCallback(async () => {
@@ -130,6 +134,15 @@ const useCart = (): UseCartReturn => {
     [token, fetchCart]
   );
 
+
+   const cartTotal = useMemo(() => {
+    return cartItems.reduce((total, item) => {
+      const price = parseFloat(item.price);
+      return total + (price * item.quantity);
+    }, 0);
+  }, [cartItems]);
+  
+
   useEffect(() => {
     if (token) {
       fetchCart();
@@ -143,6 +156,7 @@ const useCart = (): UseCartReturn => {
     addToCart,
     removeFromCart,
     updateCart,
+    cartTotal
   };
 };
 
