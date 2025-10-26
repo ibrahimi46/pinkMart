@@ -1,0 +1,58 @@
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+import { db } from "@/db";
+import { addresses } from "@/db/schema";
+import { eq } from "drizzle-orm";
+
+export async function GET(req: NextRequest) {
+    try {
+        const authHeader = req.headers.get("authorization");
+        if (!authHeader) return NextResponse.json({ error: "Missing header" }, { status: 401 });
+
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number, isAdmin: boolean };
+        if (!token || !decoded) return NextResponse.json({ error: "Missing token" }, { status: 401 });
+
+        const userAddresses = await db.select({
+            type: addresses.type,
+            streetAddress: addresses.streetAddress,
+            aptNumber: addresses.aptNumber,
+            zipCode: addresses.zipCode
+        }).from(addresses).where(eq(addresses.userId, decoded.userId));
+
+        return NextResponse.json({ addresses: userAddresses }, { status: 200 });
+
+    } catch (err) {
+        console.error(err);
+        return NextResponse.json({ error: "Error fetching addresses", err }, { status: 400 });
+    }
+}
+
+export async function POST(req: NextRequest) {
+    try {
+        const authHeader = req.headers.get("authorization");
+        if (!authHeader) return NextResponse.json({ error: "Missing header" }, { status: 401 });
+
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number, isAdmin: boolean };
+        if (!token || !decoded) return NextResponse.json({ error: "Missing token" }, { status: 401 });
+
+        const { type, streetAddress, city, aptNumber, zipCode } = await req.json();
+        if (!type || !streetAddress || !city || !zipCode) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        }
+
+        await db.insert(addresses).values({
+            userId: decoded?.userId,
+            type, streetAddress, city, aptNumber, zipCode
+        });
+
+        return NextResponse.json({ success: true }, { status: 200 });
+
+    } catch (err) {
+        console.error(err);
+        return NextResponse.json({ error: "Error adding address", err }, { status: 400 });
+    }
+}
+
+

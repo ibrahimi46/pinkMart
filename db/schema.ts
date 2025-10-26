@@ -71,6 +71,17 @@ export const paymentMethods = pgTable("paymentMethods", {
 })
 
 
+export const addresses = pgTable("addresses", {
+    id: serial("id").primaryKey(),
+    userId: serial("user_id").notNull(),
+    type: varchar("type", {length: 50}).notNull(),
+    streetAddress: text("street_address").notNull(),
+    city: varchar("city", {length: 100}).notNull(),
+    aptNumber: varchar("apt_number", {length: 50}),
+    zipCode: varchar("zip_code", {length: 20}).notNull(),
+    createdAt: varchar("created_at", {length: 50}).default(new Date().toISOString())
+})
+
 // Relations
 
 export const orderRelations = relations(orders, ({many, one}) => ({
