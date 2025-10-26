@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Button from "@/app/components/Button";
-import assets from "@/assets";
 
 interface NoDataPlaceholderProps {
   icon: string;

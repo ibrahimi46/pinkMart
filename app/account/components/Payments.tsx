@@ -1,10 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NoDataPlaceholder from "./NoDataPlaceholder";
 import assets from "@/assets";
 import Image from "next/image";
 import BackButton from "@/app/components/BackButton";
+import usePayments from "@/app/utils/usePayments";
 
-const PaymentMethodItem = () => {
+interface PaymentMethods {
+  id?: number;
+  userId?: number;
+  type?: string;
+  provider: string;
+  cardNumber: string;
+  expiryDate: string;
+  cvv?: string;
+  isDefault: boolean;
+  createdAt?: string;
+  deletePayment?: (id: number) => void;
+}
+
+const PaymentMethodItem = ({
+  provider,
+  cardNumber,
+  expiryDate,
+  isDefault,
+  deletePayment,
+  id,
+}: PaymentMethods) => {
   return (
     <div className="bg-black-100 p-4 rounded-2xl border border-black-200 text-body-md flex justify-between items-center">
       <div className="flex gap-4">
@@ -15,11 +36,12 @@ const PaymentMethodItem = () => {
           alt="mastercard"
         />
         <div>
-          <h1 className="font-semibold">MasterCard 6568</h1>
-          <p className="text-black-400 text-body-sm">Exp 12/2024</p>
+          <h1 className="font-semibold">{`${provider.toUpperCase()} - ${cardNumber}`}</h1>
+          <p className="text-black-400 text-body-sm">{expiryDate}</p>
+          {isDefault && <p className="text-body-sm">Default</p>}
         </div>
       </div>
-      <div>
+      <div onClick={() => deletePayment?.(id!)}>
         <Image src={assets.icons.bin_purple} height={20} width={20} alt="bin" />
       </div>
     </div>
@@ -32,6 +54,14 @@ interface AddPaymentModalProps {
 
 const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
   const [paymentMode, setPaymentMode] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const [cardNumber, setCardNumber] = useState<string>("");
+  const [expiryDate, setExpiryDate] = useState<string>("");
+  const [cvv, setCvv] = useState<string>("");
+  const [isDefault, setIsDefault] = useState<boolean>(false);
+
+  const { addPaymentMethod, getPaymentMethods } = usePayments();
+
   return (
     <div className="fixed bottom-0 sm:inset-0 left-0 right-0 z-50 flex items-center justify-center transition-all duration-300">
       <div className="bg-white px-4 py-7 flex flex-col gap-6 rounded-3xl relative sm:w-[420px] w-full">
@@ -54,23 +84,45 @@ const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
             <div className="flex flex-col gap-3">
               <p className="font-semibold">Card Number</p>
               <input
-                type="number"
+                type="text"
                 placeholder="XXXX-XXXX-XXXX-XXXX"
                 className="bg-black-100 p-3 rounded-xl"
+                onChange={(e) => setCardNumber(e.target.value)}
               />
               <div className="flex justify-between">
                 <input
                   type="date"
                   placeholder="MM/YY"
                   className="bg-black-100 p-3 rounded-xl"
+                  onChange={(e) => setExpiryDate(e.target.value)}
                 />
                 <input
                   type="number"
                   placeholder="CVC"
                   className="bg-black-100 p-3 rounded-xl"
+                  onChange={(e) => setCvv(e.target.value)}
                 />
               </div>
-              <button className="bg-primary-600 text-white py-3 rounded-3xl mt-4">
+              <div className="flex gap-2">
+                <p className="text-body-md font-semibold">Save as Default</p>
+                <input
+                  type="checkbox"
+                  onChange={() => setIsDefault(!isDefault)}
+                />
+              </div>
+              <button
+                onClick={() =>
+                  addPaymentMethod({
+                    type,
+                    provider: paymentMode,
+                    cardNumber,
+                    expiryDate,
+                    cvv,
+                    isDefault,
+                  })
+                }
+                className="bg-primary-600 text-white py-3 rounded-3xl mt-2"
+              >
                 Save
               </button>
             </div>
@@ -101,7 +153,10 @@ const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
             <div className="flex flex-col gap-3">
               <div
                 className="flex bg-black-100 p-4 rounded-2xl justify-between"
-                onClick={() => setPaymentMode("visa")}
+                onClick={() => {
+                  setPaymentMode("visa");
+                  setType("Credit Card");
+                }}
               >
                 <div className="flex gap-2">
                   <Image
@@ -121,7 +176,10 @@ const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
               </div>
               <div
                 className="flex bg-black-100 p-4 rounded-2xl justify-between"
-                onClick={() => setPaymentMode("paypal")}
+                onClick={() => {
+                  setPaymentMode("paypal");
+                  setType("Paypal");
+                }}
               >
                 <div className="flex gap-2">
                   <Image
@@ -148,15 +206,41 @@ const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
 };
 
 const Payments = () => {
-  const [paymentMethods, setPaymentMethods] = useState<object>({});
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethods[]>([]);
   const [showAddPaymentModal, setShowAddPaymentModal] =
     useState<boolean>(false);
+
+  const { getPaymentMethods, deletePayment } = usePayments();
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      const data = await getPaymentMethods();
+      if (data) {
+        setPaymentMethods(data);
+      }
+    };
+
+    fetchPayments();
+  }, []);
+
   return (
     <div>
-      {paymentMethods ? (
+      {paymentMethods.length > 0 ? (
         <div className="flex flex-col gap-4 mt-2">
           <h1 className="font-bold">My Payments</h1>
-          <PaymentMethodItem />
+          {paymentMethods.map((method) => {
+            return (
+              <PaymentMethodItem
+                key={method.id}
+                provider={method.provider}
+                cardNumber={method.cardNumber}
+                expiryDate={method.expiryDate}
+                isDefault={method.isDefault}
+                deletePayment={deletePayment}
+                id={method.id}
+              />
+            );
+          })}
           <div className="flex gap-2 bg-primary-50 border border-primary-300 w-56 py-2 items-center justify-center text-nowrap rounded-xl ">
             <Image src={assets.icons.plus} width={20} height={20} alt="plus" />
             <p onClick={() => setShowAddPaymentModal(true)}>
