@@ -43,6 +43,7 @@ const assets = {
     bin: "/icons/bin.svg",
     upload: "/icons/upload.svg",
     signup: "/icons/signup.svg",
+    green_tickmark: "/icons/green_tickmark.svg",
   },
   onboarding: {
     step1: {

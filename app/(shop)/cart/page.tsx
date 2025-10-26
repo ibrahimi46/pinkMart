@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 import useCart from "@/app/utils/useCart";
 import useProducts from "@/app/utils/useProducts";
 import { generateDeliveryDates } from "@/app/utils/generateDeliveryDates";
-import BackButton from "@/app/components/BackButton";
+import OrderPlaced from "./components/OrderPlaced";
+import Checkout from "./components/Checkout";
 
 interface DeliveryDates {
   date: Date;
@@ -21,7 +22,7 @@ interface DeliveryDates {
 
 const Cart = () => {
   const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
-    "checkout"
+    "order_placed"
   );
   const [lastOrder, setLastOrder] = useState<any>(null);
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
@@ -46,7 +47,7 @@ const Cart = () => {
   };
 
   return (
-    <main className="md:px-20 flex flex-col md:flex-row px-6 mb-6 gap-8">
+    <main className="md:px-20 flex flex-col lg:flex-row px-6 mb-6 gap-8">
       <div
         className={`fixed bottom-0 left-0 right-0 sm:inset-0 sm:bg-black-200 border-t-black-200 
         rounded-t-3xl border z-50 transform transition-all duration-300 flex sm:items-center sm:justify-center
@@ -144,113 +145,9 @@ const Cart = () => {
           </>
         )}
 
-        {step === "checkout" && (
-          <>
-            <div className="flex flex-col gap-4 bg-white p-4 rounded-3xl border border-black-100">
-              <div className="mb-4">
-                <BackButton handleBack={() => handleStepBack()} />
-              </div>
-              <div className="flex justify-between">
-                <div className="flex gap-3 items-center">
-                  <div className="bg-primary-100 p-2 rounded-full ">
-                    <Image
-                      src={assets.icons.card_purple}
-                      height={30}
-                      width={30}
-                      alt="card"
-                    />
-                  </div>
-                  <h1 className="font-semibold text-body-xl">Checkout</h1>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <Image
-                    src={assets.icons.location}
-                    height={20}
-                    width={20}
-                    alt="location"
-                  />
-                  <p>Deliver Sep 17</p>
-                </div>
-              </div>
-              <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
-                <div className="flex justify-between">
-                  <h1 className="font-semibold">Delivery Info</h1>
-                  <Image
-                    src={assets.icons.arrow_right}
-                    height={25}
-                    width={25}
-                    alt="right"
-                  />
-                </div>
-                <div className="flex gap-4 text-body-md md:text-body-lg">
-                  <p>Deliver to:</p>
-                  <div className="flex gap-2">
-                    <Image
-                      src={assets.icons.location_purple}
-                      height={25}
-                      width={25}
-                      alt="location"
-                    />
-                    <p className="text-primary-600">
-                      2118 Thornridge Cir, Connecticut 35624
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
-                <div className="flex justify-between">
-                  <h1 className="font-semibold">Payment Method</h1>
-                  <Image
-                    src={assets.icons.arrow_right}
-                    height={25}
-                    width={25}
-                    alt="right"
-                  />
-                </div>
-                <div className="flex gap-4 text-body-md md:text-body-lg">
-                  <p>Pay with:</p>
-                  <div className="flex gap-2">
-                    <Image
-                      src={assets.icons.card_purple}
-                      height={25}
-                      width={25}
-                      alt="location"
-                    />
-                    <p className="text-primary-600">MasterCard ****3434</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
-                <div className="flex justify-between">
-                  <h1 className="font-semibold">Review Order</h1>
-                </div>
-                <div className="bg-black-100 p-4 rounded-xl flex justify-between">
-                  <div>
-                    <div className="bg-white flex items-center justify-center h-14 w-14 rounded-xl">
-                      <Image
-                        src={assets.home.best_sellers.img1}
-                        height={40}
-                        width={40}
-                        alt="item"
-                      />
-                    </div>
-                  </div>
-                  <Image
-                    src={assets.icons.arrow_right}
-                    height={25}
-                    width={25}
-                    alt="right"
-                  />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
+        {step === "checkout" && <Checkout handleStepBack={handleStepBack} />}
         {step === "order_placed" && (
-          <>
-            <div>Order placed</div>
-          </>
+          <OrderPlaced handleStepBack={handleStepBack} />
         )}
       </div>
 
@@ -309,6 +206,7 @@ const Cart = () => {
         <OrderSummary
           selectedDeliveryDate={selectedDeliveryDate}
           handleStepNext={handleStepNext}
+          step={step}
         />
       </div>
     </main>
