@@ -4,9 +4,10 @@ import BackButton from "@/app/components/BackButton";
 
 interface CheckoutProps {
   handleStepBack: (step?: string) => void;
+  selectedDeliveryDate: string;
 }
 
-const Checkout = ({ handleStepBack }: CheckoutProps) => {
+const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
   return (
     <div className="flex flex-col gap-4 bg-white p-4 rounded-3xl border border-black-100">
       <div className="mb-4">
@@ -32,7 +33,7 @@ const Checkout = ({ handleStepBack }: CheckoutProps) => {
             alt="location"
           />
           <p className="text-body-sm md:text-body-md text-primary-600">
-            Deliver Sep 17
+            {`Deliver ${selectedDeliveryDate}`}
           </p>
         </div>
       </div>

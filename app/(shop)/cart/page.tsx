@@ -22,9 +22,9 @@ interface DeliveryDates {
 
 const Cart = () => {
   const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
-    "order_placed"
+    "cart"
   );
-  const [lastOrder, setLastOrder] = useState<any>(null);
+  // const [lastOrder, setLastOrder] = useState<any>(null);
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
@@ -67,10 +67,10 @@ const Cart = () => {
         />
       </div>
       {/** leftcontainer */}
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         {step === "cart" && (
           <>
-            <div className="flex-1 overflow-hidden flex flex-col gap-12">
+            <div className="w-full overflow-hidden flex flex-col gap-12">
               <div className="flex flex-col gap-8">
                 <div className="lg:flex justify-between hidden bg-white border border-black-100 items-center rounded-xl h-24 p-4">
                   <div className="flex justify-center gap-4">
@@ -140,12 +140,19 @@ const Cart = () => {
                     })}
                 </div>
               </div>
-              <BestSeller title="Recommendations" />
+              <div className="min-w-0 overflow-x-hidden">
+                <BestSeller title="Recommendations" />
+              </div>
             </div>
           </>
         )}
 
-        {step === "checkout" && <Checkout handleStepBack={handleStepBack} />}
+        {step === "checkout" && (
+          <Checkout
+            handleStepBack={handleStepBack}
+            selectedDeliveryDate={selectedDeliveryDate}
+          />
+        )}
         {step === "order_placed" && (
           <OrderPlaced handleStepBack={handleStepBack} />
         )}

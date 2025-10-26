@@ -19,6 +19,8 @@ const OrderSummary = ({
 
   const deliveryFee = 5.78;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
+  const isDisabled =
+    step === "cart" && (!selectedDeliveryDate || selectedDeliveryDate === "");
 
   return step !== "order_placed" ? (
     <div className="bg-white w-full p-6 rounded-3xl h-72 border border-black-100 flex flex-col gap-4">
@@ -43,8 +45,11 @@ const OrderSummary = ({
       </div>
       {step === "cart" ? (
         <div
-          className="bg-primary-600 flex justify-between w-full px-4 py-2 text-body-md cursor-pointer rounded-full md:w-64"
-          onClick={() => handleStepNext("checkout")}
+          className={` flex justify-between bg-primary-600 w-full px-4 py-2 text-body-md 
+            cursor-pointer rounded-full md:w-64
+            ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer "}
+            `}
+          onClick={() => !isDisabled && handleStepNext("checkout")}
         >
           <div className="flex gap-2 text-black-50">
             <Image
@@ -59,8 +64,11 @@ const OrderSummary = ({
         </div>
       ) : (
         <div
-          className="bg-primary-600 text-center text-white font-semibold w-full px-4 py-2 text-body-md cursor-pointer rounded-full md:w-64"
-          onClick={() => handleStepNext("order_placed")}
+          className={`bg-primary-600 text-center text-white font-semibold w-full px-4 py-2 
+            text-body-md cursor-pointer rounded-full md:w-64
+            ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer "}
+            `}
+          onClick={() => !isDisabled && handleStepNext("order_placed")}
         >
           <p>Place Order</p>
         </div>
