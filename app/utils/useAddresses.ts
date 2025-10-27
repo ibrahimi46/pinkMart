@@ -12,6 +12,7 @@ interface UseAddressesProps {
     streetAddress: string;
     aptNumber: string;
     zipCode: string;
+    city: string
 }
 
 const useAddresses = () => {
@@ -20,7 +21,7 @@ const useAddresses = () => {
 
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-    const addAddress = async ({ type, streetAddress, aptNumber, zipCode }: UseAddressesProps) => {
+    const addAddress = async ({ type, streetAddress, aptNumber, zipCode, city }: UseAddressesProps) => {
         if (!type || !streetAddress || !aptNumber || !zipCode) return;
 
         try {
@@ -32,7 +33,7 @@ const useAddresses = () => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ type, streetAddress, aptNumber, zipCode })
+                body: JSON.stringify({ type, streetAddress, aptNumber, zipCode, city })
             });
 
             const data = await res.json();

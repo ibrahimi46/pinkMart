@@ -4,6 +4,7 @@ import assets from "@/assets";
 import Image from "next/image";
 import Button from "@/app/components/Button";
 import BackButton from "@/app/components/BackButton";
+import useAddresses from "@/app/utils/useAddresses";
 
 const AddressItem = () => {
   return (
@@ -24,18 +25,19 @@ const AddressItem = () => {
 };
 
 interface AddAddressModalProps {
-  type: string;
-  setType: (type: string) => void;
   setShowAddAddrModal: (value: boolean) => void;
 }
 
-const AddAddressModal = ({
-  type,
-  setType,
-  setShowAddAddrModal,
-}: AddAddressModalProps) => {
+const AddAddressModal = ({ setShowAddAddrModal }: AddAddressModalProps) => {
+  const [type, setType] = useState<string>("home");
+  const [address, setAddress] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [aptNum, setAptNum] = useState<string>("");
+  const [zipcode, setZipcode] = useState<string>("");
+
+  const { addAddress } = useAddresses();
   return (
-    <div className="flex flex-col gap-6 text-body-sm md:text-body-md bg-orange-50 p-4">
+    <div className="flex flex-col gap-6 text-body-sm md:text-body-md p-4">
       <div className="flex justify-between items-center">
         <h1 className="font-semibold text-body-xl">Add New Address</h1>
         <div
@@ -88,6 +90,7 @@ const AddAddressModal = ({
           type="text"
           placeholder="XXXX, Example road, city, postcode..."
           className="p-3 border border-black-100 rounded-xl"
+          onChange={(e) => setAddress(e.target.value)}
         />
         <div className="flex gap-4 items-center flex-wrap mt-2">
           <div className="flex flex-col gap-2 w-full sm:w-[32%]">
@@ -96,6 +99,7 @@ const AddAddressModal = ({
               type="text"
               placeholder="City..."
               className="p-3 border border-black-100 rounded-xl"
+              onChange={(e) => setCity(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-[31%]">
@@ -104,6 +108,7 @@ const AddAddressModal = ({
               type="text"
               placeholder="XX"
               className="p-3 border border-black-100 rounded-xl"
+              onChange={(e) => setAptNum(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-[32%]">
@@ -112,6 +117,7 @@ const AddAddressModal = ({
               type="text"
               placeholder="XXXXX"
               className="p-3 border border-black-100 rounded-xl"
+              onChange={(e) => setZipcode(e.target.value)}
             />
           </div>
         </div>
@@ -122,33 +128,33 @@ const AddAddressModal = ({
         name="Save Address"
         extraStyles="bg-primary-600 text-white"
         iconStyle="filter invert"
+        handleOnClick={() => {
+          addAddress({
+            type,
+            streetAddress: address,
+            aptNumber: aptNum,
+            zipCode: zipcode,
+            city: city,
+          });
+          console.log("Added");
+          setShowAddAddrModal(false);
+        }}
       />
     </div>
   );
 };
 
 const MyAddresses = () => {
-  const [showAddAddrModal, setShowAddAddrModal] = useState<boolean>(true);
-
-  // data for api
-
-  const [type, setType] = useState<string>("home");
-  const [address, setAddress] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [aptNum, setAptNum] = useState<string>("");
-  const [zipcode, setZipcode] = useState<string>("");
+  const [showAddAddrModal, setShowAddAddrModal] = useState<boolean>(false);
+  const [availableAddresses, setAvailableAddresses] = useState<object>();
 
   return (
     <div>
       {showAddAddrModal ? (
-        <AddAddressModal
-          type={type}
-          setType={setType}
-          setShowAddAddrModal={setShowAddAddrModal}
-        />
+        <AddAddressModal setShowAddAddrModal={setShowAddAddrModal} />
       ) : (
         <>
-          {address ? (
+          {availableAddresses ? (
             <div className="mt-2 flex flex-col gap-6">
               <h1 className="font-semibold">My Addresses</h1>
               <AddressItem />
