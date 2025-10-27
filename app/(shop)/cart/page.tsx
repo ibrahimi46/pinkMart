@@ -6,12 +6,13 @@ import Image from "next/image";
 import CartItem from "./components/CartItem";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import DeliveryDateModal from "./components/DeliveryDateModal";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useCart from "@/app/utils/useCart";
 import useProducts from "@/app/utils/useProducts";
 import { generateDeliveryDates } from "@/app/utils/generateDeliveryDates";
 import OrderPlaced from "./components/OrderPlaced";
 import Checkout from "./components/Checkout";
+import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface DeliveryDates {
   date: Date;
@@ -28,8 +29,9 @@ const Cart = () => {
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
-  const { cartItems, removeFromCart, updateCart } = useCart();
+  const { removeFromCart, updateCart } = useCart();
   const { products } = useProducts();
+  const { cartItems } = useContext(UserDataContext)!;
 
   useEffect(() => {
     const dates = generateDeliveryDates(2, 10);
