@@ -16,6 +16,7 @@ interface PaymentMethods {
   isDefault: boolean;
   createdAt?: string;
   deletePayment?: (id: number) => void;
+  onDelete: () => void;
 }
 
 const PaymentMethodItem = ({
@@ -25,7 +26,15 @@ const PaymentMethodItem = ({
   isDefault,
   deletePayment,
   id,
+  onDelete,
 }: PaymentMethods) => {
+  const handleDelete = async () => {
+    if (deletePayment && id) {
+      const result = await deletePayment(id);
+      onDelete();
+    }
+  };
+
   return (
     <div className="bg-black-100 p-4 rounded-2xl border border-black-200 text-body-md flex justify-between items-center">
       <div className="flex gap-4">
@@ -41,7 +50,7 @@ const PaymentMethodItem = ({
           {isDefault && <p className="text-body-sm">Default</p>}
         </div>
       </div>
-      <div onClick={() => deletePayment?.(id!)}>
+      <div onClick={() => handleDelete()}>
         <Image src={assets.icons.bin_purple} height={20} width={20} alt="bin" />
       </div>
     </div>
@@ -50,9 +59,13 @@ const PaymentMethodItem = ({
 
 interface AddPaymentModalProps {
   setShowAddPaymentModal: (value: boolean) => void;
+  onPayment: () => void;
 }
 
-const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
+const AddPaymentModal = ({
+  setShowAddPaymentModal,
+  onPayment,
+}: AddPaymentModalProps) => {
   const [paymentMode, setPaymentMode] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [cardNumber, setCardNumber] = useState<string>("");
@@ -61,6 +74,19 @@ const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
   const [isDefault, setIsDefault] = useState<boolean>(false);
 
   const { addPaymentMethod, getPaymentMethods } = usePayments();
+
+  const handleSave = () => {
+    addPaymentMethod({
+      type,
+      provider: paymentMode,
+      cardNumber,
+      expiryDate,
+      cvv,
+      isDefault,
+    });
+    setShowAddPaymentModal(false);
+    onPayment();
+  };
 
   return (
     <div className="fixed bottom-0 sm:inset-0 left-0 right-0 z-50 flex items-center justify-center transition-all duration-300">
@@ -85,6 +111,7 @@ const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
               <p className="font-semibold">Card Number</p>
               <input
                 type="text"
+                maxLength={16}
                 placeholder="XXXX-XXXX-XXXX-XXXX"
                 className="bg-black-100 p-3 rounded-xl"
                 onChange={(e) => setCardNumber(e.target.value)}
@@ -111,16 +138,7 @@ const AddPaymentModal = ({ setShowAddPaymentModal }: AddPaymentModalProps) => {
                 />
               </div>
               <button
-                onClick={() =>
-                  addPaymentMethod({
-                    type,
-                    provider: paymentMode,
-                    cardNumber,
-                    expiryDate,
-                    cvv,
-                    isDefault,
-                  })
-                }
+                onClick={() => handleSave()}
                 className="bg-primary-600 text-white py-3 rounded-3xl mt-2"
               >
                 Save
@@ -212,14 +230,14 @@ const Payments = () => {
 
   const { getPaymentMethods, deletePayment } = usePayments();
 
-  useEffect(() => {
-    const fetchPayments = async () => {
-      const data = await getPaymentMethods();
-      if (data) {
-        setPaymentMethods(data);
-      }
-    };
+  const fetchPayments = async () => {
+    const data = await getPaymentMethods();
+    if (data) {
+      setPaymentMethods(data);
+    }
+  };
 
+  useEffect(() => {
     fetchPayments();
   }, []);
 
@@ -238,6 +256,7 @@ const Payments = () => {
                 isDefault={method.isDefault}
                 deletePayment={deletePayment}
                 id={method.id}
+                onDelete={fetchPayments}
               />
             );
           })}
@@ -247,9 +266,6 @@ const Payments = () => {
               Add Payment Method
             </p>
           </div>
-          {showAddPaymentModal && (
-            <AddPaymentModal setShowAddPaymentModal={setShowAddPaymentModal} />
-          )}
         </div>
       ) : (
         <div className="flex flex-col gap-4 mt-2">
@@ -260,8 +276,18 @@ const Payments = () => {
             field2="Add your address, start shopping!"
             btnName="Add Payment Method"
             btnIcon={assets.icons.plus}
+            handleAction={() => {
+              setShowAddPaymentModal(true);
+              console.log("test");
+            }}
           />
         </div>
+      )}
+      {showAddPaymentModal && (
+        <AddPaymentModal
+          setShowAddPaymentModal={setShowAddPaymentModal}
+          onPayment={fetchPayments}
+        />
       )}
     </div>
   );

@@ -7,6 +7,7 @@ interface NoDataPlaceholderProps {
   field2: string;
   btnIcon: string;
   btnName: string;
+  handleAction?: () => void;
 }
 
 const NoDataPlaceholder = ({
@@ -15,6 +16,7 @@ const NoDataPlaceholder = ({
   field2,
   btnIcon,
   btnName,
+  handleAction,
 }: NoDataPlaceholderProps) => {
   return (
     <div className="flex flex-col items-center gap-3 border border-black-200 rounded-2xl p-6">
@@ -30,6 +32,7 @@ const NoDataPlaceholder = ({
         extraStyles="bg-primary-600 p-4"
         textStyles="text-body-md text-black-100 font-regular"
         iconStyle="filter invert"
+        handleOnClick={() => handleAction?.()}
       />
     </div>
   );
