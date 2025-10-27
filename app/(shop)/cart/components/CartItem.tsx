@@ -1,5 +1,7 @@
 import Image from "next/image";
 import assets from "@/assets";
+import { useContext } from "react";
+import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface ProductProps {
   product: {
@@ -11,17 +13,13 @@ interface ProductProps {
     stock: number;
     imageUrl: string;
   };
-  removeFromCart: (productId: number) => void;
-  updateCart: (productId: number, quantity: number) => void;
   quantity: number;
+  onUpdate: () => void;
 }
 
-const CartItem = ({
-  product,
-  removeFromCart,
-  quantity,
-  updateCart,
-}: ProductProps) => {
+const CartItem = ({ product, quantity, onUpdate }: ProductProps) => {
+  const context = useContext(UserDataContext);
+  const { updateCart, removeFromCart } = context!;
   return (
     <>
       <div className="flex justify-between mt-4">
@@ -55,6 +53,7 @@ const CartItem = ({
                 alt="delete"
                 onClick={() => {
                   updateCart(product.id, Number(quantity) - 1);
+                  onUpdate();
                 }}
               />
             </div>
@@ -69,13 +68,17 @@ const CartItem = ({
                 alt="plus"
                 onClick={() => {
                   updateCart(product.id, Number(quantity) + 1);
+                  onUpdate();
                 }}
               />
             </div>
           </div>
           <p
             className="text-primary-600 text-body-sm font-semibold hidden sm:block cursor-pointer"
-            onClick={() => removeFromCart(product.id)}
+            onClick={() => {
+              removeFromCart(product.id);
+              onUpdate();
+            }}
           >
             Remove
           </p>

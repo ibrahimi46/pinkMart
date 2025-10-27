@@ -30,7 +30,7 @@ const Cart = () => {
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
 
   const context = useContext(UserDataContext);
-  const { removeFromCart, updateCart, cartItems } = context!;
+  const { cartItems, refetchCartItems } = context!;
   const { products } = useProducts();
 
   useEffect(() => {
@@ -134,9 +134,8 @@ const Cart = () => {
                         <CartItem
                           key={product.id}
                           product={product}
-                          removeFromCart={removeFromCart}
                           quantity={cartItem.quantity}
-                          updateCart={updateCart}
+                          onUpdate={refetchCartItems}
                         />
                       ) : null;
                     })}
