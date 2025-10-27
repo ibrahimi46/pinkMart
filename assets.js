@@ -44,6 +44,9 @@ const assets = {
     upload: "/icons/upload.svg",
     signup: "/icons/signup.svg",
     green_tickmark: "/icons/green_tickmark.svg",
+    home: "/icons/home.svg",
+    work: "/icons/work.svg",
+    villa: "/icons/villa.svg",
   },
   onboarding: {
     step1: {

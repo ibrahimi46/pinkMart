@@ -33,7 +33,7 @@ const Button = ({
       {iconPosition === "left" && icon && (
         <Image src={icon} height={20} width={20} alt="" className={iconStyle} />
       )}
-      <p className={`font-semibold ${textStyles}`}>{name}</p>
+      <p className={`${textStyles}`}>{name}</p>
       {iconPosition === "right" && icon && (
         <Image src={icon} height={20} width={20} alt="" className={iconStyle} />
       )}
