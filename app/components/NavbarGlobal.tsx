@@ -2,10 +2,16 @@ import Image from "next/image";
 import assets from "@/assets";
 import Button from "./Button";
 import Link from "next/link";
-import { useUser } from "../utils/useUser";
+import { useContext } from "react";
+import { UserDataContext } from "../context/UserDataContext";
 
-const NavbarGlobal = ({ toggleSidebar }) => {
-  const { isLoggedIn } = useUser();
+interface NavbarGlobalProps {
+  toggleSidebar: () => void;
+}
+
+const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
+  const context = useContext(UserDataContext);
+  const { isLoggedIn } = context!;
   return (
     <>
       <div className="bg-black-100 h-32 sm:h-20 mb-6 md:py-10 flex flex-col justify-center border-b-2">

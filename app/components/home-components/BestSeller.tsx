@@ -4,9 +4,9 @@ import BackButton from "../BackButton";
 import assets from "@/assets";
 import ForwardButton from "../ForwardButton";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 import useProducts from "@/app/utils/useProducts";
-import useCart from "@/app/utils/useCart";
+import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface BestSellerProps {
   title: string;
@@ -69,7 +69,8 @@ const CardsItem = ({
 const BestSeller = ({ title }: BestSellerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { products } = useProducts();
-  const { addToCart } = useCart();
+  const context = useContext(UserDataContext);
+  const { addToCart } = context!;
   const defaultQuantity = 1;
 
   const scroll = (direction: "left" | "right") => {

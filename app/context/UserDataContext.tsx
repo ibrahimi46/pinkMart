@@ -62,6 +62,7 @@ interface UserDataContextType {
   users: User[];
   loading: boolean;
   cartTotal: number;
+  isLoggedIn: boolean;
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
   logout: () => void;
@@ -88,6 +89,8 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const isLoggedIn = !!user;
 
   // On mount identifies the user token
   useEffect(() => {
@@ -314,7 +317,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         },
       });
       const data = await res.json();
-      setCartItems(data.items || null);
+      setCartItems(data.items || []);
     } catch (err) {
       console.error("Failed to fetch cart:", err);
     } finally {
@@ -435,6 +438,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         users,
         loading,
         cartTotal,
+        isLoggedIn,
         logout,
         addAddress,
         deleteAddress,

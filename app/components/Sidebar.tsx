@@ -2,8 +2,9 @@
 import Image from "next/image";
 import Button from "./Button";
 import assets from "@/assets";
-import { useUser } from "@/app/utils/useUser";
 import Link from "next/link";
+import { useContext } from "react";
+import { UserDataContext } from "../context/UserDataContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,7 +12,8 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
-  const { user, logout } = useUser();
+  const context = useContext(UserDataContext);
+  const { logout, user } = context!;
 
   return (
     <div
