@@ -4,6 +4,9 @@ import { db } from "@/db";
 import { addresses } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 
+const capitalizeFirst = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
 export async function GET(req: NextRequest) {
     try {
         const authHeader = req.headers.get("authorization");
@@ -17,7 +20,8 @@ export async function GET(req: NextRequest) {
             type: addresses.type,
             streetAddress: addresses.streetAddress,
             aptNumber: addresses.aptNumber,
-            zipCode: addresses.zipCode
+            zipCode: addresses.zipCode,
+            city: addresses.city
         }).from(addresses).where(eq(addresses.userId, decoded.userId));
 
         return NextResponse.json({ addresses: userAddresses }, { status: 200 });
@@ -44,7 +48,7 @@ export async function POST(req: NextRequest) {
 
         await db.insert(addresses).values({
             userId: decoded?.userId,
-            type, streetAddress, city, aptNumber, zipCode
+            type: capitalizeFirst(type), streetAddress: capitalizeFirst(streetAddress), city: capitalizeFirst(city), aptNumber, zipCode
         });
 
         return NextResponse.json({ success: true }, { status: 200 });

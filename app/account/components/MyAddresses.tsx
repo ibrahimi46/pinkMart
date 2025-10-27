@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NoDataPlaceholder from "./NoDataPlaceholder";
 import assets from "@/assets";
 import Image from "next/image";
 import Button from "@/app/components/Button";
-import BackButton from "@/app/components/BackButton";
 import useAddresses from "@/app/utils/useAddresses";
 
-const AddressItem = () => {
+const AddressItem = ({
+  type,
+  streetAddress,
+  city,
+  zipCode,
+  aptNumber,
+}: Address) => {
   return (
     <div className="flex justify-between bg-black-100 p-4 rounded-3xl border border-black-200 text-body-md">
       <div className="flex gap-2">
         <input type="radio" />
         <div>
-          <h1 className="font-semibold">Home</h1>
-          <p>23782, Westminster road, Encanada</p>
+          <h1 className="font-semibold">{type}</h1>
+          <p>{`${aptNumber}, ${streetAddress}, ${city} - ${zipCode}`}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -26,14 +31,18 @@ const AddressItem = () => {
 
 interface AddAddressModalProps {
   setShowAddAddrModal: (value: boolean) => void;
+  onAdd: () => void;
 }
 
-const AddAddressModal = ({ setShowAddAddrModal }: AddAddressModalProps) => {
+const AddAddressModal = ({
+  setShowAddAddrModal,
+  onAdd,
+}: AddAddressModalProps) => {
   const [type, setType] = useState<string>("home");
   const [address, setAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [aptNum, setAptNum] = useState<string>("");
-  const [zipcode, setZipcode] = useState<string>("");
+  const [zipCode, setzipCode] = useState<string>("");
 
   const { addAddress } = useAddresses();
   return (
@@ -103,7 +112,7 @@ const AddAddressModal = ({ setShowAddAddrModal }: AddAddressModalProps) => {
             />
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-[31%]">
-            <label htmlFor="apartmentNum">Apartment Number</label>
+            <label htmlFor="aptNumber">Apartment Number</label>
             <input
               type="text"
               placeholder="XX"
@@ -117,7 +126,7 @@ const AddAddressModal = ({ setShowAddAddrModal }: AddAddressModalProps) => {
               type="text"
               placeholder="XXXXX"
               className="p-3 border border-black-100 rounded-xl"
-              onChange={(e) => setZipcode(e.target.value)}
+              onChange={(e) => setzipCode(e.target.value)}
             />
           </div>
         </div>
@@ -133,10 +142,10 @@ const AddAddressModal = ({ setShowAddAddrModal }: AddAddressModalProps) => {
             type,
             streetAddress: address,
             aptNumber: aptNum,
-            zipCode: zipcode,
+            zipCode: zipCode,
             city: city,
           });
-          console.log("Added");
+          onAdd();
           setShowAddAddrModal(false);
         }}
       />
@@ -144,24 +153,62 @@ const AddAddressModal = ({ setShowAddAddrModal }: AddAddressModalProps) => {
   );
 };
 
+interface Address {
+  id?: number;
+  userId?: number;
+  type: string;
+  streetAddress: string;
+  city: string;
+  aptNumber: string;
+  zipCode: string;
+}
+
 const MyAddresses = () => {
   const [showAddAddrModal, setShowAddAddrModal] = useState<boolean>(false);
-  const [availableAddresses, setAvailableAddresses] = useState<object>();
+  const [availableAddresses, setAvailableAddresses] = useState<Address[]>([]);
+
+  const { getAddresses } = useAddresses();
+
+  const fetchAddress = async () => {
+    const result = await getAddresses();
+    if (result) setAvailableAddresses(result);
+    console.log(result);
+  };
+
+  useEffect(() => {
+    fetchAddress();
+  }, []);
 
   return (
     <div>
       {showAddAddrModal ? (
-        <AddAddressModal setShowAddAddrModal={setShowAddAddrModal} />
+        <AddAddressModal
+          setShowAddAddrModal={setShowAddAddrModal}
+          onAdd={fetchAddress}
+        />
       ) : (
         <>
           {availableAddresses ? (
             <div className="mt-2 flex flex-col gap-6">
               <h1 className="font-semibold">My Addresses</h1>
-              <AddressItem />
-              <AddressItem />
+              {availableAddresses &&
+                availableAddresses.map((address) => {
+                  return (
+                    <AddressItem
+                      key={address.id}
+                      type={address.type}
+                      city={address.city}
+                      zipCode={address.zipCode}
+                      aptNumber={address.aptNumber}
+                      streetAddress={address.streetAddress}
+                    />
+                  );
+                })}
               <div
                 onClick={() => setShowAddAddrModal(true)}
-                className="flex gap-2 bg-primary-50 border border-primary-300 sm:w-56 w-full py-2 items-center justify-center text-nowrap rounded-xl "
+                className="flex gap-2 bg-primary-50 border cursor-pointer transition-all duration-300
+                hover:bg-primary-600
+                border-primary-300 sm:w-56 w-full py-2 items-center justify-center text-nowrap rounded-xl "
               >
                 <Image
                   src={assets.icons.plus}
