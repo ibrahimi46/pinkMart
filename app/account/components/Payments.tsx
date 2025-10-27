@@ -3,7 +3,6 @@ import NoDataPlaceholder from "./NoDataPlaceholder";
 import assets from "@/assets";
 import Image from "next/image";
 import BackButton from "@/app/components/BackButton";
-import usePayments from "@/app/utils/usePayments";
 
 interface PaymentMethods {
   id?: number;

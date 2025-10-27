@@ -1,7 +1,7 @@
 import Image from "next/image";
 import assets from "@/assets";
-import useFullUserDetails from "@/app/utils/useFullUserDetails";
-import { useUser } from "@/app/utils/useUser";
+import { useContext } from "react";
+import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface AccDetailItems {
   field1?: string;
@@ -21,8 +21,8 @@ const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
 };
 
 const MyAccountComp = () => {
-  const { user } = useUser();
-  const { userDetails } = useFullUserDetails(user?.userId || null);
+  const context = useContext(UserDataContext);
+  const { user, userDetails } = context!;
 
   return (
     <div className="flex flex-col gap-3 mt-2">

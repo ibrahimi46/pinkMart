@@ -1,34 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NoDataPlaceholder from "./NoDataPlaceholder";
 import assets from "@/assets";
 import Image from "next/image";
 import Button from "@/app/components/Button";
-import useAddresses from "@/app/utils/useAddresses";
-
-const AddressItem = ({
-  type,
-  streetAddress,
-  city,
-  zipCode,
-  aptNumber,
-  isDefault,
-}: Address) => {
-  return (
-    <div className="flex justify-between bg-black-100 p-4 rounded-3xl border border-black-200 text-body-md">
-      <div>
-        <div className="flex gap-2 items-center">
-          <h1 className="font-semibold">{type}</h1>
-          <h1 className="text-body-sm">{isDefault && "(Default Address)"}</h1>
-        </div>
-        <p>{`${aptNumber}, ${streetAddress}, ${city} - ${zipCode}`}</p>
-      </div>
-      <div className="flex items-center gap-2">
-        <Image src={assets.icons.edit} height={20} width={20} alt="edit" />
-        <p className="hidden sm:block">Edit</p>
-      </div>
-    </div>
-  );
-};
+import { UserDataContext } from "@/app/context/UserDataContext";
+import AddressItem from "@/app/components/AddressItem";
 
 interface AddAddressModalProps {
   setShowAddAddrModal: (value: boolean) => void;
@@ -46,7 +22,8 @@ const AddAddressModal = ({
   const [zipCode, setzipCode] = useState<string>("");
   const [isDefault, setIsDefault] = useState<boolean>(false);
 
-  const { addAddress } = useAddresses();
+  const context = useContext(UserDataContext);
+  const { addAddress } = context!;
   return (
     <div className="flex flex-col gap-6 text-body-sm md:text-body-md p-4">
       <div className="flex justify-between items-center">
@@ -180,23 +157,19 @@ const MyAddresses = () => {
   const [showAddAddrModal, setShowAddAddrModal] = useState<boolean>(false);
   const [availableAddresses, setAvailableAddresses] = useState<Address[]>([]);
 
-  const { getAddresses } = useAddresses();
-
-  const fetchAddress = async () => {
-    const result = await getAddresses();
-    if (result) setAvailableAddresses(result);
-  };
+  const context = useContext(UserDataContext);
+  const { addresses, refetchAddresses } = context!;
 
   useEffect(() => {
-    fetchAddress();
-  }, []);
+    if (addresses) setAvailableAddresses(addresses);
+  }, [addresses]);
 
   return (
     <div>
       {showAddAddrModal ? (
         <AddAddressModal
           setShowAddAddrModal={setShowAddAddrModal}
-          onAdd={fetchAddress}
+          onAdd={() => refetchAddresses()}
         />
       ) : (
         <>

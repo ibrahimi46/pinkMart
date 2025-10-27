@@ -1,6 +1,7 @@
 import Image from "next/image";
 import assets from "@/assets";
 import BackButton from "@/app/components/BackButton";
+import { useState } from "react";
 
 interface CheckoutProps {
   handleStepBack: (step?: string) => void;
@@ -8,6 +9,8 @@ interface CheckoutProps {
 }
 
 const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
+  const [showAddresses, setShowAddresses] = useState<boolean>(false);
+  const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
   return (
     <div className="flex flex-col gap-4 bg-white p-4 rounded-3xl border border-black-100">
       <div className="mb-4">
@@ -37,31 +40,37 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
           </p>
         </div>
       </div>
-      <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
-        <div className="flex justify-between">
-          <h1 className="font-semibold">Delivery Info</h1>
-          <Image
-            src={assets.icons.arrow_right}
-            height={25}
-            width={25}
-            alt="right"
-          />
-        </div>
-        <div className="flex gap-4 text-body-sm md:text-body-md">
-          <p>Deliver to:</p>
-          <div className="flex gap-2">
+      {/** Delivery Info Container */}
+      {showAddresses ? (
+        <div>add</div>
+      ) : (
+        <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
+          <div className="flex justify-between">
+            <h1 className="font-semibold">Delivery Info</h1>
             <Image
-              src={assets.icons.location_purple}
+              src={assets.icons.arrow_right}
               height={25}
               width={25}
-              alt="location"
+              alt="right"
             />
-            <p className="text-primary-600">
-              2118 Thornridge Cir, Connecticut 35624
-            </p>
+          </div>
+          <div className="flex gap-4 text-body-sm md:text-body-md">
+            <p>Deliver to:</p>
+            <div className="flex gap-2">
+              <Image
+                src={assets.icons.location_purple}
+                height={25}
+                width={25}
+                alt="location"
+              />
+              <p className="text-primary-600">
+                2118 Thornridge Cir, Connecticut 35624
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+      {/** Payment Method Container */}
       <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
         <div className="flex justify-between">
           <h1 className="font-semibold">Payment Method</h1>
@@ -90,7 +99,11 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
         <div className="flex justify-between">
           <h1 className="font-semibold">Review Order</h1>
         </div>
-        <div className="bg-black-100 p-4 rounded-xl flex justify-between">
+
+        <div
+          className="bg-black-100 p-4 rounded-xl flex justify-between"
+          onClick={() => handleStepBack()}
+        >
           <div>
             <div className="bg-white flex items-center justify-center h-14 w-14 rounded-xl">
               <Image

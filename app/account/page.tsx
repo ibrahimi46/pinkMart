@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../components/Button";
 import assets from "@/assets";
 import Image from "next/image";
@@ -12,7 +12,7 @@ import ManageProducts from "./(admin)/ManageProducts";
 import ManageOrders from "./(admin)/ManageOrders";
 import ManageUsers from "./(admin)/ManageUsers";
 import Analytics from "./(admin)/Analytics";
-import { useUser } from "../utils/useUser";
+import { UserDataContext } from "../context/UserDataContext";
 
 const userMenu = [
   {
@@ -47,7 +47,8 @@ const adminMenu = [
 
 const MyAccount = () => {
   const [activeSection, setActiveSection] = useState<string>("");
-  const { logout, user } = useUser();
+  const context = useContext(UserDataContext);
+  const { logout, user } = context!;
 
   useEffect(() => {
     if (user) {
