@@ -11,27 +11,33 @@ interface User {
 export const useUser = () => {
     const [user, setUser] = useState<User | null>(null);
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
 
-        if (token) {
-            try {
-                const decoded = jwtDecode<User>(token)
-                setUser(decoded)
-                
-            } catch (err) {
-                console.error("Invalid token", err)
+
+    const getUser = () => {
+    const token = localStorage.getItem("token")
+
+            if (token) {
+                try {
+                    const decoded = jwtDecode<User>(token)
+                    setUser(decoded)
+                    
+                } catch (err) {
+                    console.error("Invalid token", err)
+                    setUser(null)
+                }
+            }
+            else {
                 setUser(null)
             }
-        }
-        else {
-            setUser(null)
-        }
+    }
 
 
+     
+    useEffect(() => {
+        
+getUser();
 
     }, [])
-
 
         const isLoggedIn = !!user;
 
@@ -42,5 +48,5 @@ export const useUser = () => {
 
         }
 
-        return {user, isLoggedIn, logout};
+        return {user, getUser, isLoggedIn, logout};
 }

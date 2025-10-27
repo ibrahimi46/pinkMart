@@ -5,6 +5,7 @@ interface Address {
     streetAddress: string;
     aptNumber: string;
     zipCode: string;
+    city: string
 }
 
 interface UseAddressesProps {
