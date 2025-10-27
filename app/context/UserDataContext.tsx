@@ -34,15 +34,6 @@ interface Address {
   isDefault: boolean;
 }
 
-interface UseAddressesProps {
-  type: string;
-  streetAddress: string;
-  aptNumber: string;
-  zipCode: string;
-  city: string;
-  isDefault: boolean;
-}
-
 interface PaymentMethod {
   id?: number;
   type: string;
@@ -63,13 +54,24 @@ interface CartItem {
 }
 
 interface UserDataContextType {
-  addresses: Address[];
-  payments: Payment[];
-  users: User[];
+  user: User | null;
+  userDetails: UserDetails | null;
   cartItems: CartItem[];
+  addresses: Address[];
+  paymentMethods: PaymentMethod[];
+  users: User[];
+  loading: boolean;
+  cartTotal: number;
+  addAddress: (address: Address) => Promise<void>;
+  deleteAddress: (id: number) => Promise<void>;
+  logout: () => void;
+  addPaymentMethod: (paymentMethod: PaymentMethod) => Promise<void>;
+  deletePayment: (id: number) => Promise<void>;
+  addToCart: (productId: number, quantity: number) => Promise<void>;
+  removeFromCart: (productId: number) => Promise<void>;
+  updateCart: (productId: number, quantity: number) => Promise<void>;
   refetchAddresses: () => Promise<void>;
-  refetchPayments: () => Promise<void>;
-  refetchUsers: () => Promise<void>;
+  refetchPaymentMethods: () => Promise<void>;
   refetchCartItems: () => Promise<void>;
   refetchAll: () => Promise<void>;
 }
@@ -78,7 +80,8 @@ export const UserDataContext = createContext<UserDataContextType | null>(null);
 
 export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   // States
-  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string>("");
+  const [user, setUser] = useState<User | null>(null); // Current user
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -86,22 +89,48 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Current User Token
-  const token = localStorage.getItem("token");
+  // On mount identifies the user token
+  useEffect(() => {
+    const userToken = localStorage.getItem("token");
+    if (userToken) setToken(userToken);
+  }, []);
 
+  useEffect(() => {
+    if (token) getUser();
+  }, [token]);
+
+  useEffect(() => {
+    if (user?.isAdmin) {
+      getUsersList();
+    }
+  }, [user]);
+
+  // User Functions
   const getUser = () => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      try {
-        const decoded = jwtDecode<User>(token);
-        setUser(decoded);
-      } catch (err) {
-        console.error("Invalid token", err);
-        setUser(null);
-      }
-    } else {
+    try {
+      const decoded = jwtDecode<User>(token);
+      setUser(decoded);
+    } catch (err) {
+      console.error("Invalid token", err);
       setUser(null);
+    }
+  };
+
+  const getUsersList = async () => {
+    try {
+      const res = await fetch("/api/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (user?.isAdmin) {
+        setUsers(data.users);
+      } else {
+        setUserDetails(data.user);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -111,16 +140,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     window.location.href = "/";
   };
 
-  const fetchUser = useCallback(async () => {
-    if (!user?.userId) return;
-    const token = localStorage.getItem("token");
-    const res = await fetch(`/api/users?id=${user.userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const userDetails = await res.json();
-    setUserDetails(userDetails.user[0]);
-  }, [user?.userId]);
-
+  // Address Functions
   const addAddress = async ({
     type,
     streetAddress,
@@ -128,7 +148,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     zipCode,
     city,
     isDefault,
-  }: UseAddressesProps) => {
+  }: Address) => {
     if (!type || !streetAddress || !aptNumber || !zipCode) return;
 
     try {
@@ -199,6 +219,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const refetchAddresses = async () => {
+    await getAddresses();
+  };
+  // Payment Functions
   const addPaymentMethod = async ({
     type,
     provider,
@@ -247,7 +271,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         },
       });
       const data = await res.json();
-      setMethods(data);
+      setPaymentMethods(data);
       return data;
     } catch (err) {
       console.error(err);
@@ -275,11 +299,12 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const refetchUsers = async () => {
-    if (user) setUsers([user]);
+  const refetchPaymentMethods = async () => {
+    await getPaymentMethods();
   };
 
-  const fetchCart = useCallback(async () => {
+  // Cart Functions
+  const fetchCartItems = useCallback(async () => {
     if (!token) return;
     setLoading(true);
     try {
@@ -310,14 +335,14 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
           },
           body: JSON.stringify({ productId, quantity }),
         });
-        await fetchCart();
+        await fetchCartItems();
       } catch (err) {
         console.error("Error adding to cart:", err);
       } finally {
         setLoading(false);
       }
     },
-    [token, fetchCart]
+    [token, fetchCartItems]
   );
 
   const removeFromCart = useCallback(
@@ -343,14 +368,14 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         setCartItems((prev) =>
           prev.filter((item) => item.productId !== productId)
         );
-        fetchCart();
+        fetchCartItems();
       } catch (err) {
         console.error("Error removing from cart:", err);
       } finally {
         setLoading(false);
       }
     },
-    [token]
+    [token, fetchCartItems]
   );
 
   const updateCart = useCallback(
@@ -366,14 +391,14 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
           },
           body: JSON.stringify({ productId, quantity }),
         });
-        await fetchCart();
+        await fetchCartItems();
       } catch (err) {
         console.error("Error updating cart:", err);
       } finally {
         setLoading(false);
       }
     },
-    [token, fetchCart]
+    [token, fetchCartItems]
   );
 
   const cartTotal = useMemo(() => {
@@ -383,30 +408,44 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }, 0);
   }, [cartItems]);
 
-  const refetchAll = async () => {
+  const refetchCartItems = async () => {
+    await fetchCartItems();
+  };
+
+  const refetchAll = useCallback(async () => {
     await Promise.all([
       refetchAddresses(),
-      refetchPayments(),
-      refetchUsers(),
+      refetchPaymentMethods(),
       refetchCartItems(),
     ]);
-  };
+  }, [token]);
 
   useEffect(() => {
     refetchAll();
-  }, [user]);
+  }, [refetchAll]);
 
   return (
     <UserDataContext.Provider
       value={{
-        addresses,
-        payments,
-        users,
+        user,
+        userDetails,
         cartItems,
+        addresses,
+        paymentMethods,
+        users,
+        loading,
+        cartTotal,
+        logout,
+        addAddress,
+        deleteAddress,
+        addPaymentMethod,
+        deletePayment,
+        addToCart,
+        removeFromCart,
+        updateCart,
         refetchAddresses,
-        refetchPayments,
-        refetchUsers,
         refetchCartItems,
+        refetchPaymentMethods,
         refetchAll,
       }}
     >

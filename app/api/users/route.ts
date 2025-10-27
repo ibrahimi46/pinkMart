@@ -37,8 +37,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-        const id = req.nextUrl.searchParams.get("id");
-
+    
         const authHeader =  req.headers.get("authorization");
         if (!authHeader) return NextResponse.json({error: "Missing token"}, {status: 401})
 
@@ -54,20 +53,19 @@ export async function GET(req: NextRequest) {
         }
 
 
-        let user;
+        if (decoded.isAdmin) {
 
-        if (id) {
-
-            user =     await db.select({
+            const users = await db.select({
                 id: usersTable.id,
                 fullName: usersTable.fullName,
                 email: usersTable.email,
                 phone: usersTable.phone,
                 isAdmin: usersTable.isAdmin,
                 createdAt: usersTable.createdAt,
-            }).from(usersTable).where(eq(usersTable.id, Number(id)))
-        } else if (decoded.isAdmin) {
-            user = await db.select({
+            }).from(usersTable).where(eq(usersTable.id, Number(decoded.userId)))
+            return NextResponse.json({users})
+        } else {
+            const user = await db.select({
                 id: usersTable.id,
                 fullName: usersTable.fullName,
                 email: usersTable.email,
@@ -75,18 +73,9 @@ export async function GET(req: NextRequest) {
                 isAdmin: usersTable.isAdmin,
                 createdAt: usersTable.createdAt,
             }).from(usersTable);
-        } else {
-            user = await db.select({
-                id: usersTable.id,
-                fullName: usersTable.fullName,
-                email: usersTable.email,
-                phone: usersTable.phone,
-                isAdmin: usersTable.isAdmin,
-                createdAt: usersTable.createdAt,
-            }).from(usersTable).where(eq(usersTable.id, decoded.userId));
-        }
-         
-        return NextResponse.json({user})
+            return NextResponse.json({user})
+        } 
+        
     }
     catch(error) {
         console.error(error)
