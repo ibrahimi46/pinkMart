@@ -79,6 +79,7 @@ export const addresses = pgTable("addresses", {
     city: varchar("city", {length: 100}).notNull(),
     aptNumber: varchar("apt_number", {length: 50}),
     zipCode: varchar("zip_code", {length: 20}).notNull(),
+    isDefault: boolean("is_default").notNull(),
     createdAt: varchar("created_at", {length: 50}).default(new Date().toISOString())
 })
 

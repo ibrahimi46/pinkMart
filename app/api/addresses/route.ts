@@ -21,7 +21,8 @@ export async function GET(req: NextRequest) {
             streetAddress: addresses.streetAddress,
             aptNumber: addresses.aptNumber,
             zipCode: addresses.zipCode,
-            city: addresses.city
+            city: addresses.city,
+            isDefault: addresses.isDefault
         }).from(addresses).where(eq(addresses.userId, decoded.userId));
 
         return NextResponse.json({ addresses: userAddresses }, { status: 200 });
@@ -41,14 +42,20 @@ export async function POST(req: NextRequest) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number, isAdmin: boolean };
         if (!token || !decoded) return NextResponse.json({ error: "Missing token" }, { status: 401 });
 
-        const { type, streetAddress, city, aptNumber, zipCode } = await req.json();
-        if (!type || !streetAddress || !city || !zipCode) {
+        const { type, streetAddress, city, aptNumber, zipCode, isDefault } = await req.json();
+        if (!type || !streetAddress || !city || !zipCode ) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        }
+
+        if (isDefault) {
+            await db.update(addresses).set({
+                isDefault: false
+            }).where(eq(addresses.userId, decoded?.userId))
         }
 
         await db.insert(addresses).values({
             userId: decoded?.userId,
-            type: capitalizeFirst(type), streetAddress: capitalizeFirst(streetAddress), city: capitalizeFirst(city), aptNumber, zipCode
+            type: capitalizeFirst(type), streetAddress: capitalizeFirst(streetAddress), city: capitalizeFirst(city), aptNumber, zipCode, isDefault
         });
 
         return NextResponse.json({ success: true }, { status: 200 });
@@ -58,7 +65,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Error adding address", err }, { status: 400 });
     }
 }
-
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     try {

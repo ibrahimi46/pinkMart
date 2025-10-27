@@ -11,15 +11,16 @@ const AddressItem = ({
   city,
   zipCode,
   aptNumber,
+  isDefault,
 }: Address) => {
   return (
     <div className="flex justify-between bg-black-100 p-4 rounded-3xl border border-black-200 text-body-md">
-      <div className="flex gap-2">
-        <input type="radio" />
-        <div>
+      <div>
+        <div className="flex gap-2 items-center">
           <h1 className="font-semibold">{type}</h1>
-          <p>{`${aptNumber}, ${streetAddress}, ${city} - ${zipCode}`}</p>
+          <h1 className="text-body-sm">{isDefault && "(Default Address)"}</h1>
         </div>
+        <p>{`${aptNumber}, ${streetAddress}, ${city} - ${zipCode}`}</p>
       </div>
       <div className="flex items-center gap-2">
         <Image src={assets.icons.edit} height={20} width={20} alt="edit" />
@@ -43,6 +44,7 @@ const AddAddressModal = ({
   const [city, setCity] = useState<string>("");
   const [aptNum, setAptNum] = useState<string>("");
   const [zipCode, setzipCode] = useState<string>("");
+  const [isDefault, setIsDefault] = useState<boolean>(false);
 
   const { addAddress } = useAddresses();
   return (
@@ -131,6 +133,15 @@ const AddAddressModal = ({
           </div>
         </div>
       </div>
+      <div className="flex gap-2">
+        <input
+          type="checkbox"
+          name="isDefault"
+          id="isDefault"
+          onChange={() => setIsDefault(!isDefault)}
+        />
+        <label htmlFor="isDefault">Default Address</label>
+      </div>
       <Button
         icon={assets.icons.location}
         iconPosition="left"
@@ -144,6 +155,7 @@ const AddAddressModal = ({
             aptNumber: aptNum,
             zipCode: zipCode,
             city: city,
+            isDefault,
           });
           onAdd();
           setShowAddAddrModal(false);
@@ -161,6 +173,7 @@ interface Address {
   city: string;
   aptNumber: string;
   zipCode: string;
+  isDefault: boolean;
 }
 
 const MyAddresses = () => {
@@ -172,7 +185,6 @@ const MyAddresses = () => {
   const fetchAddress = async () => {
     const result = await getAddresses();
     if (result) setAvailableAddresses(result);
-    console.log(result);
   };
 
   useEffect(() => {
@@ -201,6 +213,7 @@ const MyAddresses = () => {
                       zipCode={address.zipCode}
                       aptNumber={address.aptNumber}
                       streetAddress={address.streetAddress}
+                      isDefault={address.isDefault}
                     />
                   );
                 })}
