@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken"
 import { db } from "@/db";
 import { paymentMethods } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { and } from "drizzle-orm";
+import capitalizor from "@/app/utils/capitalizor";
+
 
 
 export async function GET(req: NextRequest) {
@@ -23,7 +24,8 @@ export async function GET(req: NextRequest) {
             isDefault: paymentMethods.isDefault
         }).from(paymentMethods).where(eq(paymentMethods.userId, decoded.userId))
 
-        return NextResponse.json(methods, {status: 200})
+        return NextResponse.json({methods: methods}, {status: 200})
+        
     } catch (err) {
         console.error(err);
         return NextResponse.json({error: "Error fetching payment methods", err}, {status: 400})
@@ -48,7 +50,7 @@ export async function POST(req:NextRequest) {
 
         await db.insert(paymentMethods).values({
             userId: decoded?.userId,
-            type, provider, cardNumber, expiryDate, cvv, isDefault: isDefault ?? false
+            type: capitalizor(type), provider: capitalizor(provider), cardNumber, expiryDate, cvv, isDefault: isDefault ?? false
         })
 
         return NextResponse.json({success: true}, {status: 200})

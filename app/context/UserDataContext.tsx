@@ -280,8 +280,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         },
       });
       const data = await res.json();
-      setPaymentMethods(data);
-      return data;
+      setPaymentMethods(data.methods);
     } catch (err) {
       console.error(err);
     } finally {

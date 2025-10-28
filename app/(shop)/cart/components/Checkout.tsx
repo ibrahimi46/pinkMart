@@ -56,7 +56,6 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
     if (id !== null) {
       setSelectedPaymentId(id);
       setShowPaymentMethods(false);
-      console.log(id);
     }
   };
 
