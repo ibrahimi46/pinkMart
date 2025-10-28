@@ -12,6 +12,7 @@ import { generateDeliveryDates } from "@/app/utils/generateDeliveryDates";
 import OrderPlaced from "./components/OrderPlaced";
 import Checkout from "./components/Checkout";
 import { UserDataContext } from "@/app/context/UserDataContext";
+import Loading from "@/app/components/Loading";
 
 interface DeliveryDates {
   date: Date;
@@ -29,8 +30,9 @@ const Cart = () => {
   const context = useContext(UserDataContext);
   const {
     cartItems,
-    refetchCartItems,
     step,
+    loading,
+    refetchCartItems,
     setStep,
     handleStepBack,
     handleStepNext,
@@ -44,6 +46,11 @@ const Cart = () => {
 
   return (
     <main className="md:px-20 flex flex-col lg:flex-row px-6 mb-6 gap-8">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <Loading />
+        </div>
+      )}
       <div
         className={`fixed bottom-0 left-0 right-0 sm:inset-0 sm:bg-black-200 border-t-black-200 
         rounded-t-3xl border z-50 transform transition-all duration-300 flex sm:items-center sm:justify-center

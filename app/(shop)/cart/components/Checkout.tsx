@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import AddressItem from "@/app/components/AddressItem";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import PaymentMethodItem from "@/app/components/PaymentMethodItem";
+import Loading from "@/app/components/Loading";
 
 interface CheckoutProps {
   handleStepBack: (step?: string) => void;
@@ -23,6 +24,7 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
 
   const context = useContext(UserDataContext);
   const {
+    loading,
     addresses,
     defaultAddress,
     paymentMethods,
@@ -66,6 +68,11 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
 
   return (
     <div className="flex flex-col gap-4 bg-white p-4 rounded-3xl border border-black-100">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <Loading />
+        </div>
+      )}
       <div className="mb-4">
         <BackButton handleBack={() => handleStepBack()} />
       </div>

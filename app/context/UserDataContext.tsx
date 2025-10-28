@@ -53,6 +53,12 @@ interface CartItem {
   price: string;
 }
 
+interface PlaceOrderProps {
+  finalCheckoutPrice: string;
+  selectedDeliveryDate: string;
+  cartItems: CartItem[];
+}
+
 type CheckoutStep = "cart" | "checkout" | "order_placed";
 
 interface UserDataContextType {
@@ -68,6 +74,13 @@ interface UserDataContextType {
   defaultAddress: Address | null;
   defaultPayment: PaymentMethod | null;
   step: CheckoutStep;
+  finalCheckoutPrice: string;
+  selectedDeliveryDate: string;
+  placeOrder: ({
+    finalCheckoutPrice,
+    selectedDeliveryDate,
+    cartItems,
+  }: PlaceOrderProps) => Promise<void>;
   getAddresses: () => void;
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
@@ -96,6 +109,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [orderId, setOrderId] = useState<number | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
@@ -433,6 +447,41 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     await fetchCartItems();
   };
 
+  // Order Functions
+
+  const placeOrder = async ({
+    finalCheckoutPrice,
+    selectedDeliveryDate,
+    cartItems,
+  }: PlaceOrderProps) => {
+    if (!finalCheckoutPrice || !selectedDeliveryDate || !cartItems) return;
+
+    try {
+      setLoading(true);
+      if (!token) return;
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          cartItems,
+          finalCheckoutPrice,
+          selectedDeliveryDate,
+        }),
+      });
+
+      const data = await res.json();
+      setOrderId(data.orderId);
+      await refetchCartItems();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const refetchAll = useCallback(async () => {
     await Promise.all([
       refetchAddresses(),
@@ -483,6 +532,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         refetchAddresses,
         refetchCartItems,
         refetchPaymentMethods,
+        placeOrder,
         refetchAll,
         setStep,
         handleStepNext,

@@ -3,6 +3,7 @@ import useOrder from "@/app/utils/useOrder";
 import assets from "@/assets";
 import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
+import Loading from "@/app/components/Loading";
 
 interface OrderSummaryProps {
   selectedDeliveryDate: string;
@@ -15,9 +16,8 @@ const OrderSummary = ({
   handleStepNext,
   step,
 }: OrderSummaryProps) => {
-  const { placeOrder } = useOrder();
   const context = useContext(UserDataContext);
-  const { cartTotal, cartItems } = context!;
+  const { cartTotal, cartItems, loading, placeOrder } = context!;
 
   const deliveryFee = 5.78;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
@@ -70,9 +70,16 @@ const OrderSummary = ({
             text-body-md cursor-pointer rounded-full md:w-64
             ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer "}
             `}
-          onClick={() => {
-            !isDisabled && handleStepNext("order_placed");
-            placeOrder({ finalCheckoutPrice, selectedDeliveryDate, cartItems });
+          onClick={async () => {
+            if (isDisabled) return;
+
+            await placeOrder({
+              finalCheckoutPrice,
+              selectedDeliveryDate,
+              cartItems,
+            });
+
+            handleStepNext("order_placed");
           }}
         >
           <p>Place Order</p>
