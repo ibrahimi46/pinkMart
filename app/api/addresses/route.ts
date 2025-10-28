@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
         if (!token || !decoded) return NextResponse.json({ error: "Missing token" }, { status: 401 });
 
         const userAddresses = await db.select({
+            id: addresses.id,
             type: addresses.type,
             streetAddress: addresses.streetAddress,
             aptNumber: addresses.aptNumber,

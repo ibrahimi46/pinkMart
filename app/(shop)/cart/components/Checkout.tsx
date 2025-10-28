@@ -1,7 +1,9 @@
 import Image from "next/image";
 import assets from "@/assets";
 import BackButton from "@/app/components/BackButton";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import AddressItem from "@/app/components/AddressItem";
+import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface CheckoutProps {
   handleStepBack: (step?: string) => void;
@@ -9,8 +11,33 @@ interface CheckoutProps {
 }
 
 const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
+    null
+  );
   const [showAddresses, setShowAddresses] = useState<boolean>(false);
   const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
+
+  const context = useContext(UserDataContext);
+  const { addresses, defaultAddress } = context!;
+
+  useEffect(() => {
+    if (defaultAddress) {
+      setSelectedAddressId(defaultAddress.id || null);
+    }
+  }, [defaultAddress]);
+
+  const selectedAddress = addresses.find(
+    (addr) => addr.id === selectedAddressId
+  );
+
+  const handleAddressSelection = (id: number) => {
+    if (id !== null) {
+      setSelectedAddressId(id);
+      setShowAddresses(false);
+      console.log(id);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 bg-white p-4 rounded-3xl border border-black-100">
       <div className="mb-4">
@@ -42,9 +69,30 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
       </div>
       {/** Delivery Info Container */}
       {showAddresses ? (
-        <div>add</div>
-      ) : (
         <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
+          {addresses &&
+            addresses.map((address) => {
+              return (
+                <AddressItem
+                  key={address.id}
+                  type={address.type}
+                  streetAddress={address.streetAddress}
+                  city={address.city}
+                  zipCode={address.zipCode}
+                  aptNumber={address.aptNumber}
+                  isDefault={address.isDefault}
+                  selectedId={selectedAddressId}
+                  onSelect={handleAddressSelection}
+                  id={address.id!}
+                />
+              );
+            })}
+        </div>
+      ) : (
+        <div
+          className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3"
+          onClick={() => setShowAddresses(true)}
+        >
           <div className="flex justify-between">
             <h1 className="font-semibold">Delivery Info</h1>
             <Image
@@ -64,7 +112,7 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
                 alt="location"
               />
               <p className="text-primary-600">
-                2118 Thornridge Cir, Connecticut 35624
+                {`${selectedAddress?.aptNumber}, ${selectedAddress?.streetAddress}, ${selectedAddress?.city} - ${selectedAddress?.zipCode}`}
               </p>
             </div>
           </div>
