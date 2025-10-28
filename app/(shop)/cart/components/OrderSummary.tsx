@@ -70,7 +70,11 @@ const OrderSummary = ({
             text-body-md cursor-pointer rounded-full md:w-64
             ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer "}
             `}
-          onClick={() => !isDisabled && handleStepNext("order_placed")}
+          onClick={() => {
+            !isDisabled && handleStepNext("order_placed");
+            console.log("clicked");
+            placeOrder({ finalCheckoutPrice, selectedDeliveryDate, cartItems });
+          }}
         >
           <p>Place Order</p>
         </div>

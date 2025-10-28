@@ -4,6 +4,7 @@ import { users as usersTable } from "@/db/schema";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken"
+import capitalizor from "@/app/utils/capitalizor";
 
 
 export async function POST(req: NextRequest) {
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
         }
 
         await db.insert(usersTable).values({
-            email: email || null, password: hashedPassword, fullName, phone: phone || null
+            email: email || null, password: hashedPassword, fullName: capitalizor(fullName), phone: phone || null
         })
         return NextResponse.json({success: "User added!"}, {status: 201})
 

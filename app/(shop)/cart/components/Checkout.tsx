@@ -15,15 +15,20 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null
   );
-  const [showAddresses, setShowAddresses] = useState<boolean>(false);
-  const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
   const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
     null
   );
+  const [showAddresses, setShowAddresses] = useState<boolean>(false);
+  const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
 
   const context = useContext(UserDataContext);
-  const { addresses, defaultAddress, paymentMethods, defaultPayment } =
-    context!;
+  const {
+    addresses,
+    defaultAddress,
+    paymentMethods,
+    defaultPayment,
+    cartItems,
+  } = context!;
 
   useEffect(() => {
     if (defaultAddress) {

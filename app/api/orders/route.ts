@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken"
 import { db } from "@/db";
-import { orders as OrderTable, orderItems as OrderItemsTable, cartItems, cart } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { orders as OrderTable, orderItems as OrderItemsTable, cart as CartsTable, cartItems as CartItemsTable, cart } from "@/db/schema";
 
 export async function POST(req: NextRequest) {
     try {
@@ -40,6 +41,16 @@ export async function POST(req: NextRequest) {
                 
             })
         }
+
+
+        const [userCart] = await db.select().from(CartsTable).where(eq(CartsTable.user_id, decoded.userId)).limit(1);
+        
+
+        if (userCart) {
+            await db.delete(CartItemsTable).where(eq(CartItemsTable.cartId, userCart.id))
+            await db.delete(CartsTable).where(eq(CartsTable.user_id, decoded.userId))
+        }
+       
 
         return NextResponse.json({success: true, orderId: orderId}, {status: 200})
 
