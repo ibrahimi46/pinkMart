@@ -63,10 +63,11 @@ interface UserDataContextType {
   loading: boolean;
   cartTotal: number;
   isLoggedIn: boolean;
+  defaultAddress: Address | null;
+  defaultPayment: PaymentMethod | null;
   getAddresses: () => void;
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
-  defaultAddress: Address | null;
   logout: () => void;
   addPaymentMethod: (paymentMethod: PaymentMethod) => Promise<void>;
   deletePayment: (id: number) => Promise<void>;
@@ -307,6 +308,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const defaultPayment = useMemo(() => {
+    return paymentMethods.find((method) => method.isDefault) || null;
+  }, [paymentMethods]);
+
   const refetchPaymentMethods = async () => {
     await getPaymentMethods();
   };
@@ -445,6 +450,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         cartTotal,
         isLoggedIn,
         defaultAddress,
+        defaultPayment,
         logout,
         getAddresses,
         addAddress,

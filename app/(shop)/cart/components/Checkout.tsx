@@ -4,6 +4,7 @@ import BackButton from "@/app/components/BackButton";
 import { useContext, useEffect, useState } from "react";
 import AddressItem from "@/app/components/AddressItem";
 import { UserDataContext } from "@/app/context/UserDataContext";
+import PaymentMethodItem from "@/app/components/PaymentMethodItem";
 
 interface CheckoutProps {
   handleStepBack: (step?: string) => void;
@@ -15,10 +16,14 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
     null
   );
   const [showAddresses, setShowAddresses] = useState<boolean>(false);
-  const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(true);
+  const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
+    null
+  );
 
   const context = useContext(UserDataContext);
-  const { addresses, defaultAddress } = context!;
+  const { addresses, defaultAddress, paymentMethods, defaultPayment } =
+    context!;
 
   useEffect(() => {
     if (defaultAddress) {
@@ -26,14 +31,32 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
     }
   }, [defaultAddress]);
 
+  useEffect(() => {
+    if (defaultPayment) {
+      setSelectedPaymentId(defaultPayment.id || null);
+    }
+  }, [defaultPayment]);
+
   const selectedAddress = addresses.find(
     (addr) => addr.id === selectedAddressId
+  );
+
+  const selectedPayment = paymentMethods.find(
+    (method) => method.id === selectedPaymentId
   );
 
   const handleAddressSelection = (id: number) => {
     if (id !== null) {
       setSelectedAddressId(id);
       setShowAddresses(false);
+    }
+  };
+
+  const handlePaymentSelection = (id: number) => {
+    if (id !== null) {
+      setSelectedPaymentId(id);
+      setShowPaymentMethods(false);
+      console.log(id);
     }
   };
 
@@ -119,9 +142,27 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
       )}
       {/** Payment Method Container */}
       {showPaymentMethods ? (
-        <div>ss</div>
-      ) : (
         <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
+          {paymentMethods &&
+            paymentMethods.map((method) => {
+              return (
+                <PaymentMethodItem
+                  key={method.id}
+                  provider={method.provider}
+                  cardNumber={method.cardNumber}
+                  expiryDate={method.expiryDate}
+                  isDefault={method.isDefault!}
+                  onSelect={handlePaymentSelection}
+                  id={method.id}
+                />
+              );
+            })}
+        </div>
+      ) : (
+        <div
+          className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3"
+          onClick={() => setShowPaymentMethods(true)}
+        >
           <div className="flex justify-between">
             <h1 className="font-semibold">Payment Method</h1>
             <Image
@@ -133,14 +174,19 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
           </div>
           <div className="flex gap-4 text-body-sm md:text-body-md">
             <p>Pay with:</p>
-            <div className="flex gap-2">
-              <Image
-                src={assets.icons.card_purple}
-                height={25}
-                width={25}
-                alt="location"
-              />
-              <p className="text-primary-600">MasterCard ****3434</p>
+            <div>
+              <div className="flex gap-2">
+                <Image
+                  src={assets.icons.card_purple}
+                  height={25}
+                  width={25}
+                  alt="location"
+                />
+                <p className="text-primary-600">{`${selectedPayment?.provider} - ${selectedPayment?.cardNumber}`}</p>
+              </div>
+              <p className="text-black-500 ml-8 text-body-sm">
+                {selectedPayment?.expiryDate}
+              </p>
             </div>
           </div>
         </div>

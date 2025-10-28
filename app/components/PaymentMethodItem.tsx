@@ -1,0 +1,61 @@
+import Image from "next/image";
+import assets from "@/assets";
+
+interface PaymentMethods {
+  id?: number;
+  userId?: number;
+  type?: string;
+  provider: string;
+  cardNumber: string;
+  expiryDate: string;
+  cvv?: string;
+  isDefault: boolean;
+  createdAt?: string;
+  deletePayment?: (id: number) => void;
+  onDelete?: () => void;
+  onSelect?: (id: number) => void;
+}
+
+const PaymentMethodItem = ({
+  provider,
+  cardNumber,
+  expiryDate,
+  isDefault,
+  deletePayment,
+  id,
+  onDelete,
+  onSelect,
+}: PaymentMethods) => {
+  const handleDelete = async () => {
+    if (deletePayment && id) {
+      const result = await deletePayment(id);
+      onDelete!();
+    }
+  };
+
+  return (
+    <div
+      className="bg-black-100 p-4 rounded-2xl border border-black-200 text-body-md flex justify-between items-center"
+      onClick={() => onSelect?.(id!)}
+    >
+      <div className="flex gap-4">
+        <Image
+          src={assets.icons.mastercard}
+          height={30}
+          width={30}
+          alt="mastercard"
+        />
+        <div>
+          <h1 className="font-semibold">{`${provider.toUpperCase()} - ${cardNumber}`}</h1>
+          <p className="text-black-400 text-body-sm">{expiryDate}</p>
+          {isDefault && <p className="text-body-sm">Default</p>}
+        </div>
+      </div>
+      <div onClick={() => handleDelete()}>
+        <Image src={assets.icons.bin_purple} height={20} width={20} alt="bin" />
+      </div>
+    </div>
+  );
+};
+
+export default PaymentMethodItem;
