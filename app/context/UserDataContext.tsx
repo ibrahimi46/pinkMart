@@ -53,6 +53,8 @@ interface CartItem {
   price: string;
 }
 
+type CheckoutStep = "cart" | "checkout" | "order_placed";
+
 interface UserDataContextType {
   user: User | null;
   userDetails: UserDetails | null;
@@ -65,6 +67,7 @@ interface UserDataContextType {
   isLoggedIn: boolean;
   defaultAddress: Address | null;
   defaultPayment: PaymentMethod | null;
+  step: CheckoutStep;
   getAddresses: () => void;
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
@@ -78,6 +81,9 @@ interface UserDataContextType {
   refetchPaymentMethods: () => Promise<void>;
   refetchCartItems: () => Promise<void>;
   refetchAll: () => Promise<void>;
+  setStep: (value: CheckoutStep) => void;
+  handleStepNext: () => void;
+  handleStepBack: () => void;
 }
 
 export const UserDataContext = createContext<UserDataContextType | null>(null);
@@ -92,6 +98,9 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
+    "cart"
+  ); // Steps in cart
 
   const isLoggedIn = !!user;
 
@@ -436,6 +445,17 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     refetchAll();
   }, [refetchAll]);
 
+  // For handling checkout steps in cart page
+  const handleStepNext = () => {
+    if (step === "cart") setStep("checkout");
+    else if (step === "checkout") setStep("order_placed");
+  };
+
+  const handleStepBack = () => {
+    if (step === "order_placed") setStep("checkout");
+    else if (step === "checkout") setStep("cart");
+  };
+
   return (
     <UserDataContext.Provider
       value={{
@@ -450,6 +470,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         isLoggedIn,
         defaultAddress,
         defaultPayment,
+        step,
         logout,
         getAddresses,
         addAddress,
@@ -463,6 +484,9 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         refetchCartItems,
         refetchPaymentMethods,
         refetchAll,
+        setStep,
+        handleStepNext,
+        handleStepBack,
       }}
     >
       {children}

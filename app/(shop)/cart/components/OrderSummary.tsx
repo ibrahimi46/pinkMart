@@ -72,7 +72,6 @@ const OrderSummary = ({
             `}
           onClick={() => {
             !isDisabled && handleStepNext("order_placed");
-            console.log("clicked");
             placeOrder({ finalCheckoutPrice, selectedDeliveryDate, cartItems });
           }}
         >

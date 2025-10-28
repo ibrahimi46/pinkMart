@@ -21,32 +21,26 @@ interface DeliveryDates {
 }
 
 const Cart = () => {
-  const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
-    "cart"
-  );
   // const [lastOrder, setLastOrder] = useState<any>(null);
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
 
   const context = useContext(UserDataContext);
-  const { cartItems, refetchCartItems } = context!;
+  const {
+    cartItems,
+    refetchCartItems,
+    step,
+    setStep,
+    handleStepBack,
+    handleStepNext,
+  } = context!;
   const { products } = useProducts();
 
   useEffect(() => {
     const dates = generateDeliveryDates(2, 10);
     setDeliveryDates(dates);
   }, []);
-
-  const handleStepNext = () => {
-    if (step === "cart") setStep("checkout");
-    else if (step === "checkout") setStep("order_placed");
-  };
-
-  const handleStepBack = () => {
-    if (step === "order_placed") setStep("checkout");
-    else if (step === "checkout") setStep("cart");
-  };
 
   return (
     <main className="md:px-20 flex flex-col lg:flex-row px-6 mb-6 gap-8">

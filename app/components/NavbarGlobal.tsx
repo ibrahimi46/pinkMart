@@ -11,7 +11,7 @@ interface NavbarGlobalProps {
 
 const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
   const context = useContext(UserDataContext);
-  const { isLoggedIn } = context!;
+  const { isLoggedIn, setStep } = context!;
   return (
     <>
       <div className="bg-black-100 h-32 sm:h-20 mb-6 md:py-10 flex flex-col justify-center border-b-2">
@@ -111,6 +111,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                     iconPosition="left"
                     textStyles="text-body-md"
                     extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
+                    handleOnClick={() => setStep("cart")}
                   />
                 </Link>
                 <Link
