@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NoDataPlaceholder from "./NoDataPlaceholder";
 import assets from "@/assets";
 import Image from "next/image";
 import BackButton from "@/app/components/BackButton";
+import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface PaymentMethods {
   id?: number;
@@ -72,7 +73,8 @@ const AddPaymentModal = ({
   const [cvv, setCvv] = useState<string>("");
   const [isDefault, setIsDefault] = useState<boolean>(false);
 
-  const { addPaymentMethod, getPaymentMethods } = usePayments();
+  const context = useContext(UserDataContext);
+  const { addPaymentMethod } = context!;
 
   const handleSave = () => {
     addPaymentMethod({
@@ -223,22 +225,11 @@ const AddPaymentModal = ({
 };
 
 const Payments = () => {
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethods[]>([]);
   const [showAddPaymentModal, setShowAddPaymentModal] =
     useState<boolean>(false);
 
-  const { getPaymentMethods, deletePayment } = usePayments();
-
-  const fetchPayments = async () => {
-    const data = await getPaymentMethods();
-    if (data) {
-      setPaymentMethods(data);
-    }
-  };
-
-  useEffect(() => {
-    fetchPayments();
-  }, []);
+  const context = useContext(UserDataContext);
+  const { paymentMethods, deletePayment, refetchPaymentMethods } = context!;
 
   return (
     <div>
@@ -255,7 +246,7 @@ const Payments = () => {
                 isDefault={method.isDefault}
                 deletePayment={deletePayment}
                 id={method.id}
-                onDelete={fetchPayments}
+                onDelete={refetchPaymentMethods}
               />
             );
           })}
@@ -285,7 +276,7 @@ const Payments = () => {
       {showAddPaymentModal && (
         <AddPaymentModal
           setShowAddPaymentModal={setShowAddPaymentModal}
-          onPayment={fetchPayments}
+          onPayment={refetchPaymentMethods}
         />
       )}
     </div>

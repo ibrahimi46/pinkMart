@@ -15,7 +15,7 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
     null
   );
   const [showAddresses, setShowAddresses] = useState<boolean>(false);
-  const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
+  const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(true);
 
   const context = useContext(UserDataContext);
   const { addresses, defaultAddress } = context!;
@@ -34,7 +34,6 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
     if (id !== null) {
       setSelectedAddressId(id);
       setShowAddresses(false);
-      console.log(id);
     }
   };
 
@@ -119,29 +118,33 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
         </div>
       )}
       {/** Payment Method Container */}
-      <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
-        <div className="flex justify-between">
-          <h1 className="font-semibold">Payment Method</h1>
-          <Image
-            src={assets.icons.arrow_right}
-            height={25}
-            width={25}
-            alt="right"
-          />
-        </div>
-        <div className="flex gap-4 text-body-sm md:text-body-md">
-          <p>Pay with:</p>
-          <div className="flex gap-2">
+      {showPaymentMethods ? (
+        <div>ss</div>
+      ) : (
+        <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
+          <div className="flex justify-between">
+            <h1 className="font-semibold">Payment Method</h1>
             <Image
-              src={assets.icons.card_purple}
+              src={assets.icons.arrow_right}
               height={25}
               width={25}
-              alt="location"
+              alt="right"
             />
-            <p className="text-primary-600">MasterCard ****3434</p>
+          </div>
+          <div className="flex gap-4 text-body-sm md:text-body-md">
+            <p>Pay with:</p>
+            <div className="flex gap-2">
+              <Image
+                src={assets.icons.card_purple}
+                height={25}
+                width={25}
+                alt="location"
+              />
+              <p className="text-primary-600">MasterCard ****3434</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
         <div className="flex justify-between">
