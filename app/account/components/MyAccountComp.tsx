@@ -1,6 +1,6 @@
 import Image from "next/image";
 import assets from "@/assets";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface AccDetailItems {
@@ -13,7 +13,9 @@ const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
     <div className="flex justify-between border border-black-300 p-3  rounded-2xl">
       <div className="">
         <h1 className="font-bold text-body-md">{field1}</h1>
-        <p className="text-black-300 text-body-sm">{field2}</p>
+        <p className="text-black-400 font-bold text-body-sm">
+          {field2 ? field2 : `NA`}
+        </p>
       </div>
       <Image src={assets.icons.edit} height={20} width={20} alt="edit" />
     </div>
@@ -22,7 +24,7 @@ const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
 
 const MyAccountComp = () => {
   const context = useContext(UserDataContext);
-  const { user, userDetails } = context!;
+  const { userDetails } = context!;
 
   return (
     <div className="flex flex-col gap-3 mt-2">

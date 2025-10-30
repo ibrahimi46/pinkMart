@@ -4,37 +4,6 @@ import { users as usersTable } from "@/db/schema";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken"
-import capitalizor from "@/app/utils/capitalizor";
-
-
-export async function POST(req: NextRequest) {
-    const signUp = await req.json();
-    const {email, password, fullName, phone} = signUp;
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    try {
-
-        if (!password || !fullName) {
-            return NextResponse.json({error: "Missing required fields"}, {status: 400})
-        }
-
-        await db.insert(usersTable).values({
-            email: email || null, password: hashedPassword, fullName: capitalizor(fullName), phone: phone || null
-        })
-        return NextResponse.json({success: "User added!"}, {status: 201})
-
-    }
-    catch(error: unknown) {
-        if (error instanceof Error) {
-            if (error.message.includes("duplicate key")) {
-            return NextResponse.json({error: "Email already exists"}, {status: 400})
-        }
-        }
-        console.error(error);
-        return NextResponse.json({error: "An error occured"}, {status: 500})
-    }
-}
 
 export async function GET(req: NextRequest) {
     try {
@@ -73,8 +42,8 @@ export async function GET(req: NextRequest) {
                 phone: usersTable.phone,
                 isAdmin: usersTable.isAdmin,
                 createdAt: usersTable.createdAt,
-            }).from(usersTable);
-            return NextResponse.json({user})
+            }).from(usersTable).where(eq(usersTable.id, decoded.userId));
+            return NextResponse.json({user: user[0]})
         } 
         
     }
@@ -83,3 +52,33 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({error: "An error occured"}, {status: 500})
     }
 }
+
+export async function POST(req: NextRequest) {
+    const signUp = await req.json();
+    const {email, password, fullName, phone} = signUp;
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    try {
+
+        if (!password || !fullName) {
+            return NextResponse.json({error: "Missing required fields"}, {status: 400})
+        }
+
+        await db.insert(usersTable).values({
+            email: email || null, password: hashedPassword, fullName: fullName, phone: phone || null
+        })
+        return NextResponse.json({success: "User added!"}, {status: 201})
+
+    }
+    catch(error: unknown) {
+        if (error instanceof Error) {
+            if (error.message.includes("duplicate key")) {
+            return NextResponse.json({error: "Email already exists"}, {status: 400})
+        }
+        }
+        console.error(error);
+        return NextResponse.json({error: "An error occured"}, {status: 500})
+    }
+}
+

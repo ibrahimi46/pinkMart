@@ -140,7 +140,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   }, [token]);
 
   useEffect(() => {
-    if (user?.isAdmin) {
+    if (user) {
       getUsersList();
     }
   }, [user]);

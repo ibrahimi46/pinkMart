@@ -4,6 +4,7 @@ import assets from "@/assets";
 import Link from "next/link";
 import { useState } from "react";
 import CreatePassword from "../components/CreatePassword";
+import capitalizor from "@/app/utils/capitalizor";
 
 const SignUp = () => {
   const [loginOption, setLoginOption] = useState<string>("email");
@@ -16,7 +17,7 @@ const SignUp = () => {
   const [password, setPassword] = useState<string>("");
 
   const handleSignUp = async () => {
-    const fullName = `${firstName} ${secondName}`;
+    const fullName = `${capitalizor(firstName)} ${capitalizor(secondName)}`;
 
     try {
       const res = await fetch("/api/users", {
