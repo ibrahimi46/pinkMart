@@ -13,6 +13,7 @@ import OrderPlaced from "./components/OrderPlaced";
 import Checkout from "./components/Checkout";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
+import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 
 interface DeliveryDates {
   date: Date;
@@ -121,25 +122,38 @@ const Cart = () => {
                 </div>
 
                 {/** items name container */}
-                <div className="bg-white border border-black-100 rounded-xl p-4">
-                  <h2 className="text-black-400 font-bold text-body-md">
-                    Items Name
-                  </h2>
-                  {cartItems &&
-                    cartItems.map((cartItem) => {
-                      const product = products.find(
-                        (item) => item.id === cartItem.productId
-                      );
-                      return product ? (
-                        <CartItem
-                          key={product.id}
-                          product={product}
-                          quantity={cartItem.quantity}
-                          onUpdate={refetchCartItems}
-                        />
-                      ) : null;
-                    })}
-                </div>
+                {cartItems && cartItems.length > 0 ? (
+                  <div className="bg-white border border-black-100 rounded-xl p-4">
+                    <h2 className="text-black-400 font-bold text-body-md">
+                      Items Name
+                    </h2>
+                    {cartItems &&
+                      cartItems.map((cartItem) => {
+                        const product = products.find(
+                          (item) => item.id === cartItem.productId
+                        );
+                        return product ? (
+                          <CartItem
+                            key={product.id}
+                            product={product}
+                            quantity={cartItem.quantity}
+                            onUpdate={refetchCartItems}
+                          />
+                        ) : null;
+                      })}
+                  </div>
+                ) : (
+                  <div>
+                    <NoDataPlaceholder
+                      icon={assets.icons.cart_purple}
+                      field1="Your cart is empty..."
+                      field2="Explore our shop to add items to your cart!"
+                      btnName="Go to Store"
+                      btnIcon={assets.icons.home}
+                      extraStyles="bg-white"
+                    />
+                  </div>
+                )}
               </div>
               <div className="min-w-0 overflow-x-hidden">
                 <BestSeller title="Recommendations" />
