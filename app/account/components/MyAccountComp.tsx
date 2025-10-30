@@ -10,7 +10,7 @@ interface AccDetailItems {
 
 const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
   return (
-    <div className="flex justify-between border border-black-300 p-3  rounded-2xl">
+    <div className="flex justify-between border border-black-300 p-3 bg-white  rounded-2xl">
       <div className="">
         <h1 className="font-bold text-body-md">{field1}</h1>
         <p className="text-black-400 font-bold text-body-sm">

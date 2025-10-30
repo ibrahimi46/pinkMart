@@ -79,10 +79,10 @@ const MyAccount = () => {
     }
   };
   return (
-    <main className="flex gap-6 px-8 h-[calc(100vh-140px)] overflow-hidden w-screen">
+    <main className="flex gap-6 px-8 overflow-hidden min-h-[calc(100vh-120px)] w-screen">
       {/** left sidebar */}
-      <div className="hidden md:flex w-1/4 max-w-64 py-2 h-full items-start justify-between flex-col">
-        <div className="flex w-full flex-col items-start p-4 bg-black-100 rounded-2xl">
+      <div className="hidden md:flex w-1/4 max-w-64 py-2 h-[650px] items-start justify-between flex-col">
+        <div className="flex w-full flex-col items-start p-4 bg-black-100 border border-black-300 rounded-2xl">
           <div className="flex items-center gap-2 mb-4">
             <Image
               src={assets.icons.account}
@@ -138,7 +138,7 @@ const MyAccount = () => {
             name="Logout"
             icon={assets.icons.logout}
             iconPosition="left"
-            extraStyles="w-full h-16 border border-black-300"
+            extraStyles="w-full h-12 border border-black-300"
             handleOnClick={logout}
           />
         </div>

@@ -192,17 +192,17 @@ const MyAddresses = () => {
                 })}
               <div
                 onClick={() => setShowAddAddrModal(true)}
-                className="flex gap-2 bg-primary-50 border cursor-pointer transition-all duration-300
-                hover:bg-primary-600
-                border-primary-300 sm:w-56 w-full py-2 items-center justify-center text-nowrap rounded-xl "
+                className="flex gap-2 bg-primary-100 border cursor-pointer transition-all duration-300
+                hover:bg-primary-200
+                border-primary-300 hover:border-primary-600 sm:w-56 w-full py-2 items-center justify-center text-nowrap rounded-xl "
               >
                 <Image
-                  src={assets.icons.plus}
+                  src={assets.icons.plus_purple}
                   width={20}
                   height={20}
                   alt="plus"
                 />
-                <p>Add Address</p>
+                <p className="text-primary-600">Add Address</p>
               </div>
             </div>
           ) : (

@@ -200,9 +200,20 @@ const Payments = () => {
               />
             );
           })}
-          <div className="flex gap-2 bg-primary-50 border border-primary-300 cursor-pointer w-56 py-2 items-center justify-center text-nowrap rounded-xl ">
-            <Image src={assets.icons.plus} width={20} height={20} alt="plus" />
-            <p onClick={() => setShowAddPaymentModal(true)}>
+          <div
+            className="flex gap-2 bg-primary-100 border cursor-pointer transition-all duration-300
+                border-primary-300 hover:bg-primary-200 hover:border-primary-600 sm:w-56 w-full py-2 items-center justify-center text-nowrap rounded-xl"
+          >
+            <Image
+              src={assets.icons.plus_purple}
+              width={20}
+              height={20}
+              alt="plus"
+            />
+            <p
+              onClick={() => setShowAddPaymentModal(true)}
+              className="text-primary-600"
+            >
               Add Payment Method
             </p>
           </div>

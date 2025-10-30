@@ -31,7 +31,7 @@ const AddressItem = ({
   const isSelected = selectedId === id;
   return (
     <div
-      className="flex justify-between bg-black-100 p-4 rounded-3xl border cursor-pointer border-black-200 text-body-md"
+      className="flex justify-between items-center bg-white p-4 rounded-3xl border cursor-pointer border-black-200 text-body-md"
       onClick={() => onSelect(id!)}
     >
       <div className="flex gap-4">
@@ -43,9 +43,12 @@ const AddressItem = ({
           <p>{`${aptNumber}, ${streetAddress}, ${city} - ${zipCode}`}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        <Image src={assets.icons.edit} height={20} width={20} alt="edit" />
-        <p className="hidden sm:block">Edit</p>
+      <div
+        onClick={() => handleDelete()}
+        className="bg-primary-100 flex p-1 h-8 rounded-full border-primary-600 border hover:bg-primary-200 hover:border-primary-600
+        transition-all duration-300 cursor-pointer"
+      >
+        <Image src={assets.icons.bin_purple} height={20} width={20} alt="bin" />
       </div>
     </div>
   );

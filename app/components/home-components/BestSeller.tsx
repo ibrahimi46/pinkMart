@@ -103,7 +103,7 @@ const BestSeller = ({ title }: BestSellerProps) => {
             icon={assets.icons.arrow_right}
             iconPosition="right"
             textStyles="text-body-sm"
-            extraStyles="px-4 border border-primary-600 bg-black-50 h-8"
+            extraStyles="px-4 border border-primary-600 bg-white h-8"
           />
           <div className="flex gap-2">
             <BackButton handleBack={() => scroll("left")} />

@@ -35,7 +35,7 @@ const PaymentMethodItem = ({
 
   return (
     <div
-      className="bg-black-100 p-4 rounded-2xl border border-black-200 text-body-md flex justify-between items-center"
+      className="bg-white p-4 rounded-2xl border border-black-200 text-body-md flex justify-between items-center"
       onClick={() => onSelect?.(id!)}
     >
       <div className="flex gap-4">
@@ -53,7 +53,8 @@ const PaymentMethodItem = ({
       </div>
       <div
         onClick={() => handleDelete()}
-        className="bg-primary-100 p-1 rounded-full border-primary-600 border hover:opacity-70 cursor-pointer"
+        className="bg-primary-100 p-1 h-8 rounded-full border-primary-600 border hover:bg-primary-200 hover:border-primary-600
+        transition-all duration-300 cursor-pointer"
       >
         <Image src={assets.icons.bin_purple} height={20} width={20} alt="bin" />
       </div>

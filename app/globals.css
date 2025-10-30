@@ -23,3 +23,10 @@
   display: flex;
   animation: marquee 20s linear infinite;
 }
+
+
+html,
+body {
+  height: "100%";
+  overflow-x: hidden;
+}
