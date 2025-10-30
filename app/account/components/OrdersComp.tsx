@@ -1,17 +1,31 @@
-import Button from "@/app/components/Button";
 import assets from "@/assets";
-import { useState } from "react";
+import { useContext } from "react";
 import Image from "next/image";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import NoDataPlaceholder from "./NoDataPlaceholder";
+import { UserDataContext } from "@/app/context/UserDataContext";
+import capitalizor from "@/app/utils/capitalizor";
+import { dateFormatter } from "@/app/utils/dateFormatter";
 
-const OrderItem = () => {
+interface OrderItemProps {
+  status: string;
+  createdAt: string;
+  totalAmount: string;
+  itemCount: string;
+}
+
+const OrderItem = ({
+  status,
+  totalAmount,
+  createdAt,
+  itemCount,
+}: OrderItemProps) => {
   return (
     <div className="border p-4 rounded-2xl flex flex-col gap-4 text-body-sm">
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <div className="flex flex-col gap-2">
-          <h1 className="font-semibold ">Order Delivered</h1>
-          <p className="text-black-400">Apr 5, 2022, 10:07 AM</p>
+          <h1 className="font-semibold ">{`Order ${capitalizor(status)}`}</h1>
+          <p className="text-black-400">{dateFormatter(createdAt)}</p>
         </div>
 
         <div className="items-center gap-2 hidden sm:flex">
@@ -24,7 +38,7 @@ const OrderItem = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <h1 className="font-semibold">$54</h1>
+            <h1 className="font-semibold">{`$${totalAmount}`}</h1>
             <p className="text-black-400">Paid with cash</p>
           </div>
         </div>
@@ -39,23 +53,12 @@ const OrderItem = () => {
           </div>
           <div className="flex flex-col gap-2">
             <h1 className="font-semibold">Items</h1>
-            <p className="text-black-400">6x</p>
+            <p className="text-black-400">{`x${itemCount}`}</p>
           </div>
         </div>
 
-        <div className="md:flex md:flex-row gap-4 ml-2 flex flex-col items-center">
-          <div className="bg-green-100 text-green-700  flex sm:px-1 px-4 py-1 items-center justify-center rounded-xl border border-green-900">
-            Completed
-          </div>
-          <div className="flex items-center gap-1 text-nowrap">
-            <p>View Order Details</p>
-            <Image
-              src={assets.icons.export}
-              height={20}
-              width={20}
-              alt="details"
-            />
-          </div>
+        <div className="bg-green-100 text-green-700  flex px-4 py-1 h-8 items-center justify-center rounded-xl border border-green-900">
+          {capitalizor(status)}
         </div>
       </div>
       <div className="flex justify-between pr-8 sm:hidden">
@@ -88,19 +91,17 @@ const OrderItem = () => {
           </div>
         </div>
       </div>
-      <div className="bg-black-100 rounded-xl p-2">
-        <div className="bg-white w-14 h-14 rounded-xl">image</div>
-      </div>
     </div>
   );
 };
 
 const OrdersComp = () => {
-  const [orders, setOrders] = useState<object>({});
+  const context = useContext(UserDataContext);
+  const { orders } = context!;
 
   return (
     <div>
-      {orders ? (
+      {orders && orders.length > 0 ? (
         <div className="flex flex-col gap-4 mt-2">
           <h1 className="hidden md:block font-bold">My Orders</h1>
           <div className="flex gap-2  text-body-sm">
@@ -117,9 +118,17 @@ const OrdersComp = () => {
               <p>Cancelled</p>
             </div>
           </div>
-          <OrderItem />
-          <OrderItem />
-          <OrderItem />
+          {orders.map((order) => {
+            return (
+              <OrderItem
+                key={order.id}
+                status={order.status}
+                totalAmount={order.totalAmount}
+                itemCount={order.itemCount}
+                createdAt={order.createdAt}
+              />
+            );
+          })}
         </div>
       ) : (
         <div className="flex flex-col gap-4 mt-2">

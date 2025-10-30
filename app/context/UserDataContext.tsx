@@ -53,6 +53,16 @@ interface CartItem {
   price: string;
 }
 
+interface Orders {
+  id: number;
+  userId: number;
+  totalAmount: number;
+  status: string;
+  deliveryDate: string;
+  createdAt: string;
+  itemCount: number;
+}
+
 interface PlaceOrderProps {
   finalCheckoutPrice: string;
   selectedDeliveryDate: string;
@@ -74,13 +84,13 @@ interface UserDataContextType {
   defaultAddress: Address | null;
   defaultPayment: PaymentMethod | null;
   step: CheckoutStep;
-  finalCheckoutPrice: string;
-  selectedDeliveryDate: string;
+  orders: Orders[];
   placeOrder: ({
     finalCheckoutPrice,
     selectedDeliveryDate,
     cartItems,
   }: PlaceOrderProps) => Promise<void>;
+  getOrders: () => Promise<void>;
   getAddresses: () => void;
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
@@ -109,7 +119,8 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-  const [orderId, setOrderId] = useState<number | null>(null);
+  // const [orderId, setOrderId] = useState<number | null>(null);
+  const [orders, setOrders] = useState<Orders[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
@@ -248,7 +259,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const defaultAddress = useMemo(() => {
-    return addresses.find((addr) => addr.isDefault) || null;
+    return addresses?.find((addr) => addr.isDefault) ?? null;
   }, [addresses]);
 
   const refetchAddresses = async () => {
@@ -331,7 +342,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const defaultPayment = useMemo(() => {
-    return paymentMethods.find((method) => method.isDefault) || null;
+    return paymentMethods?.find((method) => method.isDefault) ?? null;
   }, [paymentMethods]);
 
   const refetchPaymentMethods = async () => {
@@ -482,11 +493,34 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const getOrders = async () => {
+    try {
+      if (!token) return;
+      setLoading(true);
+      const res = await fetch("/api/orders", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (data) setOrders(data.result);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const refetchOrders = async () => {
+    await getOrders();
+  };
+
   const refetchAll = useCallback(async () => {
     await Promise.all([
       refetchAddresses(),
       refetchPaymentMethods(),
       refetchCartItems(),
+      refetchOrders(),
     ]);
   }, [token]);
 
@@ -520,6 +554,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         defaultAddress,
         defaultPayment,
         step,
+        orders,
         logout,
         getAddresses,
         addAddress,
@@ -537,6 +572,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         setStep,
         handleStepNext,
         handleStepBack,
+        getOrders,
       }}
     >
       {children}
