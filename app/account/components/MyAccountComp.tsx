@@ -1,6 +1,6 @@
 import Image from "next/image";
 import assets from "@/assets";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface AccDetailItems {
