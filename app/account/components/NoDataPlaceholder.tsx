@@ -7,7 +7,6 @@ interface NoDataPlaceholderProps {
   field2: string;
   btnIcon: string;
   btnName: string;
-  extraStyles: string;
   handleAction?: () => void;
 }
 
@@ -17,12 +16,11 @@ const NoDataPlaceholder = ({
   field2,
   btnIcon,
   btnName,
-  extraStyles,
   handleAction,
 }: NoDataPlaceholderProps) => {
   return (
     <div
-      className={`flex flex-col items-center gap-3 border border-black-200 rounded-2xl p-6 ${extraStyles}`}
+      className={`flex flex-col items-center gap-3 border bg-white border-black-200 rounded-2xl p-6`}
     >
       <div className="bg-primary-100 p-3 rounded-full">
         <Image src={icon} height={40} width={40} alt="receipt" />

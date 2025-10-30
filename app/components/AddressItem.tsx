@@ -2,7 +2,7 @@ import Image from "next/image";
 import assets from "@/assets";
 
 interface Address {
-  id: number;
+  id?: number;
   userId?: number;
   type: string;
   streetAddress: string;
@@ -35,13 +35,6 @@ const AddressItem = ({
       onClick={() => onSelect(id!)}
     >
       <div className="flex gap-4">
-        <input
-          type="radio"
-          checked={isSelected}
-          name="address"
-          readOnly
-          onChange={() => {}}
-        />
         <div>
           <div className="flex gap-2 items-center">
             <h1 className="font-semibold">{type}</h1>

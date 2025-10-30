@@ -9,7 +9,7 @@ interface PaymentMethods {
   cardNumber: string;
   expiryDate: string;
   cvv?: string;
-  isDefault: boolean;
+  isDefault?: boolean;
   createdAt?: string;
   deletePayment?: (id: number) => void;
   onDelete?: () => void;
@@ -51,7 +51,10 @@ const PaymentMethodItem = ({
           {isDefault && <p className="text-body-sm">Default</p>}
         </div>
       </div>
-      <div onClick={() => handleDelete()}>
+      <div
+        onClick={() => handleDelete()}
+        className="bg-primary-100 p-1 rounded-full border-primary-600 border hover:opacity-70 cursor-pointer"
+      >
         <Image src={assets.icons.bin_purple} height={20} width={20} alt="bin" />
       </div>
     </div>

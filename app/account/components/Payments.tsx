@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import NoDataPlaceholder from "./NoDataPlaceholder";
 import assets from "@/assets";
 import Image from "next/image";
@@ -51,7 +51,7 @@ const AddPaymentModal = ({
         {/**conditional render */}
         {paymentMode === "visa" ? (
           <>
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center cursor-pointer">
               <BackButton handleBack={() => setPaymentMode("")} />
               <h1 className="font-semibold text-body-xl">Add Payment</h1>
             </div>
@@ -74,8 +74,9 @@ const AddPaymentModal = ({
                   onChange={(e) => setExpiryDate(e.target.value)}
                 />
                 <input
-                  type="number"
+                  type="text"
                   placeholder="CVC"
+                  maxLength={3}
                   className="bg-black-100 p-3 rounded-xl"
                   onChange={(e) => setCvv(e.target.value)}
                 />
@@ -182,7 +183,7 @@ const Payments = () => {
 
   return (
     <div>
-      {paymentMethods.length > 0 ? (
+      {paymentMethods ? (
         <div className="flex flex-col gap-4 mt-2">
           <h1 className="font-bold">My Payments</h1>
           {paymentMethods.map((method) => {
@@ -199,7 +200,7 @@ const Payments = () => {
               />
             );
           })}
-          <div className="flex gap-2 bg-primary-50 border border-primary-300 w-56 py-2 items-center justify-center text-nowrap rounded-xl ">
+          <div className="flex gap-2 bg-primary-50 border border-primary-300 cursor-pointer w-56 py-2 items-center justify-center text-nowrap rounded-xl ">
             <Image src={assets.icons.plus} width={20} height={20} alt="plus" />
             <p onClick={() => setShowAddPaymentModal(true)}>
               Add Payment Method

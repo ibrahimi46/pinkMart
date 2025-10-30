@@ -94,7 +94,7 @@ const BestSeller = ({ title }: BestSellerProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 border border-black-100 p-4 rounded-3xl bg-white">
       <div className="flex justify-between items-end">
         <h1 className="text-body-lg font-bold">{title}</h1>
         <div className="sm:flex hidden items-center gap-6">

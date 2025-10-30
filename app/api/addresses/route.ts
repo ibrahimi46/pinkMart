@@ -26,6 +26,8 @@ export async function GET(req: NextRequest) {
             isDefault: addresses.isDefault
         }).from(addresses).where(eq(addresses.userId, decoded.userId));
 
+        console.log("done")
+        console.log(userAddresses);
         return NextResponse.json({ addresses: userAddresses }, { status: 200 });
 
     } catch (err) {
