@@ -1,9 +1,7 @@
 import Image from "next/image";
-import useOrder from "@/app/utils/useOrder";
 import assets from "@/assets";
 import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
-import Loading from "@/app/components/Loading";
 
 interface OrderSummaryProps {
   selectedDeliveryDate: string;
@@ -17,7 +15,7 @@ const OrderSummary = ({
   step,
 }: OrderSummaryProps) => {
   const context = useContext(UserDataContext);
-  const { cartTotal, cartItems, loading, placeOrder } = context!;
+  const { cartTotal, cartItems, placeOrder } = context!;
 
   const deliveryFee = 5.78;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);

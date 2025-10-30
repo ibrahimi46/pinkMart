@@ -33,7 +33,6 @@ const Cart = () => {
     step,
     loading,
     refetchCartItems,
-    setStep,
     handleStepBack,
     handleStepNext,
   } = context!;
