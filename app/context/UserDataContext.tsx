@@ -79,6 +79,21 @@ interface AdminOrder {
   itemCount: number;
 }
 
+interface AdminUser {
+  id: number;
+  fullName: string;
+  email: string;
+  phone: string | null;
+  isAdmin: boolean;
+  createdAt: string;
+  orders?: {
+    id: number;
+    totalAmount: number;
+    status: string;
+    createdAt: string;
+  }[];
+}
+
 type CheckoutStep = "cart" | "checkout" | "order_placed";
 
 interface UserDataContextType {
@@ -96,6 +111,10 @@ interface UserDataContextType {
   step: CheckoutStep;
   orders: Orders[];
   adminOrders: AdminOrder[];
+  adminUsers: AdminUser[];
+  fetchAdminUsers: () => void;
+  updateUserRole: (userId: number, isAdmin: boolean) => void;
+  getAdminUserDetails: (userId: number) => Promise<AdminUser | null>;
   placeOrder: ({
     finalCheckoutPrice,
     selectedDeliveryDate,
@@ -128,6 +147,7 @@ export const UserDataContext = createContext<UserDataContextType | null>(null);
 export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   // States
   const [token, setToken] = useState<string>("");
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
   const [user, setUser] = useState<User | null>(null); // Current user
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -194,6 +214,68 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     window.location.href = "/";
   };
+
+  // Admin User Functions
+
+  const fetchAdminUsers = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      setLoading(true);
+      const res = await fetch("/api/admin/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setAdminUsers(data.users || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateUserRole = async (userId: number, isAdmin: boolean) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      setLoading(true);
+      await fetch(`/api/admin/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ isAdmin }),
+      });
+      setAdminUsers((prev) =>
+        prev.map((user) => (user.id === userId ? { ...user, isAdmin } : user))
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAdminUserDetails = useCallback(async (userId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    try {
+      setLoading(true);
+      const res = await fetch(`/api/admin/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      return data.user;
+    } catch (err) {
+      console.error(err);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // Address Functions
   const addAddress = async ({
@@ -646,6 +728,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         step,
         orders,
         adminOrders,
+        adminUsers,
+        fetchAdminUsers,
+        updateUserRole,
+        getAdminUserDetails,
         updateOrderStatus,
         getOrderDetails,
         fetchAdminOrders,

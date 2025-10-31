@@ -46,11 +46,11 @@ const RecentOrderItem = () => {
 
 const AdminDashboard = () => {
   return (
-    <div className="mt-2 flex flex-col gap-6 h-full overflow-y-scroll scrollbar-hide">
+    <div className="mt-2 flex flex-col gap-6 h-screen overflow-y-scroll scrollbar-hide">
       <h1 className="font-semibold">Admin Dashboard</h1>
       <div className="">
         {/** sales user products */}
-        <div className="border border-black-200 p-6 gap-2 rounded-2xl flex justify-evenly">
+        <div className="border bg-white border-black-200 p-6 gap-2 rounded-2xl flex justify-evenly">
           <DashboardInfoItem name="Sales" count="130" />
           <DashboardInfoItem name="Users" count="956" />
           <DashboardInfoItem name="Products" count="140" />
@@ -67,7 +67,7 @@ const AdminDashboard = () => {
         />
       </div>
 
-      <div className="border border-black-200 rounded-2xl p-4 flex flex-col gap-8">
+      <div className="border bg-white border-black-200 rounded-2xl p-4 flex flex-col gap-8">
         <RecentOrderItem />
         <RecentOrderItem />
         <RecentOrderItem />
