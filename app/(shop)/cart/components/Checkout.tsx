@@ -96,26 +96,51 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
         </div>
       </div>
       {/** Delivery Info Container */}
-      {showAddresses ? (
-        <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
-          {addresses &&
-            addresses.map((address) => {
-              return (
-                <AddressItem
-                  key={address.id}
-                  type={address.type}
-                  streetAddress={address.streetAddress}
-                  city={address.city}
-                  zipCode={address.zipCode}
-                  aptNumber={address.aptNumber}
-                  isDefault={address.isDefault}
-                  selectedId={selectedAddressId}
-                  onSelect={handleAddressSelection}
-                  id={address.id!}
+      {addresses && addresses.length > 0 ? (
+        showAddresses ? (
+          <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
+            {addresses.map((address) => (
+              <AddressItem
+                key={address.id}
+                type={address.type}
+                streetAddress={address.streetAddress}
+                city={address.city}
+                zipCode={address.zipCode}
+                aptNumber={address.aptNumber}
+                isDefault={address.isDefault}
+                onSelect={handleAddressSelection}
+                id={address.id!}
+              />
+            ))}
+          </div>
+        ) : (
+          <div
+            className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3"
+            onClick={() => setShowAddresses(true)}
+          >
+            <div className="flex justify-between">
+              <h1 className="font-semibold">Delivery Info</h1>
+              <Image
+                src={assets.icons.arrow_right}
+                height={25}
+                width={25}
+                alt="right"
+              />
+            </div>
+            <div className="flex gap-4 text-body-sm md:text-body-md">
+              <p>Deliver to:</p>
+              <div className="flex gap-2 items-center ml-2">
+                <Image
+                  src={assets.icons.location_purple}
+                  height={25}
+                  width={25}
+                  alt="location"
                 />
-              );
-            })}
-        </div>
+                <p className="text-primary-600">{`${selectedAddress?.aptNumber}, ${selectedAddress?.streetAddress}, ${selectedAddress?.city} - ${selectedAddress?.zipCode}`}</p>
+              </div>
+            </div>
+          </div>
+        )
       ) : (
         <NoDataPlaceholder
           btnName="Add New Address"
@@ -127,33 +152,66 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
         />
       )}
       {/** Payment Method Container */}
-      {showPaymentMethods ? (
-        <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
-          {paymentMethods &&
-            paymentMethods.map((method) => {
-              return (
-                <PaymentMethodItem
-                  key={method.id}
-                  provider={method.provider}
-                  cardNumber={method.cardNumber}
-                  expiryDate={method.expiryDate}
-                  isDefault={method.isDefault!}
-                  onSelect={handlePaymentSelection}
-                  id={method.id}
+      {paymentMethods && paymentMethods.length > 0 ? (
+        showPaymentMethods ? (
+          <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
+            {paymentMethods.map((method) => (
+              <PaymentMethodItem
+                key={method.id}
+                provider={method.provider}
+                cardNumber={method.cardNumber}
+                expiryDate={method.expiryDate}
+                isDefault={method.isDefault!}
+                onSelect={handlePaymentSelection}
+                id={method.id}
+              />
+            ))}
+          </div>
+        ) : (
+          <div
+            className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3"
+            onClick={() => setShowPaymentMethods(true)}
+          >
+            <div className="flex justify-between">
+              <h1 className="font-semibold">Payment Method</h1>
+              <Image
+                src={assets.icons.arrow_right}
+                height={25}
+                width={25}
+                alt="right"
+              />
+            </div>
+            <div className="flex gap-4 text-body-sm md:text-body-md">
+              <p>Pay with:</p>
+              <div className="flex gap-2 items-center ml-2">
+                <Image
+                  src={assets.icons.card_purple}
+                  height={25}
+                  width={25}
+                  alt="card"
                 />
-              );
-            })}
-        </div>
+                <p className="text-primary-600">{`${selectedPayment?.provider} - ${selectedPayment?.cardNumber}`}</p>
+              </div>
+              {selectedPayment?.expiryDate && (
+                <p className="text-black-500 ml-8 text-body-sm">
+                  {selectedPayment.expiryDate}
+                </p>
+              )}
+            </div>
+          </div>
+        )
       ) : (
         <NoDataPlaceholder
-          btnName="Add New Payment"
-          field1="You don't have any added Payment Methods"
-          field2="Add a payment method to checkout!"
+          btnName="Add New Payment Method"
+          field1="You don't have any added Payment Method"
+          field2="Add a payment method to place an order!"
           btnIcon={assets.icons.plus}
-          icon={assets.icons.payments_purple}
+          icon={assets.icons.card_purple}
           navigateTo="/account?page=payments"
         />
       )}
+
+      {/** Review order container */}
 
       <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
         <div className="flex justify-between">

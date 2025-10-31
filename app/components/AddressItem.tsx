@@ -15,6 +15,11 @@ interface Address {
   isDefault: boolean;
 }
 
+interface AddressItemProps extends Address {
+  selectedId?: number;
+  onSelect: (id: number) => void;
+}
+
 const AddressItem = ({
   id,
   type,
@@ -23,12 +28,16 @@ const AddressItem = ({
   zipCode,
   aptNumber,
   isDefault,
-}: Address) => {
+  onSelect,
+}: AddressItemProps) => {
   const context = useContext(UserDataContext);
   const { loading, deleteAddress } = context!;
 
   return (
-    <div className="flex justify-between items-center bg-white p-4 rounded-3xl border cursor-pointer border-black-200 text-body-md">
+    <div
+      onClick={() => onSelect?.(id!)}
+      className="flex justify-between items-center bg-white p-4 rounded-3xl border cursor-pointer border-black-200 text-body-md"
+    >
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <Loading />
