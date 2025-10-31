@@ -319,7 +319,7 @@ const ManageOrders = () => {
             />
           </div>
 
-          <div className="p-4 rounded-3xl border border-black-200 flex flex-col gap-4 max-h-[512px] overflow-y-scroll scrollbar-hide">
+          <div className="p-4 rounded-3xl bg-white border border-black-200 flex flex-col gap-4 max-h-[512px] overflow-y-scroll scrollbar-hide">
             {loading ? (
               <Loading />
             ) : (

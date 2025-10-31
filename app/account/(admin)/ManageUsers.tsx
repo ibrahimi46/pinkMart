@@ -143,7 +143,7 @@ const UserDetails = ({ userId, handleBack }: UserDetailsProps) => {
             <h1 className="font-semibold">User #{userDetails?.id}</h1>
           </div>
 
-          <div className="border border-black-200 rounded-3xl p-4 flex flex-col gap-4">
+          <div className="bg-white border border-black-200 rounded-3xl p-4 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <h2 className="font-semibold">User Information</h2>
               <p className="text-body-md">
@@ -301,7 +301,7 @@ const ManageUsers = () => {
             />
           </div>
 
-          <div className="p-4 rounded-3xl border border-black-200 flex flex-col gap-4 max-h-[512px] overflow-y-scroll scrollbar-hide">
+          <div className="p-4 rounded-3xl bg-white border border-black-200 flex flex-col gap-4 max-h-[512px] overflow-y-scroll scrollbar-hide">
             {loading ? (
               <Loading />
             ) : (

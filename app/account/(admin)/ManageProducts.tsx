@@ -287,7 +287,7 @@ const ManageProducts = () => {
               handleOnClick={() => setShowAddProductForm(true)}
             />
           </div>
-          <div className="p-4 rounded-3xl border border-black-200 flex flex-col gap-6 sm:gap-4 max-h-[512px] overflow-y-scroll scrollbar-hide">
+          <div className="p-4 rounded-3xl border bg-white border-black-200 flex flex-col gap-6 sm:gap-4 max-h-[512px] overflow-y-scroll scrollbar-hide">
             {loading ? (
               <Loading />
             ) : (
