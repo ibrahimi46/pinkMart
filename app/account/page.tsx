@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, Suspense } from "react";
 import Button from "../components/Button";
 import assets from "@/assets";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import ManageUsers from "./(admin)/ManageUsers";
 import Analytics from "./(admin)/Analytics";
 import { UserDataContext } from "../context/UserDataContext";
 import { useSearchParams } from "next/navigation";
+import Loading from "../components/Loading";
 
 const userMenu = [
   {
@@ -46,7 +47,7 @@ const adminMenu = [
   },
 ];
 
-const MyAccount = () => {
+function MyAccountContent() {
   const [activeSection, setActiveSection] = useState<string>("");
   const context = useContext(UserDataContext);
   const { logout, user } = context!;
@@ -59,7 +60,7 @@ const MyAccount = () => {
     } else if (user) {
       setActiveSection(user.isAdmin ? "admin-dashboard" : "account-details");
     }
-  }, [user]);
+  }, [user, searchParams]);
 
   const renderSection = () => {
     switch (activeSection) {
@@ -153,6 +154,12 @@ const MyAccount = () => {
       <div className="flex-1 min-w-0">{renderSection()}</div>
     </main>
   );
-};
+}
 
-export default MyAccount;
+export default function MyAccount() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <MyAccountContent />
+    </Suspense>
+  );
+}

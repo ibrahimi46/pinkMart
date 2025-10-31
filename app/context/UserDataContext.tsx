@@ -264,6 +264,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const defaultAddress = useMemo(() => {
+    if (addresses.length === 0) return null;
     return addresses?.find((addr) => addr.isDefault) || addresses?.[0];
   }, [addresses]);
 
@@ -348,7 +349,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const defaultPayment = useMemo(() => {
-    if (paymentMethods.length === 0) return;
+    if (paymentMethods.length === 0) return null;
     return (
       paymentMethods?.find((method) => method.isDefault) || paymentMethods?.[0]
     );
