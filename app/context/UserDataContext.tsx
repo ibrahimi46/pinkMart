@@ -586,7 +586,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getOrderDetails = async (orderId: number) => {
+  const getOrderDetails = useCallback(async (orderId: number) => {
     const token = localStorage.getItem("token");
     if (!token) return null;
 
@@ -603,7 +603,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const refetchAll = useCallback(async () => {
     await Promise.all([

@@ -102,11 +102,11 @@ interface OrderDetailsProps {
 interface AdminOrder {
   id: number;
   userId: number;
-  totalAmount: number | string;
+  totalAmount: number;
   status: string;
   deliveryDate: string | null;
-  createdAt?: string;
-  itemCount?: number;
+  createdAt: string;
+  itemCount: number;
   items?: {
     id: number;
     productName: string;
@@ -130,90 +130,94 @@ const OrderDetails = ({ orderId, handleBack }: OrderDetailsProps) => {
           totalAmount: Number(details.totalAmount),
         });
       }
-      console.log("here");
     };
     fetchDetails();
-  }, [orderId, getOrderDetails]);
+  }, [orderId]);
 
   return (
     <div className="flex flex-col gap-4">
-      {(loading || !orderDetails) && <Loading />}
-      <div className="flex gap-4 items-center">
-        <div
-          onClick={handleBack}
-          className="cursor-pointer bg-black-100 p-2 rounded-full border border-black-200"
-        >
-          <Image
-            src={assets.icons.arrow_left}
-            height={20}
-            width={20}
-            alt="back"
-          />
-        </div>
-        <h1 className="font-semibold">Order #{orderDetails.id}</h1>
-      </div>
+      {loading || !orderDetails ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex gap-4 items-center">
+            <div
+              onClick={handleBack}
+              className="cursor-pointer bg-black-100 p-2 rounded-full border border-black-200"
+            >
+              <Image
+                src={assets.icons.arrow_left}
+                height={20}
+                width={20}
+                alt="back"
+              />
+            </div>
+            <h1 className="font-semibold">Order #{orderDetails?.id}</h1>
+          </div>
 
-      <div className="border border-black-200 rounded-3xl p-4 flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <h2 className="font-semibold">Order Information</h2>
-          <p className="text-body-md">
-            <b>User ID:</b> {orderDetails.userId}
-          </p>
-          <p className="text-body-md">
-            <b>Status:</b> {orderDetails.status}
-          </p>
-          <p className="text-body-md">
-            <b>Total Amount:</b> ${orderDetails.totalAmount}
-          </p>
-          {orderDetails.deliveryDate && (
-            <p className="text-body-md">
-              <b>Delivery Date:</b>{" "}
-              {new Date(orderDetails.deliveryDate).toLocaleDateString()}
-            </p>
-          )}
-        </div>
+          <div className="border border-black-200 rounded-3xl p-4 flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <h2 className="font-semibold">Order Information</h2>
+              <p className="text-body-md">
+                <b>User ID:</b> {orderDetails?.userId}
+              </p>
+              <p className="text-body-md">
+                <b>Status:</b> {orderDetails?.status}
+              </p>
+              <p className="text-body-md">
+                <b>Total Amount:</b> ${orderDetails?.totalAmount}
+              </p>
+              {orderDetails?.deliveryDate && (
+                <p className="text-body-md">
+                  <b>Delivery Date:</b>{" "}
+                  {new Date(orderDetails?.deliveryDate).toLocaleDateString()}
+                </p>
+              )}
+            </div>
 
-        <hr className="border-black-200" />
+            <hr className="border-black-200" />
 
-        <div className="flex flex-col gap-3">
-          <h2 className="font-semibold">Order Items</h2>
-          {orderDetails.items &&
-            orderDetails.items.map((item) => (
-              <div
-                key={item.id}
-                className="flex justify-between items-center bg-black-100 p-3 rounded-2xl"
-              >
-                <div className="flex gap-3 items-center">
-                  <Image
-                    src={item.imageUrl || assets.logo}
-                    height={50}
-                    width={50}
-                    alt={item.productName}
-                    className="rounded-xl"
-                  />
-                  <div>
-                    <p className="font-semibold text-body-md">
-                      {item.productName}
-                    </p>
-                    <p className="text-body-sm text-gray-600">
-                      Qty: {item.quantity}
-                    </p>
+            <div className="flex flex-col gap-3">
+              <h2 className="font-semibold">Order Items</h2>
+              {orderDetails?.items &&
+                orderDetails.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex justify-between items-center bg-black-100 p-3 rounded-2xl"
+                  >
+                    <div className="flex gap-3 items-center">
+                      <Image
+                        src={item.imageUrl || assets.logo}
+                        height={50}
+                        width={50}
+                        alt={item.productName}
+                        className="rounded-xl"
+                      />
+                      <div>
+                        <p className="font-semibold text-body-md">
+                          {item.productName}
+                        </p>
+                        <p className="text-body-sm text-gray-600">
+                          Qty: {item.quantity}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="font-semibold">${item.price}</p>
                   </div>
-                </div>
-                <p className="font-semibold">${item.price}</p>
-              </div>
-            ))}
-        </div>
+                ))}
+            </div>
 
-        <hr className="border-black-200" />
+            <hr className="border-black-200" />
 
-        <div className="flex justify-between items-center">
-          <h2 className="font-semibold text-h6">Total</h2>
-          <p className="font-bold text-h6 text-primary-600">
-            ${orderDetails.totalAmount}
-          </p>
-        </div>
-      </div>
+            <div className="flex justify-between items-center">
+              <h2 className="font-semibold text-h6">Total</h2>
+              <p className="font-bold text-h6 text-primary-600">
+                ${orderDetails?.totalAmount}
+              </p>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
