@@ -8,12 +8,26 @@ import PaymentMethodItem from "@/app/components/PaymentMethodItem";
 import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 
+interface Payment {
+  type: string;
+  provider: string;
+  expiryDate: string;
+  cvv?: string;
+  isDefault?: boolean;
+  cardNumber: string;
+}
+
 interface CheckoutProps {
   handleStepBack: (step?: string) => void;
   selectedDeliveryDate: string;
+  setSelectedPaymentMethod: (payment: Payment | null) => void;
 }
 
-const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
+const Checkout = ({
+  handleStepBack,
+  selectedDeliveryDate,
+  setSelectedPaymentMethod,
+}: CheckoutProps) => {
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null
   );
@@ -46,6 +60,29 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
   const selectedPayment = paymentMethods.find(
     (method) => method.id === selectedPaymentId
   );
+
+  useEffect(() => {
+    setSelectedPaymentMethod(selectedPayment || null);
+  }, [selectedPayment, setSelectedPaymentMethod]);
+
+  useEffect(() => {
+    if (
+      selectedAddressId &&
+      !addresses.find((addr) => addr.id === selectedAddressId)
+    ) {
+      setSelectedAddressId(null);
+    }
+  }, [addresses, selectedAddressId]);
+
+  useEffect(() => {
+    if (
+      selectedPaymentId &&
+      !paymentMethods.find((pm) => pm.id === selectedPaymentId)
+    ) {
+      setSelectedPaymentId(null);
+      setSelectedPaymentMethod(null); // clear the parent state
+    }
+  }, [paymentMethods, selectedPaymentId, setSelectedPaymentMethod]);
 
   const handleAddressSelection = (id: number) => {
     if (id !== null) {
@@ -83,17 +120,19 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
           </div>
           <h1 className="font-semibold text-body-xl">Checkout</h1>
         </div>
-        <div className="flex gap-2 items-center">
-          <Image
-            src={assets.icons.location_purple}
-            height={20}
-            width={20}
-            alt="location"
-          />
-          <p className="text-body-sm md:text-body-md text-primary-600">
-            {`Deliver ${selectedDeliveryDate}`}
-          </p>
-        </div>
+        {addresses && addresses.length > 0 && (
+          <div className="flex gap-2 items-center">
+            <Image
+              src={assets.icons.location_purple}
+              height={20}
+              width={20}
+              alt="location"
+            />
+            <p className="text-body-sm md:text-body-md text-primary-600">
+              {`Deliver ${selectedDeliveryDate}`}
+            </p>
+          </div>
+        )}
       </div>
       {/** Delivery Info Container */}
       {addresses && addresses.length > 0 ? (

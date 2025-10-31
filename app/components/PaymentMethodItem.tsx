@@ -24,18 +24,18 @@ const PaymentMethodItem = ({
   cardNumber,
   expiryDate,
   isDefault,
-  deletePayment,
   id,
-  onDelete,
   onSelect,
 }: PaymentMethods) => {
   const context = useContext(UserDataContext);
-  const { loading } = context!;
+  const { loading, deletePayment } = context!;
 
   const handleDelete = async () => {
+    console.log("start");
+    console.log(id);
     if (deletePayment && id) {
+      console.log("deleted");
       await deletePayment(id);
-      onDelete!();
     }
   };
 
@@ -63,7 +63,10 @@ const PaymentMethodItem = ({
         </div>
       </div>
       <div
-        onClick={() => handleDelete()}
+        onClick={() => {
+          console.log("triggered");
+          handleDelete();
+        }}
         className="bg-primary-100 p-1 h-8 rounded-full border-primary-600 border hover:bg-primary-200 hover:border-primary-600
         transition-all duration-300 cursor-pointer"
       >

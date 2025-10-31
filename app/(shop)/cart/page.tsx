@@ -22,11 +22,22 @@ interface DeliveryDates {
   fullDate: string;
 }
 
+interface Payment {
+  type: string;
+  provider: string;
+  expiryDate: string;
+  cvv?: string;
+  isDefault?: boolean;
+  cardNumber: string;
+}
+
 const Cart = () => {
   // const [lastOrder, setLastOrder] = useState<any>(null);
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<Payment | null>(null);
 
   const context = useContext(UserDataContext);
   const {
@@ -166,6 +177,7 @@ const Cart = () => {
           <Checkout
             handleStepBack={handleStepBack}
             selectedDeliveryDate={selectedDeliveryDate}
+            setSelectedPaymentMethod={setSelectedPaymentMethod}
           />
         )}
         {step === "order_placed" && (
@@ -227,6 +239,7 @@ const Cart = () => {
       <div>
         <OrderSummary
           selectedDeliveryDate={selectedDeliveryDate}
+          selectedPaymentMethod={selectedPaymentMethod}
           handleStepNext={handleStepNext}
           step={step}
         />

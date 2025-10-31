@@ -3,14 +3,25 @@ import assets from "@/assets";
 import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 
+interface Payment {
+  type: string;
+  provider: string;
+  expiryDate: string;
+  cvv?: string;
+  isDefault?: boolean;
+  cardNumber: string;
+}
+
 interface OrderSummaryProps {
   selectedDeliveryDate: string;
+  selectedPaymentMethod: Payment | null;
   handleStepNext: (step: string) => void;
   step: string;
 }
 
 const OrderSummary = ({
   selectedDeliveryDate,
+  selectedPaymentMethod,
   handleStepNext,
   step,
 }: OrderSummaryProps) => {
@@ -19,8 +30,18 @@ const OrderSummary = ({
 
   const deliveryFee = 5.78;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
-  const isDisabled =
-    step === "cart" && (!selectedDeliveryDate || selectedDeliveryDate === "");
+  const isCheckoutDisabled =
+    step === "cart" &&
+    (cartItems.length < 1 ||
+      !selectedDeliveryDate ||
+      selectedDeliveryDate === "");
+
+  const isPlaceOrderDisabled =
+    step === "checkout" &&
+    (!selectedDeliveryDate ||
+      !selectedPaymentMethod ||
+      cartItems.length < 1 ||
+      context?.addresses.length === 0);
 
   return step !== "order_placed" ? (
     <div className="bg-white w-full p-6 rounded-3xl h-64 border border-black-100 flex flex-col gap-4">
@@ -44,9 +65,13 @@ const OrderSummary = ({
         <div
           className={` flex justify-between bg-primary-600 w-full px-4 py-2 text-body-md 
             cursor-pointer rounded-full md:w-64
-            ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer "}
+            ${
+              isCheckoutDisabled
+                ? "cursor-not-allowed opacity-50"
+                : "cursor-pointer "
+            }
             `}
-          onClick={() => !isDisabled && handleStepNext("checkout")}
+          onClick={() => !isCheckoutDisabled && handleStepNext("checkout")}
         >
           <div className="flex gap-2 text-black-50">
             <Image
@@ -63,10 +88,14 @@ const OrderSummary = ({
         <div
           className={`bg-primary-600 text-center text-white font-semibold w-full px-4 py-2 
             text-body-md cursor-pointer rounded-full md:w-64
-            ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer "}
+            ${
+              isPlaceOrderDisabled
+                ? "cursor-not-allowed opacity-50"
+                : "cursor-pointer "
+            }
             `}
           onClick={async () => {
-            if (isDisabled) return;
+            if (isPlaceOrderDisabled) return;
 
             await placeOrder({
               finalCheckoutPrice,

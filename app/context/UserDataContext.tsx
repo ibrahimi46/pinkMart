@@ -264,7 +264,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const defaultAddress = useMemo(() => {
-    return addresses?.find((addr) => addr.isDefault) ?? null;
+    return addresses?.find((addr) => addr.isDefault) || addresses?.[0];
   }, [addresses]);
 
   const refetchAddresses = async () => {
@@ -338,6 +338,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         },
       });
       const data = await res.json();
+      if (data) refetchPaymentMethods();
       return data;
     } catch (err) {
       console.error(err);
@@ -347,7 +348,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const defaultPayment = useMemo(() => {
-    return paymentMethods?.find((method) => method.isDefault) ?? null;
+    if (paymentMethods.length === 0) return;
+    return (
+      paymentMethods?.find((method) => method.isDefault) || paymentMethods?.[0]
+    );
   }, [paymentMethods]);
 
   const refetchPaymentMethods = async () => {
