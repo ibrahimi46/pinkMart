@@ -229,7 +229,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       const data = await res.json();
       setAddresses(data.addresses);
     } catch (err) {
@@ -263,7 +262,9 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   }, [addresses]);
 
   const refetchAddresses = async () => {
+    console.log("refetch called");
     await getAddresses();
+    console.log("finsiehd");
   };
   // Payment Functions
   const addPaymentMethod = async ({

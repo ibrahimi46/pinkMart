@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Button from "@/app/components/Button";
+import Link from "next/link";
 
 interface NoDataPlaceholderProps {
   icon: string;
@@ -8,6 +9,7 @@ interface NoDataPlaceholderProps {
   btnIcon: string;
   btnName: string;
   handleAction?: () => void;
+  navigateTo: string;
 }
 
 const NoDataPlaceholder = ({
@@ -16,6 +18,7 @@ const NoDataPlaceholder = ({
   field2,
   btnIcon,
   btnName,
+  navigateTo,
   handleAction,
 }: NoDataPlaceholderProps) => {
   return (
@@ -27,15 +30,17 @@ const NoDataPlaceholder = ({
       </div>
       <h2 className="font-semibold">{field1}</h2>
       <p className="text-black-300 text-body-sm">{field2}</p>
-      <Button
-        name={btnName}
-        icon={btnIcon}
-        iconPosition="left"
-        extraStyles="bg-primary-600 p-4"
-        textStyles="text-body-md text-black-100 font-regular"
-        iconStyle="filter invert"
-        handleOnClick={() => handleAction?.()}
-      />
+      <Link href={navigateTo}>
+        <Button
+          name={btnName}
+          icon={btnIcon}
+          iconPosition="left"
+          extraStyles="bg-primary-600 p-4"
+          textStyles="text-body-md text-black-100 font-regular"
+          iconStyle="filter invert"
+          handleOnClick={() => handleAction?.()}
+        />
+      </Link>
     </div>
   );
 };

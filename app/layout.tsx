@@ -32,6 +32,7 @@ export default function RootLayout({
 }>) {
   const pathName = usePathname();
   const isAuthPage = pathName.startsWith("/auth");
+  const isAccountPage = pathName.startsWith("/account");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -52,7 +53,7 @@ export default function RootLayout({
             </>
           )}
           <main>{children}</main>
-          <Footer />
+          {!isAccountPage && <Footer />}
         </UserDataProvider>
       </body>
     </html>

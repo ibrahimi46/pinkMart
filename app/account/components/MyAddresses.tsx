@@ -12,8 +12,8 @@ interface AddAddressModalProps {
 }
 
 const AddAddressModal = ({
-  setShowAddAddrModal,
   onAdd,
+  setShowAddAddrModal,
 }: AddAddressModalProps) => {
   const [type, setType] = useState<string>("home");
   const [address, setAddress] = useState<string>("");
@@ -155,29 +155,24 @@ interface Address {
 
 const MyAddresses = () => {
   const [showAddAddrModal, setShowAddAddrModal] = useState<boolean>(false);
-  const [availableAddresses, setAvailableAddresses] = useState<Address[]>([]);
 
   const context = useContext(UserDataContext);
   const { addresses, refetchAddresses } = context!;
-
-  useEffect(() => {
-    if (addresses) setAvailableAddresses(addresses);
-  }, [addresses]);
 
   return (
     <div>
       {showAddAddrModal ? (
         <AddAddressModal
           setShowAddAddrModal={setShowAddAddrModal}
-          onAdd={() => refetchAddresses()}
+          onAdd={refetchAddresses}
         />
       ) : (
         <>
-          {availableAddresses ? (
+          {addresses && addresses.length > 0 ? (
             <div className="mt-2 flex flex-col gap-6">
               <h1 className="font-semibold">My Addresses</h1>
-              {availableAddresses &&
-                availableAddresses.map((address) => {
+              {addresses &&
+                addresses.map((address) => {
                   return (
                     <AddressItem
                       key={address.id}
@@ -187,6 +182,8 @@ const MyAddresses = () => {
                       aptNumber={address.aptNumber}
                       streetAddress={address.streetAddress}
                       isDefault={address.isDefault}
+                      id={address.id}
+                      onDelete={refetchAddresses}
                     />
                   );
                 })}
@@ -215,6 +212,7 @@ const MyAddresses = () => {
                   btnIcon={assets.icons.plus}
                   icon={assets.icons.location_purple}
                   handleAction={() => setShowAddAddrModal(true)}
+                  navigateTo="#"
                 />
               </div>
             </>

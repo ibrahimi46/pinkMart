@@ -174,6 +174,7 @@ const OrdersComp = () => {
             field1="You don't have any orders yet..."
             field2="Explore and place your first order now!"
             icon={assets.icons.receipt_purple}
+            navigateTo="/"
           />
           <div className="mt-4">
             <BestSeller title="Best Sellers" />

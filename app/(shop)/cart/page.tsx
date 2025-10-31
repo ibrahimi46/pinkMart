@@ -150,6 +150,7 @@ const Cart = () => {
                       field2="Explore our shop to add items to your cart!"
                       btnName="Go to Store"
                       btnIcon={assets.icons.home}
+                      navigateTo="/"
                     />
                   </div>
                 )}

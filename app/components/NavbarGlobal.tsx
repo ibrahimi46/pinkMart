@@ -110,13 +110,13 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                     icon={assets.icons.cart}
                     iconPosition="left"
                     textStyles="text-body-md"
-                    extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
+                    extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 bg-white border hover:border-black-800 transition-all duration-300"
                     handleOnClick={() => setStep("cart")}
                   />
                 </Link>
                 <Link
                   href={"/account"}
-                  className="bg-black-100 p-2 rounded-full border border-primary-600"
+                  className="p-2 rounded-full border border-primary-600 bg-white hover:border-black-800 transition-all duration-300"
                 >
                   <Image
                     src={assets.icons.account}
@@ -133,7 +133,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                   icon={assets.icons.double_user}
                   iconPosition="left"
                   textStyles="text-body-md"
-                  extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border"
+                  extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 border bg-white hover:border-black-800 transition-all duration-300"
                 />
               </Link>
             )}

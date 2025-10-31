@@ -33,7 +33,7 @@ const CategoryStrip = ({ categories }: CategoryStripProps) => {
             icon={CategoryIcons[item]}
             iconPosition="left"
             textStyles="text-body-md"
-            extraStyles="h-10 min-w-14 max-w-28 px-6 bg-black-100"
+            extraStyles="h-10 min-w-14 max-w-28 px-6 bg-white border hover:border-primary-600 transition-all duration-300"
           />
         ))}
     </div>
