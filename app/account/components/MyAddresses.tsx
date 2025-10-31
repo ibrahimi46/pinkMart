@@ -1,20 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import NoDataPlaceholder from "./NoDataPlaceholder";
 import assets from "@/assets";
 import Image from "next/image";
 import Button from "@/app/components/Button";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import AddressItem from "@/app/components/AddressItem";
+import Loading from "@/app/components/Loading";
 
 interface AddAddressModalProps {
   setShowAddAddrModal: (value: boolean) => void;
-  onAdd: () => void;
 }
 
-const AddAddressModal = ({
-  onAdd,
-  setShowAddAddrModal,
-}: AddAddressModalProps) => {
+const AddAddressComp = ({ setShowAddAddrModal }: AddAddressModalProps) => {
   const [type, setType] = useState<string>("home");
   const [address, setAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
@@ -23,7 +20,7 @@ const AddAddressModal = ({
   const [isDefault, setIsDefault] = useState<boolean>(false);
 
   const context = useContext(UserDataContext);
-  const { addAddress } = context!;
+  const { addAddress, loading } = context!;
   return (
     <div className="flex flex-col gap-6 text-body-sm md:text-body-md p-4">
       <div className="flex justify-between items-center">
@@ -36,7 +33,7 @@ const AddAddressModal = ({
         </div>
       </div>
       <hr />
-      {/* <div>map</div> */}
+      {/* <div>LATER WE WILL ADD A MAP AS WELL!!!!</div> */}
       <div className="flex flex-col gap-2">
         <h1 className="font-semibold">Select Address Type</h1>
         <div className="flex gap-3">
@@ -134,7 +131,6 @@ const AddAddressModal = ({
             city: city,
             isDefault,
           });
-          onAdd();
           setShowAddAddrModal(false);
         }}
       />
@@ -142,30 +138,21 @@ const AddAddressModal = ({
   );
 };
 
-interface Address {
-  id?: number;
-  userId?: number;
-  type: string;
-  streetAddress: string;
-  city: string;
-  aptNumber: string;
-  zipCode: string;
-  isDefault: boolean;
-}
-
 const MyAddresses = () => {
-  const [showAddAddrModal, setShowAddAddrModal] = useState<boolean>(false);
+  const [showAddAddrComp, setShowAddAddrComp] = useState<boolean>(false);
 
   const context = useContext(UserDataContext);
-  const { addresses, refetchAddresses } = context!;
+  const { addresses, loading } = context!;
 
   return (
     <div>
-      {showAddAddrModal ? (
-        <AddAddressModal
-          setShowAddAddrModal={setShowAddAddrModal}
-          onAdd={refetchAddresses}
-        />
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <Loading />
+        </div>
+      )}
+      {showAddAddrComp ? (
+        <AddAddressComp setShowAddAddrModal={setShowAddAddrComp} />
       ) : (
         <>
           {addresses && addresses.length > 0 ? (
@@ -183,12 +170,11 @@ const MyAddresses = () => {
                       streetAddress={address.streetAddress}
                       isDefault={address.isDefault}
                       id={address.id}
-                      onDelete={refetchAddresses}
                     />
                   );
                 })}
               <div
-                onClick={() => setShowAddAddrModal(true)}
+                onClick={() => setShowAddAddrComp(true)}
                 className="flex gap-2 bg-primary-100 border cursor-pointer transition-all duration-300
                 hover:bg-primary-200
                 border-primary-300 hover:border-primary-600 sm:w-56 w-full py-2 items-center justify-center text-nowrap rounded-xl "
@@ -204,14 +190,15 @@ const MyAddresses = () => {
             </div>
           ) : (
             <>
-              <div className="mt-2">
+              <div className="flex flex-col gap-4 mt-2">
+                <h1 className="font-bold">My Addresses</h1>
                 <NoDataPlaceholder
                   btnName="Add New Address"
                   field1="You don't have any added addresses"
                   field2="Add your address, start shopping!"
                   btnIcon={assets.icons.plus}
                   icon={assets.icons.location_purple}
-                  handleAction={() => setShowAddAddrModal(true)}
+                  handleAction={() => setShowAddAddrComp(true)}
                   navigateTo="#"
                 />
               </div>

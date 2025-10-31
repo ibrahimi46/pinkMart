@@ -2,6 +2,7 @@ import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
+import Loading from "@/app/components/Loading";
 
 interface AccDetailItems {
   field1?: string;
@@ -24,10 +25,15 @@ const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
 
 const MyAccountComp = () => {
   const context = useContext(UserDataContext);
-  const { userDetails } = context!;
+  const { userDetails, loading } = context!;
 
   return (
     <div className="flex flex-col gap-3 mt-2">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <Loading />
+        </div>
+      )}
       <h1 className="font-bold mb-2">Account Details</h1>
       <AccDetailItems field1="Full Name" field2={userDetails?.fullName} />
       <AccDetailItems field1="Mobile Number" field2={userDetails?.phone} />

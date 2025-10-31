@@ -2,6 +2,7 @@ import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
 import { UserDataContext } from "../context/UserDataContext";
+import Loading from "./Loading";
 
 interface Address {
   id?: number;
@@ -14,10 +15,6 @@ interface Address {
   isDefault: boolean;
 }
 
-interface AddressItemProps extends Address {
-  onDelete: () => void;
-}
-
 const AddressItem = ({
   id,
   type,
@@ -26,13 +23,17 @@ const AddressItem = ({
   zipCode,
   aptNumber,
   isDefault,
-  onDelete,
-}: AddressItemProps) => {
+}: Address) => {
   const context = useContext(UserDataContext);
-  const { deleteAddress } = context!;
+  const { loading, deleteAddress } = context!;
 
   return (
     <div className="flex justify-between items-center bg-white p-4 rounded-3xl border cursor-pointer border-black-200 text-body-md">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <Loading />
+        </div>
+      )}
       <div className="flex gap-4">
         <div>
           <div className="flex gap-2 items-center">
@@ -45,7 +46,6 @@ const AddressItem = ({
       <div
         onClick={() => {
           deleteAddress(id!);
-          onDelete();
         }}
         className="bg-primary-100 flex p-1 h-8 rounded-full border-primary-600 border hover:bg-primary-200 hover:border-primary-600
         transition-all duration-300 cursor-pointer"

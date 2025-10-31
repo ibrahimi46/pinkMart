@@ -1,5 +1,5 @@
 import assets from "@/assets";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import NoDataPlaceholder from "./NoDataPlaceholder";
@@ -153,17 +153,18 @@ const OrdersComp = () => {
               <p>Cancelled</p>
             </div>
           </div>
-          {filteredOrders.map((order) => {
-            return (
-              <OrderItem
-                key={order.id}
-                status={order.status}
-                totalAmount={order.totalAmount}
-                itemCount={order.itemCount}
-                createdAt={order.createdAt}
-              />
-            );
-          })}
+          {filteredOrders &&
+            filteredOrders.map((order) => {
+              return (
+                <OrderItem
+                  key={order.id}
+                  status={order.status}
+                  totalAmount={order.totalAmount}
+                  itemCount={order.itemCount}
+                  createdAt={order.createdAt}
+                />
+              );
+            })}
         </div>
       ) : (
         <div className="flex flex-col gap-4 mt-2">

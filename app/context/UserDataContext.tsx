@@ -211,6 +211,9 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
       });
 
       const data = await res.json();
+      if (data.success) {
+        await refetchAddresses();
+      }
       return data;
     } catch (err) {
       console.error(err);
@@ -249,6 +252,9 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         },
       });
       const data = await res.json();
+      if (data.success) {
+        await refetchAddresses();
+      }
       return data;
     } catch (err) {
       console.error(err);
@@ -262,9 +268,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   }, [addresses]);
 
   const refetchAddresses = async () => {
-    console.log("refetch called");
     await getAddresses();
-    console.log("finsiehd");
   };
   // Payment Functions
   const addPaymentMethod = async ({

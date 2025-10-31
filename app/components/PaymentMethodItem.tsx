@@ -1,5 +1,8 @@
 import Image from "next/image";
 import assets from "@/assets";
+import { useContext } from "react";
+import { UserDataContext } from "../context/UserDataContext";
+import Loading from "./Loading";
 
 interface PaymentMethods {
   id?: number;
@@ -26,9 +29,12 @@ const PaymentMethodItem = ({
   onDelete,
   onSelect,
 }: PaymentMethods) => {
+  const context = useContext(UserDataContext);
+  const { loading } = context!;
+
   const handleDelete = async () => {
     if (deletePayment && id) {
-      const result = await deletePayment(id);
+      await deletePayment(id);
       onDelete!();
     }
   };
@@ -38,6 +44,11 @@ const PaymentMethodItem = ({
       className="bg-white p-4 rounded-2xl border border-black-200 text-body-md flex justify-between items-center"
       onClick={() => onSelect?.(id!)}
     >
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <Loading />
+        </div>
+      )}
       <div className="flex gap-4">
         <Image
           src={assets.icons.mastercard}

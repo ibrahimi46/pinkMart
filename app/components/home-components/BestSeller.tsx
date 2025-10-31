@@ -124,7 +124,6 @@ const BestSeller = ({ title }: BestSellerProps) => {
                 capacity={item.stock}
                 addToCart={() => {
                   addToCart(item.id, defaultQuantity);
-                  console.log("clicked");
                 }}
               />
             );

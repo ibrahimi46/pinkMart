@@ -6,6 +6,7 @@ import AddressItem from "@/app/components/AddressItem";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import PaymentMethodItem from "@/app/components/PaymentMethodItem";
 import Loading from "@/app/components/Loading";
+import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 
 interface CheckoutProps {
   handleStepBack: (step?: string) => void;
@@ -23,14 +24,8 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
   const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
 
   const context = useContext(UserDataContext);
-  const {
-    loading,
-    addresses,
-    defaultAddress,
-    paymentMethods,
-    defaultPayment,
-    cartItems,
-  } = context!;
+  const { loading, addresses, defaultAddress, paymentMethods, defaultPayment } =
+    context!;
 
   useEffect(() => {
     if (defaultAddress) {
@@ -122,34 +117,14 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
             })}
         </div>
       ) : (
-        <div
-          className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3"
-          onClick={() => setShowAddresses(true)}
-        >
-          <div className="flex justify-between">
-            <h1 className="font-semibold">Delivery Info</h1>
-            <Image
-              src={assets.icons.arrow_right}
-              height={25}
-              width={25}
-              alt="right"
-            />
-          </div>
-          <div className="flex gap-4 text-body-sm md:text-body-md">
-            <p>Deliver to:</p>
-            <div className="flex gap-2">
-              <Image
-                src={assets.icons.location_purple}
-                height={25}
-                width={25}
-                alt="location"
-              />
-              <p className="text-primary-600">
-                {`${selectedAddress?.aptNumber}, ${selectedAddress?.streetAddress}, ${selectedAddress?.city} - ${selectedAddress?.zipCode}`}
-              </p>
-            </div>
-          </div>
-        </div>
+        <NoDataPlaceholder
+          btnName="Add New Address"
+          field1="You don't have any added addresses"
+          field2="Add your address, start shopping!"
+          btnIcon={assets.icons.plus}
+          icon={assets.icons.location_purple}
+          navigateTo="/address"
+        />
       )}
       {/** Payment Method Container */}
       {showPaymentMethods ? (
@@ -170,37 +145,14 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
             })}
         </div>
       ) : (
-        <div
-          className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3"
-          onClick={() => setShowPaymentMethods(true)}
-        >
-          <div className="flex justify-between">
-            <h1 className="font-semibold">Payment Method</h1>
-            <Image
-              src={assets.icons.arrow_right}
-              height={25}
-              width={25}
-              alt="right"
-            />
-          </div>
-          <div className="flex gap-4 text-body-sm md:text-body-md">
-            <p>Pay with:</p>
-            <div>
-              <div className="flex gap-2">
-                <Image
-                  src={assets.icons.card_purple}
-                  height={25}
-                  width={25}
-                  alt="location"
-                />
-                <p className="text-primary-600">{`${selectedPayment?.provider} - ${selectedPayment?.cardNumber}`}</p>
-              </div>
-              <p className="text-black-500 ml-8 text-body-sm">
-                {selectedPayment?.expiryDate}
-              </p>
-            </div>
-          </div>
-        </div>
+        <NoDataPlaceholder
+          btnName="Add New Payment"
+          field1="You don't have any added Payment Methods"
+          field2="Add a payment method to checkout!"
+          btnIcon={assets.icons.plus}
+          icon={assets.icons.payments_purple}
+          navigateTo="/address"
+        />
       )}
 
       <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">

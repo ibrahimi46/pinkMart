@@ -48,6 +48,7 @@ const assets = {
     work: "/icons/work.svg",
     villa: "/icons/villa.svg",
     plus_purple: "/icons/plus_purple.svg",
+    payments_purple: "/icons/payments_purple.svg",
   },
   onboarding: {
     step1: {
