@@ -49,6 +49,10 @@ const assets = {
     villa: "/icons/villa.svg",
     plus_purple: "/icons/plus_purple.svg",
     payments_purple: "/icons/payments_purple.svg",
+    processing: "/icons/processing.svg",
+    shipping: "/icons/shipping.svg",
+    delivered: "/icons/delivered.svg",
+    pending: "/icons/pending.svg",
   },
   onboarding: {
     step1: {

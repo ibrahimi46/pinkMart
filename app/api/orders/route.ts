@@ -75,7 +75,7 @@ export async function GET(req:NextRequest) {
 
         if (!decoded) return NextResponse.json({error: "Missing token"}, {status: 401})
 
-
+      
         const result = await db.select({
             id: OrderTable.id,
             userId: OrderTable.userId,

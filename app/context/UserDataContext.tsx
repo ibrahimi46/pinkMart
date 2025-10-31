@@ -69,6 +69,16 @@ interface PlaceOrderProps {
   cartItems: CartItem[];
 }
 
+interface AdminOrder {
+  id: number;
+  userId: number;
+  totalAmount: number;
+  status: string;
+  deliveryDate: string | null;
+  createdAt: string;
+  itemCount: number;
+}
+
 type CheckoutStep = "cart" | "checkout" | "order_placed";
 
 interface UserDataContextType {
@@ -85,12 +95,16 @@ interface UserDataContextType {
   defaultPayment: PaymentMethod | null;
   step: CheckoutStep;
   orders: Orders[];
+  adminOrders: AdminOrder[];
   placeOrder: ({
     finalCheckoutPrice,
     selectedDeliveryDate,
     cartItems,
   }: PlaceOrderProps) => Promise<void>;
   getOrders: () => Promise<void>;
+  fetchAdminOrders: () => void;
+  updateOrderStatus: (orderId: number, status: string) => void;
+  getOrderDetails: (orderId: number) => Promise<AdminOrder | null>;
   getAddresses: () => void;
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
@@ -119,6 +133,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [adminOrders, setAdminOrders] = useState<AdminOrder[]>([]);
   const [orderId, setOrderId] = useState<number | null>(null);
   const [orders, setOrders] = useState<Orders[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -526,6 +541,70 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     await getOrders();
   };
 
+  // Admin Orders
+
+  const fetchAdminOrders = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      setLoading(true);
+      const res = await fetch("/api/admin/orders", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setAdminOrders(data.result || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateOrderStatus = async (orderId: number, status: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      setLoading(true);
+      await fetch(`/api/admin/orders/${orderId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status }),
+      });
+      setAdminOrders((prev) =>
+        prev.map((order) =>
+          order.id === orderId ? { ...order, status } : order
+        )
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getOrderDetails = async (orderId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    try {
+      setLoading(true);
+      const res = await fetch(`/api/admin/orders/${orderId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      return data.order;
+    } catch (err) {
+      console.error(err);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const refetchAll = useCallback(async () => {
     await Promise.all([
       refetchAddresses(),
@@ -566,6 +645,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         defaultPayment,
         step,
         orders,
+        adminOrders,
+        updateOrderStatus,
+        getOrderDetails,
+        fetchAdminOrders,
         logout,
         getAddresses,
         addAddress,

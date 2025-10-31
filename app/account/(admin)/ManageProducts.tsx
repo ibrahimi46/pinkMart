@@ -44,8 +44,8 @@ const ProductItem = ({
         onClick={() => handleDelete()}
         className="flex cursor-pointer items-center sm:w-28 md:w-32 w-full gap-2 bg-primary-100 p-2 justify-center rounded-3xl border border-primary-600"
       >
-        <Image src={assets.icons.bin} height={20} width={20} alt="edit" />
-        <p>Delete</p>
+        <Image src={assets.icons.bin} height={20} width={20} alt="delete" />
+        <p className="text-body-md">Delete</p>
       </div>
     </div>
   );

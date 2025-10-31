@@ -45,81 +45,101 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
               {user.isAdmin ? (
                 <>
                   <div className="flex flex-col gap-2 text-body-md">
-                    <Link href={"/auth/login"}>
+                    <Link href={"/account?page=admin-dashboard"}>
                       <Button
                         name="Admin Dashboard"
                         iconPosition="left"
                         icon={assets.icons.dashboard}
                         extraStyles="px-3 py-1 border border-black-200 w-full border hover:border hover:border-black-600
                   transition-all duration-300"
-                        handleOnClick={() => {}}
+                        handleOnClick={closeSidebar}
                       />
                     </Link>
-                    <Link href={"/auth/login"}>
+                    <Link href={"/account?page=manage-products"}>
                       <Button
                         name="Manage Products"
                         iconPosition="left"
                         icon={assets.icons.products}
                         extraStyles="px-3 py-1 border border-black-200 w-full border hover:border hover:border-black-600
                   transition-all duration-300"
-                        handleOnClick={() => {}}
+                        handleOnClick={closeSidebar}
                       />
                     </Link>
-                    <Link href={"/auth/login"}>
+                    <Link href={"/account?page=manage-orders"}>
                       <Button
                         name="Manage Orders"
                         iconPosition="left"
                         icon={assets.icons.orders}
                         extraStyles="px-3 py-1 border border-black-200 w-full border hover:border hover:border-black-600
                   transition-all duration-300"
-                        handleOnClick={() => {}}
+                        handleOnClick={closeSidebar}
                       />
                     </Link>
-                    <Link href={"/auth/login"}>
+                    <Link href={"/account?page=manage-users"}>
                       <Button
                         name="Manage Users"
                         iconPosition="left"
-                        icon={assets.icons.orders}
+                        icon={assets.icons.users}
                         extraStyles="px-3 py-1 border border-black-200 w-full border hover:border hover:border-black-600
                   transition-all duration-300"
-                        handleOnClick={() => {}}
+                        handleOnClick={closeSidebar}
                       />
                     </Link>
-                    <Link href={"/auth/login"}>
+                    <Link href={"/account?page=analytics"}>
                       <Button
                         name="Analytics & Reports"
                         iconPosition="left"
                         icon={assets.icons.analytics}
                         extraStyles="px-3 py-1 border border-black-200 w-full border hover:border hover:border-black-600
                   transition-all duration-300"
-                        handleOnClick={() => {}}
+                        handleOnClick={closeSidebar}
                       />
                     </Link>
                   </div>
                 </>
               ) : (
-                <>
-                  <Button
-                    name="Account Details"
-                    icon={assets.icons.account}
-                    handleOnClick={() => {}}
-                  />
-                  <Button
-                    name="My Orders"
-                    icon={assets.icons.orders}
-                    handleOnClick={() => {}}
-                  />
-                  <Button
-                    name="Addresses"
-                    icon={assets.icons.location}
-                    handleOnClick={() => {}}
-                  />
-                  <Button
-                    name="Payments"
-                    icon={assets.icons.payment}
-                    handleOnClick={() => {}}
-                  />
-                </>
+                <div className="flex flex-col gap-4">
+                  <Link href={"/account?page=account-details"}>
+                    <Button
+                      name="Account Details"
+                      icon={assets.icons.users}
+                      handleOnClick={closeSidebar}
+                      iconPosition="left"
+                      extraStyles="px-4 border border-black-200 hover:border-primary-600 transition-all duration-300 w-full"
+                      textStyles="text-body-md"
+                    />
+                  </Link>
+                  <Link href={"/account?page=account-details"}>
+                    <Button
+                      name="My Orders"
+                      icon={assets.icons.orders}
+                      handleOnClick={closeSidebar}
+                      iconPosition="left"
+                      extraStyles="px-4 border border-black-200 hover:border-primary-600 transition-all duration-300 w-full"
+                      textStyles="text-body-md"
+                    />
+                  </Link>
+                  <Link href={"/account?page=account-details"}>
+                    <Button
+                      name="My Addresses"
+                      icon={assets.icons.location}
+                      handleOnClick={closeSidebar}
+                      iconPosition="left"
+                      extraStyles="px-4 border border-black-200 hover:border-primary-600 transition-all duration-300 w-full"
+                      textStyles="text-body-md"
+                    />
+                  </Link>
+                  <Link href={"/account?page=account-details"}>
+                    <Button
+                      name="My Payments"
+                      icon={assets.icons.users}
+                      handleOnClick={closeSidebar}
+                      iconPosition="left"
+                      extraStyles="px-4 border border-black-200 hover:border-primary-600 transition-all duration-300 w-full"
+                      textStyles="text-body-md"
+                    />
+                  </Link>
+                </div>
               )}
             </>
           ) : (
@@ -173,7 +193,8 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
           <Button
             name="Logout"
             icon={assets.icons.logout}
-            extraStyles="w-full border mt-4"
+            iconPosition="left"
+            extraStyles="w-full border border-black-300 mt-4 py-4 hover:bg-black-400 transition-all duration-300"
             handleOnClick={logout}
           />
         )}
