@@ -491,6 +491,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
       const data = await res.json();
       setOrderId(data.orderId);
       await refetchCartItems();
+      await refetchOrders();
     } catch (err) {
       console.error(err);
     } finally {

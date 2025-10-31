@@ -48,7 +48,7 @@ const DeliveryDateModal = ({
   selectedDeliveryDate,
 }: DeliveryDateModalProps) => {
   return (
-    <div className="bg-white p-5 w-[550px] h-auto rounded-3xl flex flex-col gap-4 relative">
+    <div className="bg-white p-5 w-[550px] h-auto rounded-3xl flex flex-col gap-4 relative border border-black-300">
       <div
         onClick={() => handleCloseModal(false)}
         className="absolute  right-3 top-4 border hover:border hover:border-black-700 border-black-100 hover:bg-black-100 transition-all duration-300 p-2 rounded-full cursor-pointer"
