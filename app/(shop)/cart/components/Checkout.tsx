@@ -123,7 +123,7 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
           field2="Add your address, start shopping!"
           btnIcon={assets.icons.plus}
           icon={assets.icons.location_purple}
-          navigateTo="/address"
+          navigateTo="/account?page=addresses"
         />
       )}
       {/** Payment Method Container */}
@@ -151,7 +151,7 @@ const Checkout = ({ handleStepBack, selectedDeliveryDate }: CheckoutProps) => {
           field2="Add a payment method to checkout!"
           btnIcon={assets.icons.plus}
           icon={assets.icons.payments_purple}
-          navigateTo="/address"
+          navigateTo="/account?page=payments"
         />
       )}
 

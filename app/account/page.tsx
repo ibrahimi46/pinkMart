@@ -13,6 +13,7 @@ import ManageOrders from "./(admin)/ManageOrders";
 import ManageUsers from "./(admin)/ManageUsers";
 import Analytics from "./(admin)/Analytics";
 import { UserDataContext } from "../context/UserDataContext";
+import { useSearchParams } from "next/navigation";
 
 const userMenu = [
   {
@@ -49,9 +50,13 @@ const MyAccount = () => {
   const [activeSection, setActiveSection] = useState<string>("");
   const context = useContext(UserDataContext);
   const { logout, user } = context!;
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (user) {
+    const section = searchParams.get("page");
+    if (section) {
+      setActiveSection(section);
+    } else if (user) {
       setActiveSection(user.isAdmin ? "admin-dashboard" : "account-details");
     }
   }, [user]);
