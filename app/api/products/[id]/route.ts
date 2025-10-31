@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { products as productsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function DELETE(req: NextRequest, {params} : {params : {id: string}}) {
+export async function DELETE(req: NextRequest, {params} : {params : Promise<{id: string}>}) {
     try {
         const authHeader = req.headers.get("authorization");
         if (!authHeader) {
@@ -25,7 +25,7 @@ export async function DELETE(req: NextRequest, {params} : {params : {id: string}
             return NextResponse.json({error: "Unauthorized"}, {status:403})
         }
 
-        const {id} = params;
+        const {id} = await params;
         await db.delete(productsTable).where(eq(productsTable.id, parseInt(id)))
         return NextResponse.json({ success: true, message: "Product deleted" });
     }
