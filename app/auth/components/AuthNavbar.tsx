@@ -2,7 +2,7 @@ import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
 
-const AuthNavbar = ({ children }: { children: React.ReactElement }) => {
+const AuthNavbar = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <div className="bg-white py-3 border-b-2">

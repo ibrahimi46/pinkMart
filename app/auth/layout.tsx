@@ -1,7 +1,5 @@
 import AuthNavbar from "./components/AuthNavbar";
 
-const layout = ({ children }: { children: React.ReactElement }) => {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <AuthNavbar>{children}</AuthNavbar>;
-};
-
-export default layout;
+}
