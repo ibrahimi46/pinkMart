@@ -170,6 +170,7 @@ const MyAddresses = () => {
                       streetAddress={address.streetAddress}
                       isDefault={address.isDefault}
                       id={address.id}
+                      onSelect={() => {}}
                     />
                   );
                 })}
