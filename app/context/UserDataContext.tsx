@@ -7,6 +7,7 @@ import {
   createContext,
 } from "react";
 import { jwtDecode } from "jwt-decode";
+import { signOut, useSession } from "next-auth/react";
 
 // Interfaces
 
@@ -162,14 +163,21 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
     "cart"
   ); // Steps in cart
+  const { data: session, status } = useSession();
 
   const isLoggedIn = !!user;
 
   // On mount identifies the user token
   useEffect(() => {
     const userToken = localStorage.getItem("token");
-    if (userToken) setToken(userToken);
-  }, []);
+    if (userToken) {
+      setToken(userToken);
+    } else if (session?.user?.customToken) {
+      setToken(session.user.customToken);
+    } else {
+      console.log("no tokens found");
+    }
+  }, [session]);
 
   useEffect(() => {
     if (token) getUser();
@@ -214,12 +222,19 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("token");
     setUser(null);
     window.location.href = "/";
+
+    if (session) {
+      import("next-auth/react").then(({ signOut }) => {
+        signOut({ callbackUrl: "/" });
+      });
+    } else {
+      window.location.href = "/";
+    }
   };
 
   // Admin User Functions
 
   const fetchAdminUsers = async () => {
-    const token = localStorage.getItem("token");
     if (!token) return;
 
     try {
@@ -237,7 +252,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateUserRole = async (userId: number, isAdmin: boolean) => {
-    const token = localStorage.getItem("token");
     if (!token) return;
     try {
       setLoading(true);
@@ -259,24 +273,26 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getAdminUserDetails = useCallback(async (userId: number) => {
-    const token = localStorage.getItem("token");
-    if (!token) return null;
+  const getAdminUserDetails = useCallback(
+    async (userId: number) => {
+      if (!token) return null;
 
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/admin/users/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      return data.user;
-    } catch (err) {
-      console.error(err);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/admin/users/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        return data.user;
+      } catch (err) {
+        console.error(err);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token]
+  );
 
   // Address Functions
   const addAddress = async ({
@@ -627,7 +643,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   // Admin Orders
 
   const fetchAdminOrders = async () => {
-    const token = localStorage.getItem("token");
     if (!token) return;
 
     try {
@@ -645,7 +660,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateOrderStatus = async (orderId: number, status: string) => {
-    const token = localStorage.getItem("token");
     if (!token) return;
     try {
       setLoading(true);
@@ -669,24 +683,26 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getOrderDetails = useCallback(async (orderId: number) => {
-    const token = localStorage.getItem("token");
-    if (!token) return null;
+  const getOrderDetails = useCallback(
+    async (orderId: number) => {
+      if (!token) return null;
 
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/admin/orders/${orderId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      return data.order;
-    } catch (err) {
-      console.error(err);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/admin/orders/${orderId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        return data.order;
+      } catch (err) {
+        console.error(err);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token]
+  );
 
   const cartTotalItems = useMemo(() => {
     return cartItems.reduce((total, item) => total + Number(item.quantity), 0);
