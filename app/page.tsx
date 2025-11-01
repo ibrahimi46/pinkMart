@@ -13,7 +13,7 @@ export default async function Home() {
   const categories = await res.json();
 
   return (
-    <main className="md:px-20 px-6 mb-6  flex flex-col gap-10 md:gap-4">
+    <main className="md:px-20 px-6 mb-6 flex flex-col gap-10 md:gap-4">
       <TwoColumnGrid />
       <CategoryStrip categories={categories} />
       <BestSeller title="Best Seller" />

@@ -33,10 +33,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const { latitude, longitude } = position.coords;
       const data = await reverseGeocode(latitude, longitude);
-      console.log("am in useeffect navbar global");
-      console.log(data.address);
       if (data) setAddress(data.address);
-      console.log(address);
     });
   }, []);
 
@@ -54,7 +51,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                 </h1>
               </div>
             </Link>
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-1 items-center cursor-pointer">
               <Image
                 src={assets.icons.location}
                 height={20}
@@ -100,7 +97,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
 
           {/** address and search bar on top of each other shows upto sm */}
           <div className="flex sm:flex md:hidden w-full max-w-96 flex-col px-4 gap-2">
-            <div className="flex gap-1 w-full justify-center">
+            <div className="flex gap-1 w-full justify-center cursor-pointer">
               <Image
                 src={assets.icons.location}
                 height={20}

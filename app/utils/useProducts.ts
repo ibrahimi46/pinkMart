@@ -22,10 +22,8 @@ const useProducts = (): UseProductsReturnProps => {
   
 
   const fetchProducts = useCallback(async () => {
-    
-    setLoading(true);
-
     try {
+      setLoading(true);
       const res = await fetch("/api/products", {
         method: "GET",
       });
