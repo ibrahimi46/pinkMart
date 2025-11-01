@@ -40,13 +40,6 @@ const BestSeller = ({ title }: BestSellerProps) => {
       <div className="flex justify-between items-end">
         <h1 className="text-body-lg font-bold">{title}</h1>
         <div className="sm:flex hidden items-center gap-6">
-          <Button
-            name="View All(+40)"
-            icon={assets.icons.arrow_right}
-            iconPosition="right"
-            textStyles="text-body-sm"
-            extraStyles="px-4 border border-primary-600 bg-white h-8"
-          />
           <div className="flex gap-2">
             <BackButton handleBack={() => scroll("left")} />
             <ForwardButton handleForward={() => scroll("right")} />

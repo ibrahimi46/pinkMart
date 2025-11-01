@@ -112,6 +112,7 @@ interface UserDataContextType {
   orders: Orders[];
   adminOrders: AdminOrder[];
   adminUsers: AdminUser[];
+  cartTotalItems: number;
   fetchAdminUsers: () => void;
   updateUserRole: (userId: number, isAdmin: boolean) => void;
   getAdminUserDetails: (userId: number) => Promise<AdminUser | null>;
@@ -687,6 +688,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const cartTotalItems = useMemo(() => {
+    return cartItems.reduce((total, item) => total + Number(item.quantity), 0);
+  }, [cartItems]);
+
   const refetchAll = useCallback(async () => {
     await Promise.all([
       refetchAddresses(),
@@ -729,6 +734,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         orders,
         adminOrders,
         adminUsers,
+        cartTotalItems,
         fetchAdminUsers,
         updateUserRole,
         getAdminUserDetails,

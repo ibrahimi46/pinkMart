@@ -54,6 +54,7 @@ const assets = {
     delivered: "/icons/delivered.svg",
     pending: "/icons/pending.svg",
     search_purple: "/icons/search_purple.svg",
+    cart_white: "/icons/cart_white.svg",
   },
   onboarding: {
     step1: {

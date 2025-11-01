@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserDataContext } from "../context/UserDataContext";
 import reverseGeocode from "../utils/reverseGeocode";
+import CartModal from "./CartModal";
+import useProducts from "../utils/useProducts";
 
 interface NavbarGlobalProps {
   toggleSidebar: () => void;
@@ -25,8 +27,10 @@ interface NominatimAddress {
 
 const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
   const [address, setAddress] = useState<NominatimAddress | null>(null);
+  const [showCartModal, setShowCartModal] = useState(false);
   const context = useContext(UserDataContext);
-  const { isLoggedIn, setStep } = context!;
+  const { isLoggedIn, setStep, cartTotalItems } = context!;
+  const { products } = useProducts();
 
   useEffect(() => {
     if (!navigator.geolocation) return;
@@ -129,7 +133,11 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
           </div>
 
           {/** cart logo shows on small screens */}
-          <div className=" bg-primary-500 lg:hidden p-2 rounded-full">
+          <div
+            className=" bg-primary-500 lg:hidden p-2 rounded-full relative"
+            onMouseEnter={() => setShowCartModal(true)}
+            onMouseLeave={() => setShowCartModal(false)}
+          >
             <Link href={"/cart"}>
               <Image
                 src={assets.icons.cart}
@@ -139,22 +147,52 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                 className="filter invert"
               />
             </Link>
+            <div
+              className={`absolute top-full mt-2 right-0 bg-white border border-gray-200 rounded-2xl shadow-lg py-2 px-4
+                transition-all duration-300 ease-in-out z-50
+                ${cartTotalItems > 0 ? "w-80" : "w-64"}
+                ${
+                  showCartModal
+                    ? "opacity-100 translate-y-0 pointer-events-auto"
+                    : "opacity-0 -translate-y-2 pointer-events-none"
+                }`}
+            >
+              <CartModal products={products} />
+            </div>
           </div>
 
           {/** cart and logo container shows lg onwards */}
           <div className="items-center hidden lg:flex md:gap-4">
             {isLoggedIn ? (
               <>
-                <Link href={"/cart"}>
-                  <Button
-                    name="Cart"
-                    icon={assets.icons.cart}
-                    iconPosition="left"
-                    textStyles="text-body-md"
-                    extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 bg-white border hover:border-black-800 transition-all duration-300"
-                    handleOnClick={() => setStep("cart")}
-                  />
-                </Link>
+                <div
+                  className="relative"
+                  onMouseEnter={() => setShowCartModal(true)}
+                  onMouseLeave={() => setShowCartModal(false)}
+                >
+                  <Link href={"/cart"}>
+                    <Button
+                      name="Cart"
+                      icon={assets.icons.cart}
+                      iconPosition="left"
+                      textStyles="text-body-md"
+                      extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 bg-white border hover:border-black-800 transition-all duration-300"
+                      handleOnClick={() => setStep("cart")}
+                    />
+                  </Link>
+                  <div
+                    className={`absolute top-full mt-2 right-0 bg-white border border-gray-200 rounded-2xl shadow-lg py-2 px-4 
+                    transition-all duration-300 ease-in-out z-50
+                    ${cartTotalItems > 0 ? "w-96" : "w-72"}
+                    ${
+                      showCartModal
+                        ? "opacity-100 translate-y-0 pointer-events-auto"
+                        : "opacity-0 -translate-y-2 pointer-events-none"
+                    }`}
+                  >
+                    <CartModal products={products} />
+                  </div>
+                </div>
                 <Link
                   href={"/account"}
                   className="p-2 rounded-full border border-primary-600 bg-white hover:border-black-800 transition-all duration-300"

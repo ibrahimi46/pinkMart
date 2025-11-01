@@ -40,7 +40,7 @@ const useProducts = (): UseProductsReturnProps => {
  
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts])
+  }, [])
 
   return { products, loading, refetchProducts: fetchProducts };
 };

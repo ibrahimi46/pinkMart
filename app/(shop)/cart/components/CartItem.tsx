@@ -24,17 +24,17 @@ const CartItem = ({ product, quantity, onUpdate }: ProductProps) => {
     <>
       <div className="flex justify-between mt-4">
         <div className="flex gap-2">
-          <div className="bg-primary-100 flex items-center justify-center md:p-3 p-1 h-10  rounded-xl">
+          <div className="flex items-center justify-center h-14 w-14">
             <Image
               src={product.imageUrl}
-              height={40}
-              width={40}
+              height={48}
+              width={48}
               alt=""
-              className="h-5 w-5 sm:h-5 sm:w-5 md:h-10 md:w-10 rounded-full"
+              className="object-cover h-full w-full rounded-xl"
             />
           </div>
-          <div className="flex flex-col gap-2 text-body-sm sm:text-body-md">
-            <p>{product?.name}</p>
+          <div className="flex flex-col gap-1">
+            <p className="text-body-sm font-medium">{product?.name}</p>
             <div className="flex gap-2 text-body-sm">
               <p className="text-primary-600">
                 ${parseFloat(product?.price).toFixed(2)}
@@ -45,22 +45,27 @@ const CartItem = ({ product, quantity, onUpdate }: ProductProps) => {
         {/**right */}
         <div className="text-body-md w-52 justify-end flex gap-4 items-center last sm:items-center">
           <div className="flex gap-4 bg-black-100 items-center rounded-3xl p-1">
-            <div className="bg-white p-1 rounded-full">
+            <div className="bg-white p-1 rounded-full cursor-pointer  hover:bg-black-200 transition-all duration-300">
               <Image
                 src={assets.icons.delete}
                 height={14}
                 width={14}
                 alt="delete"
                 onClick={() => {
-                  updateCart(product.id, Number(quantity) - 1);
-                  onUpdate();
+                  if (quantity > 1) {
+                    updateCart(product.id, Number(quantity) - 1);
+                    onUpdate();
+                  } else {
+                    removeFromCart(product.id);
+                    onUpdate();
+                  }
                 }}
               />
             </div>
-            <div className="w-2 flex items-center justify-center">
+            <div className="w-2 flex items-center justify-center cursor-default">
               <p>{quantity}</p>
             </div>
-            <div className="p-1 bg-primary-600 rounded-full">
+            <div className="p-1 bg-primary-600 rounded-full cursor-pointer hover:bg-primary-400 transition-all duration-300">
               <Image
                 src={assets.icons.plus}
                 height={14}
@@ -82,7 +87,7 @@ const CartItem = ({ product, quantity, onUpdate }: ProductProps) => {
           >
             Remove
           </p>
-          <p className="hidden sm:block">
+          <p className="hidden sm:block cursor-default">
             ${(Number(product.price) * quantity).toFixed(2)}
           </p>
         </div>
