@@ -1,4 +1,5 @@
 "use client";
+import CategoriesPage from "./categories/page";
 import BestSeller from "./components/home-components/BestSeller";
 import CategoryStrip from "./components/home-components/CategoryStrip";
 import TwoColumnGrid from "./components/home-components/TwoColumnGrid";

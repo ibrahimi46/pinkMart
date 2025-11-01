@@ -21,9 +21,11 @@ interface Product {
 }
 
 const CategoriesPage = () => {
-  <Suspense fallback={<Loading />}>
-    <CategoriesPageContent />
-  </Suspense>;
+  return (
+    <Suspense fallback={<Loading />}>
+      <CategoriesPageContent />
+    </Suspense>
+  );
 };
 
 const CategoriesPageContent = () => {
