@@ -167,7 +167,7 @@ const Cart = () => {
                 )}
               </div>
               <div className="min-w-0 overflow-x-hidden">
-                <BestSeller title="Recommendations" />
+                <BestSeller title="Recommendations" withBorder />
               </div>
             </div>
           </>

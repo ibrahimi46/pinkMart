@@ -1,7 +1,5 @@
 "use client";
-import Button from "../Button";
 import BackButton from "../BackButton";
-import assets from "@/assets";
 import ForwardButton from "../ForwardButton";
 import { useRef, useContext } from "react";
 import useProducts from "@/app/utils/useProducts";
@@ -11,9 +9,10 @@ import ProductCard from "../ProductCard";
 
 interface BestSellerProps {
   title: string;
+  withBorder: boolean;
 }
 
-const BestSeller = ({ title }: BestSellerProps) => {
+const BestSeller = ({ title, withBorder }: BestSellerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { products } = useProducts();
   const context = useContext(UserDataContext);
@@ -35,7 +34,11 @@ const BestSeller = ({ title }: BestSellerProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-6 border border-black-100 p-4 rounded-3xl bg-white">
+    <div
+      className={`flex flex-col gap-6 ${
+        withBorder && "border border-black-100 p-4 rounded-3xl bg-white"
+      }`}
+    >
       {context?.loading && <Loading />}
       <div className="flex justify-between items-end">
         <h1 className="text-body-lg font-bold">{title}</h1>
