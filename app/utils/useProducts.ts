@@ -19,22 +19,14 @@ interface UseProductsReturnProps {
 const useProducts = (): UseProductsReturnProps => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [token, setToken] = useState<string | null>(null);
-
-  // ✅ safely get token client-side
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("token"));
-    }
-  }, []);
+  
 
   const fetchProducts = useCallback(async () => {
-    if (!token) return;
+    
     setLoading(true);
 
     try {
       const res = await fetch("/api/products", {
-        headers: { Authorization: `Bearer ${token}` },
         method: "GET",
       });
 
@@ -45,11 +37,12 @@ const useProducts = (): UseProductsReturnProps => {
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, []);
 
+ 
   useEffect(() => {
-    if (token) fetchProducts();
-  }, [token, fetchProducts]);
+    fetchProducts();
+  }, [fetchProducts])
 
   return { products, loading, refetchProducts: fetchProducts };
 };
