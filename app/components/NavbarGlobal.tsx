@@ -29,7 +29,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
   const [address, setAddress] = useState<NominatimAddress | null>(null);
   const [showCartModal, setShowCartModal] = useState(false);
   const context = useContext(UserDataContext);
-  const { isLoggedIn, setStep, cartTotalItems } = context!;
+  const { isLoggedIn, cartTotalItems } = context!;
   const { products } = useProducts();
 
   useEffect(() => {
@@ -171,14 +171,20 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                   onMouseLeave={() => setShowCartModal(false)}
                 >
                   <Link href={"/cart"}>
-                    <Button
-                      name="Cart"
-                      icon={assets.icons.cart}
-                      iconPosition="left"
-                      textStyles="text-body-md"
-                      extraStyles="h-8 py-2 px-4 rounded-2xl border-primary-500 bg-white border hover:border-black-800 transition-all duration-300"
-                      handleOnClick={() => setStep("cart")}
-                    />
+                    <div className="bg-primary-100 p-2 rounded-3xl flex gap-2 items-center">
+                      <div className="bg-white rounded-3xl flex gap-1 p-1">
+                        <Image
+                          src={assets.icons.cart_purple}
+                          height={15}
+                          width={15}
+                          alt="cart"
+                        />
+                        <p className="text-primary-600 text-body-sm">
+                          {cartTotalItems}
+                        </p>
+                      </div>
+                      <div>Cart</div>
+                    </div>
                   </Link>
                   <div
                     className={`absolute top-full mt-2 right-0 bg-white border border-gray-200 rounded-2xl shadow-lg py-2 px-4 
