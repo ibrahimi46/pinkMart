@@ -7,6 +7,7 @@ import useProducts from "../utils/useProducts";
 import { UserDataContext } from "../context/UserDataContext";
 import Loading from "../components/Loading";
 import { useSearchParams } from "next/navigation";
+import FilterSidebar from "./components/FilterSidebar";
 
 interface Product {
   id: number;
@@ -24,6 +25,8 @@ const CategoriesPage = () => {
     searchParams.get("category") || ""
   );
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [priceFilter, setPriceFilter] = useState({ min: 0, max: 100 });
+  const [stockFilter, setStockFilter] = useState(false);
 
   const { categories } = useCategories();
   const { products } = useProducts();
@@ -32,17 +35,31 @@ const CategoriesPage = () => {
 
   useEffect(() => {
     if (!products) return;
-    const filtered = selectedCategory
+    let filtered = selectedCategory
       ? products.filter((product) => product.category === selectedCategory)
       : products;
+
+    filtered = filtered.filter(
+      (product) =>
+        Number(product.price) >= priceFilter.min &&
+        Number(product.price) <= priceFilter.max
+    );
+
+    if (stockFilter) {
+      filtered = filtered.filter((product) => product.stock > 0);
+    }
+
     setFilteredProducts(filtered);
-  }, [products, selectedCategory]);
+  }, [products, selectedCategory, priceFilter, stockFilter]);
 
   return (
     <main className="flex gap-4 mx-4">
       {loading && <Loading />}
       <div className="w-60 h-[600px] hidden md:flex bg-primary-50 flex-shrink-0">
-        left sidebar
+        <FilterSidebar
+          onPriceFilter={(min, max) => setPriceFilter({ min, max })}
+          onStockFilter={setStockFilter}
+        />
       </div>
       <div className="flex-1 flex flex-col gap-4 min-w-0">
         <div className="px-4">
