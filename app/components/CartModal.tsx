@@ -62,10 +62,11 @@ const CartModal = ({ products }: CartModalProps) => {
                   product={product}
                   quantity={item.quantity}
                   onUpdate={() => {}}
+                  compact
                 />
               ) : null;
             })}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 mt-2">
             <div className="flex justify-between">
               <h1 className="text-black-400 font-semibold">Subtotal</h1>
               <p className="font-bold">{`$${cartTotal.toFixed(2)}`}</p>
