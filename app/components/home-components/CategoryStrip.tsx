@@ -5,6 +5,8 @@ import assets from "@/assets";
 
 type CategoryStripProps = {
   categories: string[];
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
 };
 
 const CategoryIcons: Record<string, string> = {
@@ -22,7 +24,11 @@ const CategoryIcons: Record<string, string> = {
   candy: assets.home.category_strip.candy,
 };
 
-const CategoryStrip = ({ categories }: CategoryStripProps) => {
+const CategoryStrip = ({
+  categories,
+  selectedCategory,
+  setSelectedCategory,
+}: CategoryStripProps) => {
   return (
     <div className="flex flex-wrap gap-4 sm:flex-nowrap sm:overflow-x-auto h-auto sm:h-20 overflow-hidden items-center scrollbar-hide">
       {categories &&
@@ -33,7 +39,12 @@ const CategoryStrip = ({ categories }: CategoryStripProps) => {
             icon={CategoryIcons[item]}
             iconPosition="left"
             textStyles="text-body-md"
-            extraStyles="h-10 min-w-14 max-w-28 px-6 bg-white border hover:border-primary-600 transition-all duration-300"
+            extraStyles={`h-10 min-w-14 max-w-28 px-6 bg-white border hover:border-primary-600 transition-all duration-300
+              ${selectedCategory === item && "border-primary-600"}
+              `}
+            handleOnClick={() => {
+              setSelectedCategory(item);
+            }}
           />
         ))}
     </div>

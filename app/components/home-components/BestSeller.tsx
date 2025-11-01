@@ -61,7 +61,7 @@ const BestSeller = ({ title }: BestSellerProps) => {
                 key={item.id}
                 name={item.name}
                 icon={item.imageUrl}
-                currentPrice={item.price}
+                currentPrice={Number(item.price).toFixed(2)}
                 oldPrice={3.99}
                 capacity={item.stock}
                 addToCart={() => {

@@ -13,8 +13,6 @@ const useCategories = () => {
                     cache: "no-store",
                 });
             const data = await res.json();
-            console.log(data)
-            console.log("am in usecatgoeies")
             if (data) setCategories(data);
         } catch (err) {
             console.error(err);
