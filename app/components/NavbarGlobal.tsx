@@ -18,14 +18,6 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
         <div className="bg-orange-50 h-24 sm:h-12 flex items-start sm:items-center justify-between md:px-16 px-3 py-2">
           {/** */}
           <div className=" gap-6 hidden md:flex">
-            <Link href={"/"}>
-              <div className="flex items-center h-10 cursor-pointer">
-                <Image src={assets.logo} width={48} height={48} alt="" />
-                <h1 className="text-h7 text-primary-600 font-bold mb-1">
-                  PinkMart
-                </h1>
-              </div>
-            </Link>
             <div className="flex gap-1 items-center">
               <Image
                 src={assets.icons.location}
@@ -49,17 +41,19 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
             />
           </div>
 
-          <div className="lg:w-80 xl:flex-1 sm:flex hidden w-56 sm:w-72 md:max-w-2xl items-center gap-2 rounded-3xl p-2 border-primary-500 border">
-            <Image
-              src={assets.icons.search}
-              height={20}
-              width={20}
-              alt="search"
-            />
+          <div className="lg:w-80 xl:flex-1 sm:flex hidden w-56 sm:w-72 md:max-w-2xl items-center gap-2 rounded-3xl py-1 px-3 border-primary-500 border">
+            <div className="bg-primary-200 p-1 rounded-full">
+              <Image
+                src={assets.icons.search_purple}
+                height={20}
+                width={20}
+                alt="search"
+              />
+            </div>
             <input
               type="text"
               placeholder="Search by..."
-              className="border-none outline-0 focus:ring-0 bg-orange-50 text-body-md"
+              className="border-none outline-0 focus:ring-0 bg-orange-50 w-full rounded-3xl px-2 py-1 text-body-md"
             />
           </div>
 
@@ -74,17 +68,19 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
               <p className="text-body-sm">10115 New York</p>
             </div>
             {/** search */}
-            <div className="flex rounded-3xl p-2 border-primary-500 border">
-              <Image
-                src={assets.icons.search}
-                height={20}
-                width={20}
-                alt="search"
-              />
+            <div className="flex rounded-3xl py-1 px-2 border-primary-500 border gap-2">
+              <div className="bg-primary-200 p-2 rounded-full flex items-center justify-center">
+                <Image
+                  src={assets.icons.search_purple}
+                  height={20}
+                  width={20}
+                  alt="search"
+                />
+              </div>
               <input
                 type="text"
                 placeholder="Search by..."
-                className="border-none outline-0 focus:ring-0 bg-orange-50 text-body-md"
+                className="border-none outline-0 focus:ring-0 bg-orange-50 text-body-md w-full rounded-3xl px-2 py-1"
               />
             </div>
           </div>

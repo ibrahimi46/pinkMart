@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
             </h1>
           </div>
         </Link>
-        <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col justify-between mt-8 h-full">
           <div
             className="absolute top-4 right-2 bg-black-200 p-2 rounded-full cursor-pointer border hover:border hover:border-black-600
                   transition-all duration-300
@@ -50,7 +50,7 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
           <div>
             {user ? (
               <>
-                <div className="flex items-center gap-2 mb-6 mt-12 relative">
+                <div className="flex items-center gap-2 mb-6 relative">
                   <Image
                     src={assets.icons.account}
                     width={50}
@@ -161,25 +161,6 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
               </>
             ) : (
               <>
-                <div className="mb-6 flex items-center gap-2 relative">
-                  <div
-                    className="absolute top-0 right-0 bg-black-200 p-2 rounded-full cursor-pointer border hover:border hover:border-black-600
-                  transition-all duration-300
-                  "
-                    onClick={closeSidebar}
-                  >
-                    <Image
-                      src={assets.icons.close}
-                      height={10}
-                      width={10}
-                      alt="close"
-                    />
-                  </div>
-                  <Image src={assets.logo} width={60} height={60} alt="Logo" />
-                  <p className="text-primary-600 font-bold text-body-2xl">
-                    PinkMart
-                  </p>
-                </div>
                 <div className="flex flex-col gap-2 text-body-md font-regular">
                   <Link href={"/auth/login"}>
                     <Button

@@ -53,6 +53,7 @@ const assets = {
     shipping: "/icons/shipping.svg",
     delivered: "/icons/delivered.svg",
     pending: "/icons/pending.svg",
+    search_purple: "/icons/search_purple.svg",
   },
   onboarding: {
     step1: {
