@@ -3,6 +3,7 @@ import Button from "@/app/components/Button";
 import assets from "@/assets";
 import Link from "next/link";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
   const [loginOption, setLoginOption] = useState<string>("email");
@@ -122,6 +123,7 @@ const Login = () => {
               icon={assets.socials.google}
               iconPosition="left"
               extraStyles="h-12 text-body-md hover:border hover:border-black-400 hover:bg-black-200 transition-all duration-300"
+              handleOnClick={() => signIn("google", { callbackUrl: "/" })}
             />
           </div>
           <div className="flex justify-center mt-4">

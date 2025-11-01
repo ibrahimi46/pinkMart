@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import { UserDataProvider } from "./context/UserDataContext";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,21 +41,23 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-screen bg-black-50`}
       >
-        <UserDataProvider>
-          {!isAuthPage && (
-            <>
-              <NavbarGlobal
-                toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-              />
-              <Sidebar
-                isOpen={isSidebarOpen}
-                closeSidebar={() => setIsSidebarOpen(false)}
-              />
-            </>
-          )}
-          <main>{children}</main>
-          {!isAccountPage && <Footer />}
-        </UserDataProvider>
+        <Providers>
+          <UserDataProvider>
+            {!isAuthPage && (
+              <>
+                <NavbarGlobal
+                  toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                />
+                <Sidebar
+                  isOpen={isSidebarOpen}
+                  closeSidebar={() => setIsSidebarOpen(false)}
+                />
+              </>
+            )}
+            <main>{children}</main>
+            {!isAccountPage && <Footer />}
+          </UserDataProvider>
+        </Providers>
       </body>
     </html>
   );
