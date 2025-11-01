@@ -6,6 +6,7 @@ import ProductCard from "../components/ProductCard";
 import useProducts from "../utils/useProducts";
 import { UserDataContext } from "../context/UserDataContext";
 import Loading from "../components/Loading";
+import { useSearchParams } from "next/navigation";
 
 interface Product {
   id: number;
@@ -18,7 +19,10 @@ interface Product {
 }
 
 const CategoriesPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const searchParams = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    searchParams.get("category") || ""
+  );
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   const { categories } = useCategories();

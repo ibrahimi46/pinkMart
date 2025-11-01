@@ -5,11 +5,13 @@ import assets from "@/assets";
 import { useRef } from "react";
 import BackButton from "../BackButton";
 import ForwardButton from "../ForwardButton";
+import { useRouter } from "next/navigation";
 
 type CategoryStripProps = {
   categories: string[];
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
+  redirectOnClick?: boolean;
 };
 
 const CategoryIcons: Record<string, string> = {
@@ -30,9 +32,11 @@ const CategoryIcons: Record<string, string> = {
 const CategoryStrip = ({
   categories,
   selectedCategory,
+  redirectOnClick,
   setSelectedCategory,
 }: CategoryStripProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -67,7 +71,13 @@ const CategoryStrip = ({
           name="All"
           icon="#"
           extraStyles="px-6 border border-black-400 flex-shrink-0"
-          handleOnClick={() => setSelectedCategory("")}
+          handleOnClick={() => {
+            if (redirectOnClick) {
+              router.push("/categories");
+            } else {
+              setSelectedCategory("");
+            }
+          }}
         />
         {categories &&
           categories?.map((item, idx) => (
@@ -81,7 +91,11 @@ const CategoryStrip = ({
               ${selectedCategory === item && "border-primary-600"}
             `}
               handleOnClick={() => {
-                setSelectedCategory(item);
+                if (redirectOnClick) {
+                  router.push(`/categories?category=${item}`);
+                } else {
+                  setSelectedCategory(item);
+                }
               }}
             />
           ))}
