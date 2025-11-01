@@ -22,7 +22,7 @@ const ProductItem = ({
   handleDelete,
 }: ProductItemProps) => {
   return (
-    <div className="bg-black-100 rounded-3xl items-center p-4 flex flex-col gap-4 justify-between sm:flex sm:flex-row">
+    <div className="bg-black-100 rounded-3xl items-center p-3 flex flex-col gap-4 justify-between sm:flex sm:flex-row">
       <div className="flex justify-between sm:flex-col text-body-sm sm:text-body-md">
         <p>
           <b>Name: </b>
@@ -33,7 +33,7 @@ const ProductItem = ({
           {category}
         </p>
         <p>
-          <b>Price: </b>${price}
+          <b>Price: </b>${Number(price).toFixed(2)}
         </p>
         <p>
           <b>Created At: </b>

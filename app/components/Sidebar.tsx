@@ -23,7 +23,10 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
     >
       <div className="p-4 flex flex-col h-full justify-start relative">
         <Link href={"/"}>
-          <div className="flex items-center h-10 cursor-pointer">
+          <div
+            className="flex items-center h-10 cursor-pointer"
+            onClick={closeSidebar}
+          >
             <Image src={assets.logo} width={48} height={48} alt="" />
             <h1 className="text-h7 text-primary-600 font-bold mb-1">
               PinkMart
