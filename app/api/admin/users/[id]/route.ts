@@ -6,9 +6,10 @@ import jwt from "jsonwebtoken";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: {params: Promise<{id : string}>},
 ) {
   try {
+    const {id} = await context.params;
     const authHeader = req.headers.get("authorization");
     if (!authHeader) return NextResponse.json({error: "Missing token"}, {status: 401});
 
@@ -25,7 +26,7 @@ export async function GET(
       return NextResponse.json({error: "Unauthorized"}, {status: 403});
     }
 
-    const userId = (await params).id;
+    const userId = Number(id);
     
     const user = await db
       .select({
@@ -65,9 +66,10 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+    context: {params: Promise<{id : string}>},
 ) {
   try {
+    const {id} = await context.params;
     const authHeader = req.headers.get("authorization");
     if (!authHeader) return NextResponse.json({error: "Missing token"}, {status: 401});
 
@@ -84,7 +86,7 @@ export async function PATCH(
       return NextResponse.json({error: "Unauthorized"}, {status: 403});
     }
 
-    const userId = parseInt(params.id);
+    const userId =  Number(id);
     const { isAdmin } = await req.json();
 
     const updatedUser = await db
