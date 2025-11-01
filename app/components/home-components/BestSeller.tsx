@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRef, useContext } from "react";
 import useProducts from "@/app/utils/useProducts";
 import { UserDataContext } from "@/app/context/UserDataContext";
+import Loading from "../Loading";
 
 interface BestSellerProps {
   title: string;
@@ -34,7 +35,14 @@ const CardsItem = ({
       {/** Item image container */}
       <div className="sm:h-32 sm:w-36 h-24 w-24 relative flex items-center justify-center">
         <Image src={icon} fill alt="" className="rounded-3xl" />
-        <div className="absolute sm:hidden bottom-2 right-2 bg-black-100 border border-primary-600 rounded-full p-1">
+
+        <div
+          className="absolute sm:hidden bottom-2 right-2 bg-black-100 border border-primary-600 rounded-full p-2"
+          onClick={() => {
+            console.log("clicked");
+            addToCart();
+          }}
+        >
           <Image src={assets.icons.plus} height={10} width={10} alt="close" />
         </div>
       </div>
@@ -95,6 +103,7 @@ const BestSeller = ({ title }: BestSellerProps) => {
 
   return (
     <div className="flex flex-col gap-6 border border-black-100 p-4 rounded-3xl bg-white">
+      {context?.loading && <Loading />}
       <div className="flex justify-between items-end">
         <h1 className="text-body-lg font-bold">{title}</h1>
         <div className="sm:flex hidden items-center gap-6">
