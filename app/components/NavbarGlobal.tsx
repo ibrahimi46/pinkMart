@@ -16,8 +16,15 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
     <>
       <div className="bg-black-100 h-32 sm:h-20 mb-6 md:py-10 flex flex-col justify-center border-b-2">
         <div className="bg-orange-50 h-24 sm:h-12 flex items-start sm:items-center justify-between md:px-16 px-3 py-2">
-          {/** */}
           <div className=" gap-6 hidden md:flex">
+            <Link href={"/"}>
+              <div className="flex items-center h-10 cursor-pointer">
+                <Image src={assets.logo} width={48} height={48} alt="" />
+                <h1 className="text-h7 text-primary-600 font-bold mb-1">
+                  PinkMart
+                </h1>
+              </div>
+            </Link>
             <div className="flex gap-1 items-center">
               <Image
                 src={assets.icons.location}

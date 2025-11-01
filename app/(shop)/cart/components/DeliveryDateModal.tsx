@@ -68,7 +68,7 @@ const DeliveryDateModal = ({
                 day={item.dayName}
                 selectedDeliveryDate={selectedDeliveryDate}
                 handleClick={() => {
-                  setSelectedDeliveryDate(item.dateStr);
+                  setSelectedDeliveryDate(item.fullDate);
                   console.log(selectedDeliveryDate);
                 }}
               />

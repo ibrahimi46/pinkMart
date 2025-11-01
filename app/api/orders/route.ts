@@ -19,13 +19,13 @@ export async function POST(req: NextRequest) {
 
         if (!decoded) return NextResponse.json({error: "Missing token"}, {status: 401})
 
-        const {cartTotal, selectedDeliveryDate, cartItems} = await req.json();
+        const {finalCheckoutPrice, selectedDeliveryDate, cartItems} = await req.json();
 
         if (!cartItems.length) return NextResponse.json({error: "cart is empty"}, {status: 400});
 
         const order = await db.insert(OrderTable).values({
             userId: decoded.userId,
-            totalAmount: cartTotal,
+            totalAmount: finalCheckoutPrice,
             deliveryDate: new Date(selectedDeliveryDate)
 
         }).returning();

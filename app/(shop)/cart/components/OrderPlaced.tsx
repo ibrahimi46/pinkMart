@@ -20,7 +20,7 @@ const OrderPlaced = ({ handleStepBack }: OrderPlacedProps) => {
               Order Arrives at Apr 5,2022
             </p>
           </div>
-          <div className="bg-black-100 flex items-center justify-center px-4 h-10 border border-primary-600 text-primary-600 rounded-full ">
+          <div className="bg-black-100 flex items-center text-body-md justify-center px-4 h-10 border border-primary-600 text-primary-600 rounded-full ">
             In Progress
           </div>
         </div>

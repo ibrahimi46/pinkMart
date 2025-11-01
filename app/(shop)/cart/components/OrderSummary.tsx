@@ -96,7 +96,6 @@ const OrderSummary = ({
             `}
           onClick={async () => {
             if (isPlaceOrderDisabled) return;
-
             await placeOrder({
               finalCheckoutPrice,
               selectedDeliveryDate,
