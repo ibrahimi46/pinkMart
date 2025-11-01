@@ -44,7 +44,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
   return (
     <>
       <div className="bg-black-100 h-32 md:h-20 mb-6 md:py-10 flex flex-col justify-center border-b-2">
-        <div className="bg-orange-50 h-24 md:h-12 flex items-start justify-between md:px-16 px-3 py-2">
+        <div className=" h-24 md:h-12 flex items-start justify-between md:px-16 px-3 py-2">
           {/** left logo and address container shown md onwards */}
           <div className=" gap-6 hidden lg:flex">
             <Link href={"/"}>
@@ -95,7 +95,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
             <input
               type="text"
               placeholder="Search by..."
-              className="border-none outline-0 focus:ring-0 bg-orange-50 w-full rounded-3xl px-2 py-1 text-body-md"
+              className="border-none outline-0 focus:ring-0  w-full rounded-3xl px-2 py-1 text-body-md"
             />
           </div>
 
