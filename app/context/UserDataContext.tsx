@@ -218,15 +218,13 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     localStorage.removeItem("token");
     setUser(null);
-    window.location.href = "/";
 
     if (session) {
-      import("next-auth/react").then(({ signOut }) => {
-        signOut({ callbackUrl: "/" });
-      });
+      const { signOut } = await import("next-auth/react");
+      signOut({ callbackUrl: "/" });
     } else {
       window.location.href = "/";
     }

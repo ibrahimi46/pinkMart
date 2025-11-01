@@ -8,6 +8,7 @@ import { UserDataContext } from "../context/UserDataContext";
 import Loading from "../components/Loading";
 import { useSearchParams } from "next/navigation";
 import FilterSidebar from "./components/FilterSidebar";
+import { Suspense } from "react";
 
 interface Product {
   id: number;
@@ -20,6 +21,12 @@ interface Product {
 }
 
 const CategoriesPage = () => {
+  <Suspense fallback={<Loading />}>
+    <CategoriesPageContent />
+  </Suspense>;
+};
+
+const CategoriesPageContent = () => {
   const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string>(
     searchParams.get("category") || ""

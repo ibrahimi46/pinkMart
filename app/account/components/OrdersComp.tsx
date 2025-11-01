@@ -178,7 +178,7 @@ const OrdersComp = () => {
             navigateTo="/"
           />
           <div className="mt-4">
-            <BestSeller title="Best Sellers" />
+            <BestSeller title="Best Sellers" withBorder />
           </div>
         </div>
       )}
