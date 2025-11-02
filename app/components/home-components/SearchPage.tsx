@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import useProducts from "@/app/utils/useProducts";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "../Loading";
 import FilterSidebar from "@/app/categories/components/FilterSidebar";
 import ProductCard from "../ProductCard";
 import { useSearchParams } from "next/navigation";
+import { ProductsContext } from "@/app/context/ProductsContext";
 
 interface Product {
   id: number;
@@ -26,7 +26,8 @@ const SearchPage = () => {
   const [priceFilter, setPriceFilter] = useState({ min: 0, max: 100 });
   const [stockFilter, setStockFilter] = useState(false);
 
-  const { products } = useProducts();
+  const productContext = useContext(ProductsContext);
+  const { products } = productContext!;
   const context = useContext(UserDataContext);
   const { addToCart, loading } = context!;
 

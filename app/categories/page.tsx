@@ -3,12 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import CategoryStrip from "../components/home-components/CategoryStrip";
 import useCategories from "../utils/useCategories";
 import ProductCard from "../components/ProductCard";
-import useProducts from "../utils/useProducts";
 import { UserDataContext } from "../context/UserDataContext";
 import Loading from "../components/Loading";
 import { useSearchParams } from "next/navigation";
 import FilterSidebar from "./components/FilterSidebar";
 import { Suspense } from "react";
+import { ProductsContext } from "../context/ProductsContext";
 
 interface Product {
   id: number;
@@ -38,7 +38,8 @@ const CategoriesPageContent = () => {
   const [stockFilter, setStockFilter] = useState(false);
 
   const { categories } = useCategories();
-  const { products } = useProducts();
+  const productContext = useContext(ProductsContext);
+  const { products } = productContext!;
   const context = useContext(UserDataContext);
   const { addToCart, loading } = context!;
 

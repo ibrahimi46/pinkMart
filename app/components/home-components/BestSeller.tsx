@@ -2,10 +2,10 @@
 import BackButton from "../BackButton";
 import ForwardButton from "../ForwardButton";
 import { useRef, useContext } from "react";
-import useProducts from "@/app/utils/useProducts";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "../Loading";
 import ProductCard from "../ProductCard";
+import { ProductsContext } from "@/app/context/ProductsContext";
 
 interface BestSellerProps {
   title: string;
@@ -14,7 +14,8 @@ interface BestSellerProps {
 
 const BestSeller = ({ title, withBorder }: BestSellerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { products } = useProducts();
+  const productContext = useContext(ProductsContext);
+  const { products } = productContext!;
   const context = useContext(UserDataContext);
   const { addToCart } = context!;
   const defaultQuantity = 1;

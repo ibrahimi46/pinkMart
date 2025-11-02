@@ -11,6 +11,7 @@ import Sidebar from "./components/Sidebar";
 import { UserDataProvider } from "./context/UserDataContext";
 import Providers from "./providers";
 import { SearchProvider } from "./context/SearchContext";
+import { ProductProvider, ProductsContext } from "./context/ProductsContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,19 +46,21 @@ export default function RootLayout({
         <Providers>
           <UserDataProvider>
             <SearchProvider>
-              {!isAuthPage && (
-                <>
-                  <NavbarGlobal
-                    toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                  />
-                  <Sidebar
-                    isOpen={isSidebarOpen}
-                    closeSidebar={() => setIsSidebarOpen(false)}
-                  />
-                </>
-              )}
-              <main>{children}</main>
-              {!isAccountPage && <Footer />}
+              <ProductProvider>
+                {!isAuthPage && (
+                  <>
+                    <NavbarGlobal
+                      toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                    />
+                    <Sidebar
+                      isOpen={isSidebarOpen}
+                      closeSidebar={() => setIsSidebarOpen(false)}
+                    />
+                  </>
+                )}
+                <main>{children}</main>
+                {!isAccountPage && <Footer />}
+              </ProductProvider>
             </SearchProvider>
           </UserDataProvider>
         </Providers>
