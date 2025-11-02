@@ -264,7 +264,7 @@ const Checkout = ({
           <div>
             <div className="bg-white flex items-center justify-center h-14 w-14 rounded-xl">
               <Image
-                src={assets.home.best_sellers.img1}
+                src={assets.home.category_strip.apple}
                 height={40}
                 width={40}
                 alt="item"
