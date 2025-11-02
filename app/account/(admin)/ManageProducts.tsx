@@ -79,6 +79,7 @@ const AddProductForm = ({
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("folderName", "products");
 
       const res = await fetch(`/api/upload`, {
         method: "POST",

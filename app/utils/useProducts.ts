@@ -20,6 +20,7 @@ const useProducts = (): UseProductsReturnProps => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   
+  
 
   const fetchProducts = useCallback(async () => {
     try {

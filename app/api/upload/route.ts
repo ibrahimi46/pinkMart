@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
         const file = formData.get("file") as File;
+        const folderName = formData.get("folderName") as string;
 
         if (!file) {
             return NextResponse.json({error: "Please select a file"}, {status: 400})
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
         const dataURI = `data:${file.type};base64,${base64}`;
 
         const result = await cloudinary.uploader.upload(dataURI, {
-            folder: "products"
+            folder: folderName
         })
 
         return NextResponse.json({success: "Image uploaded", imageUrl: result.secure_url}, {status: 200})

@@ -21,6 +21,7 @@ export const users = pgTable("users", {
     googleId: text("google_id"),
     phone: text("phone").unique(),
     isAdmin: boolean("is_admin").default(false),
+    image: text("image"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 })
 
