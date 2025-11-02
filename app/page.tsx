@@ -35,7 +35,7 @@ export default function Home() {
             selectedCategory=""
             setSelectedCategory={() => {}}
           />
-          <BestSeller title="Best Seller" withBorder />
+          <BestSeller title="Best Seller" withBorder={false} />
         </>
       )}
     </main>

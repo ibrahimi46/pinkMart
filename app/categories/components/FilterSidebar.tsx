@@ -9,11 +9,11 @@ const FilterSidebar = ({
   onPriceFilter,
   onStockFilter,
 }: FiltersSidebarProps) => {
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 100 });
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
   const [inStockOnly, setInStockOnly] = useState(false);
 
   const handlePriceChange = (type: "min" | "max", value: string) => {
-    const numValue = parseFloat(value) || 0;
+    const numValue = Math.max(0, Number(value)) || 0;
     const newRange = { ...priceRange, [type]: numValue };
     setPriceRange(newRange);
     onPriceFilter(newRange.min, newRange.max);
@@ -26,7 +26,7 @@ const FilterSidebar = ({
   };
 
   const handleClearFilters = () => {
-    setPriceRange({ min: 0, max: 100 });
+    setPriceRange({ min: 0, max: 0 });
     setInStockOnly(false);
     onPriceFilter(0, 100);
     onStockFilter(false);
@@ -53,7 +53,7 @@ const FilterSidebar = ({
           <input
             type="number"
             placeholder="Min"
-            value={priceRange.min}
+            value={priceRange.min === 0 ? "" : priceRange.min}
             onChange={(e) => handlePriceChange("min", e.target.value)}
             className="w-full px-3 py-2 border border-black-300 rounded-lg text-body-sm outline-none focus:border-primary-600 transition-all duration-300"
           />
@@ -61,7 +61,7 @@ const FilterSidebar = ({
           <input
             type="number"
             placeholder="Max"
-            value={priceRange.max}
+            value={priceRange.max === 0 ? "" : priceRange.max}
             onChange={(e) => handlePriceChange("max", e.target.value)}
             className="w-full px-3 py-2 border border-black-300 rounded-lg text-body-sm outline-none focus:border-primary-600 transition-all duration-300"
           />

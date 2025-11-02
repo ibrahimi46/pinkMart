@@ -36,8 +36,8 @@ const BestSeller = ({ title, withBorder }: BestSellerProps) => {
 
   return (
     <div
-      className={`flex flex-col gap-2 p-4 h-auto rounded-3xl bg-white ${
-        withBorder && "border border-black-100"
+      className={`flex flex-col gap-2 h-auto rounded-3xl  ${
+        withBorder && "border border-black-100 bg-white p-4"
       }`}
     >
       {context?.loading && <Loading />}

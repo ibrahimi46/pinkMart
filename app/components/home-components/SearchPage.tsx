@@ -5,6 +5,9 @@ import FilterSidebar from "@/app/categories/components/FilterSidebar";
 import ProductCard from "../ProductCard";
 import { useSearchParams } from "next/navigation";
 import { ProductsContext } from "@/app/context/ProductsContext";
+import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
+import assets from "@/assets";
+import { SearchContext } from "@/app/context/SearchContext";
 
 interface Product {
   id: number;
@@ -26,16 +29,24 @@ const SearchPage = () => {
   const [priceFilter, setPriceFilter] = useState({ min: 0, max: 100 });
   const [stockFilter, setStockFilter] = useState(false);
 
-  const productContext = useContext(ProductsContext);
-  const { products } = productContext!;
   const context = useContext(UserDataContext);
+  const productContext = useContext(ProductsContext);
+  const searchContext = useContext(SearchContext);
+  const { products } = productContext!;
   const { addToCart, loading } = context!;
+  const { searchQuery } = searchContext!;
 
   useEffect(() => {
     if (!products) return;
     let filtered = selectedCategory
       ? products.filter((product) => product.category === selectedCategory)
       : products;
+
+    if (searchQuery) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
 
     filtered = filtered.filter(
       (product) =>
@@ -48,7 +59,8 @@ const SearchPage = () => {
     }
 
     setFilteredProducts(filtered);
-  }, [products, selectedCategory, priceFilter, stockFilter]);
+  }, [products, selectedCategory, priceFilter, stockFilter, searchQuery]);
+
   return (
     <div className="flex gap-4">
       {loading && <Loading />}
@@ -59,13 +71,12 @@ const SearchPage = () => {
         />
       </div>
 
-      <div
-        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6  gap-x-4
-         md:gap-y-8 p-4 overflow-y-auto scrollbar-hide 2xl:grid-cols-7 place-items-center"
-      >
-        {filteredProducts &&
-          filteredProducts.length &&
-          filteredProducts.map((product) => {
+      {filteredProducts && filteredProducts.length > 0 ? (
+        <div
+          className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-4
+         md:gap-y-8 p-4 overflow-y-auto scrollbar-hide 2xl:grid-cols-7"
+        >
+          {filteredProducts.map((product) => {
             return (
               <ProductCard
                 key={product.id}
@@ -77,7 +88,20 @@ const SearchPage = () => {
               />
             );
           })}
-      </div>
+        </div>
+      ) : (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-96">
+            <NoDataPlaceholder
+              icon={assets.icons.close}
+              field1="No products found"
+              field2="Try adjusting your filters"
+              btnName="Clear Filters"
+              handleAction={() => {}}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

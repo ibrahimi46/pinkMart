@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import FilterSidebar from "./components/FilterSidebar";
 import { Suspense } from "react";
 import { ProductsContext } from "../context/ProductsContext";
+import { SearchContext } from "../context/SearchContext";
 
 interface Product {
   id: number;
@@ -42,12 +43,20 @@ const CategoriesPageContent = () => {
   const { products } = productContext!;
   const context = useContext(UserDataContext);
   const { addToCart, loading } = context!;
+  const searchContext = useContext(SearchContext);
+  const { searchQuery } = searchContext!;
 
   useEffect(() => {
     if (!products) return;
     let filtered = selectedCategory
       ? products.filter((product) => product.category === selectedCategory)
       : products;
+
+    if (searchQuery) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
 
     filtered = filtered.filter(
       (product) =>
@@ -60,7 +69,7 @@ const CategoriesPageContent = () => {
     }
 
     setFilteredProducts(filtered);
-  }, [products, selectedCategory, priceFilter, stockFilter]);
+  }, [products, selectedCategory, priceFilter, stockFilter, searchQuery]);
 
   return (
     <main className="flex gap-4 mx-4">

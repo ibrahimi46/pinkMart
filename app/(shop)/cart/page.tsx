@@ -7,13 +7,13 @@ import CartItem from "./components/CartItem";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import DeliveryDateModal from "./components/DeliveryDateModal";
 import { useContext, useEffect, useState } from "react";
-import useProducts from "@/app/utils/useProducts";
 import { generateDeliveryDates } from "@/app/utils/generateDeliveryDates";
 import OrderPlaced from "./components/OrderPlaced";
 import Checkout from "./components/Checkout";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
+import { ProductsContext } from "@/app/context/ProductsContext";
 
 interface DeliveryDates {
   date: Date;
@@ -48,7 +48,8 @@ const Cart = () => {
     handleStepBack,
     handleStepNext,
   } = context!;
-  const { products } = useProducts();
+  const productContext = useContext(ProductsContext);
+  const { products } = productContext!;
 
   useEffect(() => {
     const dates = generateDeliveryDates(2, 10);
