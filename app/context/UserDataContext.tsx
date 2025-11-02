@@ -213,6 +213,8 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
       });
       const data = await res.json();
 
+      console.log("am in getuserslist context");
+      console.log(data.user);
       setUserDetails(data.user);
 
       if (data.user?.isAdmin) {

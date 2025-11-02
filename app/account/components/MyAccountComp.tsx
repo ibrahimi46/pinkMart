@@ -48,11 +48,6 @@ const ProfilePictureUpload = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("sddds");
-    console.log(userPfp);
-  }, []);
-
   return (
     <div className="flex flex-col gap-3 mt-2">
       <h1 className="font-bold mb-2">Profile Picture</h1>

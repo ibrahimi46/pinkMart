@@ -7,6 +7,8 @@ declare module "next-auth" {
       id: number;
       isAdmin?: boolean | null,
       fullName?: string,
+      email?: string,
+      image?: string,
       customToken?: string,
     } & DefaultSession["user"];
   }
@@ -22,5 +24,7 @@ declare module "next-auth/jwt" {
         isAdmin?: boolean,
         fullName?: string,
         customToken?: string,
+        email?: string,
+        image?: string,
     }
 }

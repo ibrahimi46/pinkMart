@@ -50,7 +50,7 @@ const adminMenu = [
 function MyAccountContent() {
   const [activeSection, setActiveSection] = useState<string>("");
   const context = useContext(UserDataContext);
-  const { logout, user, userPfp } = context!;
+  const { logout, userDetails, user, userPfp } = context!;
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -109,7 +109,7 @@ function MyAccountContent() {
                 />
               )}
             </div>
-            <p>{user?.full_name}</p>
+            <p>{userDetails?.fullName}</p>
           </div>
           {!user?.isAdmin
             ? userMenu.map((user) => (
