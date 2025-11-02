@@ -1,12 +1,15 @@
 import Image from "next/image";
 import assets from "@/assets";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
 
 const ProfilePictureUpload = () => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const context = useContext(UserDataContext);
+  const { userPfp, setUserPfp } = context!;
 
   const handleSubmit = async () => {
     if (!file) return;
@@ -27,8 +30,7 @@ const ProfilePictureUpload = () => {
       const data = await res.json();
       const imageUrl = data.imageUrl;
 
-      console.log("am in pfp upload com");
-      console.log(imageUrl);
+      setUserPfp(imageUrl);
 
       if (imageUrl) {
         await fetch("/api/upload-profile-pic", {
@@ -38,7 +40,6 @@ const ProfilePictureUpload = () => {
           },
           body: JSON.stringify({ imageUrl }),
         });
-        console.log("done uploading");
       }
     } catch (err) {
       console.log(err);
@@ -47,19 +48,37 @@ const ProfilePictureUpload = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("sddds");
+    console.log(userPfp);
+  }, []);
+
   return (
     <div className="flex flex-col gap-3 mt-2">
       <h1 className="font-bold mb-2">Profile Picture</h1>
       <div className="flex justify-between border border-black-300 p-3 bg-white rounded-2xl items-center">
         <div className="flex items-center gap-3">
-          <div className="bg-primary-100 rounded-3xl p-4 flex items-center justify-center">
-            <Image
-              src={assets.icons.upload}
-              height={24}
-              width={24}
-              alt="upload"
-            />
-          </div>
+          {userPfp ? (
+            <div className="bg-primary-100 rounded-full flex h-12 w-12 items-center justify-center">
+              <Image
+                src={userPfp}
+                height={60}
+                width={60}
+                alt="user-pfp"
+                className="rounded-full object-cover h-full w-full"
+              />
+            </div>
+          ) : (
+            <div className="bg-primary-100 rounded-3xl p-4 flex items-center justify-center">
+              <Image
+                src={userPfp || assets.icons.upload}
+                height={24}
+                width={24}
+                alt="upload"
+              />
+            </div>
+          )}
+
           <div>
             <h1 className="font-bold text-body-md">Upload Photo</h1>
             <p className="text-black-400 font-bold text-body-sm">

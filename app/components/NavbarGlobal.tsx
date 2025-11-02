@@ -29,7 +29,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
   const [address, setAddress] = useState<NominatimAddress | null>(null);
   const [showCartModal, setShowCartModal] = useState(false);
   const context = useContext(UserDataContext);
-  const { isLoggedIn, cartTotalItems } = context!;
+  const { isLoggedIn, cartTotalItems, userPfp } = context!;
   const { products } = useProducts();
 
   useEffect(() => {
@@ -200,15 +200,26 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                   </div>
                 </div>
                 <Link
-                  href={"/account"}
-                  className="p-2 rounded-full border border-primary-600 bg-white hover:border-black-800 transition-all duration-300"
+                  href="/account"
+                  className="rounded-full h-10 w-10 border border-primary-600 bg-white hover:border-black-800 transition-all duration-300 overflow-hidden"
                 >
-                  <Image
-                    src={assets.icons.account}
-                    height={20}
-                    width={20}
-                    alt="pfp"
-                  />
+                  {userPfp ? (
+                    <Image
+                      src={userPfp}
+                      alt="pfp"
+                      width={40}
+                      height={40}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <Image
+                      src={assets.icons.account}
+                      alt="account"
+                      width={20}
+                      height={20}
+                      className="object-contain w-full h-full p-1"
+                    />
+                  )}
                 </Link>
               </>
             ) : (

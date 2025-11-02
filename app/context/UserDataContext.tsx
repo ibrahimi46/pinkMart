@@ -115,6 +115,7 @@ interface UserDataContextType {
   adminUsers: AdminUser[];
   cartTotalItems: number;
   userPfp: string;
+  setUserPfp: React.Dispatch<React.SetStateAction<string>>;
   fetchUserPfp: () => Promise<void>;
   fetchAdminUsers: () => void;
   updateUserRole: (userId: number, isAdmin: boolean) => void;
@@ -662,6 +663,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
       const data = await res.json();
       if (data?.user?.image) setUserPfp(data.user.image);
+      console.log(userPfp);
     } catch (err) {
       console.error(err);
     } finally {
@@ -671,7 +673,8 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchUserPfp();
-  }, [userPfp]);
+  }, [token]);
+
   // Admin Orders
 
   const fetchAdminOrders = async () => {
@@ -784,6 +787,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         adminUsers,
         cartTotalItems,
         userPfp,
+        setUserPfp,
         fetchUserPfp,
         fetchAdminUsers,
         updateUserRole,

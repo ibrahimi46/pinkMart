@@ -50,7 +50,7 @@ const adminMenu = [
 function MyAccountContent() {
   const [activeSection, setActiveSection] = useState<string>("");
   const context = useContext(UserDataContext);
-  const { logout, user } = context!;
+  const { logout, user, userPfp } = context!;
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -90,12 +90,25 @@ function MyAccountContent() {
       <div className="hidden md:flex w-1/4 max-w-64 py-2 h-[480px] items-start justify-between flex-col">
         <div className="flex w-full flex-col items-start p-4 bg-black-100 border border-black-300 rounded-2xl">
           <div className="flex items-center gap-2 mb-4">
-            <Image
-              src={assets.icons.account}
-              height={50}
-              width={50}
-              alt="pfp"
-            />
+            <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
+              {userPfp ? (
+                <Image
+                  src={userPfp}
+                  alt="pfp"
+                  className="w-full h-full object-cover"
+                  width={40}
+                  height={40}
+                />
+              ) : (
+                <Image
+                  src={assets.icons.account}
+                  alt="account"
+                  className="w-10 h-10 object-contain"
+                  width={24}
+                  height={24}
+                />
+              )}
+            </div>
             <p>{user?.full_name}</p>
           </div>
           {!user?.isAdmin
