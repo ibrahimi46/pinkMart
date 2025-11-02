@@ -1,15 +1,13 @@
 import Image from "next/image";
 import assets from "@/assets";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
 
 const ProfilePictureUpload = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-
   const context = useContext(UserDataContext);
-  const { userPfp, setUserPfp, token } = context!;
+  const { userPfp, setUserPfp, token, setLoading, loading } = context!;
 
   const handleSubmit = async () => {
     if (!file) return;

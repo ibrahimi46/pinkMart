@@ -117,6 +117,7 @@ interface UserDataContextType {
   userPfp: string;
   token: string;
   setUserPfp: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: (value: boolean) => void;
   fetchUserPfp: () => Promise<void>;
   fetchAdminUsers: () => void;
   updateUserRole: (userId: number, isAdmin: boolean) => void;
@@ -791,6 +792,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         cartTotalItems,
         userPfp,
         token,
+        setLoading,
         setUserPfp,
         fetchUserPfp,
         fetchAdminUsers,
