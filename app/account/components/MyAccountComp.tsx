@@ -9,14 +9,14 @@ const ProfilePictureUpload = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const context = useContext(UserDataContext);
-  const { userPfp, setUserPfp } = context!;
+  const { userPfp, setUserPfp, token } = context!;
 
   const handleSubmit = async () => {
     if (!file) return;
 
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
+      console.log("am in handlesubmit myacc");
       if (!token) return;
       const formData = new FormData();
       formData.append("file", file);

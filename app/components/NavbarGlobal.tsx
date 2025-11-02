@@ -201,7 +201,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                 </div>
                 <Link
                   href="/account"
-                  className="rounded-full h-10 w-10 border border-primary-600 bg-white hover:border-black-800 transition-all duration-300 overflow-hidden"
+                  className="rounded-full h-10 w-10 bg-white hover:border-black-800 transition-all duration-300 overflow-hidden"
                 >
                   {userPfp ? (
                     <Image
