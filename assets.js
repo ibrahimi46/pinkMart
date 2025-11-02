@@ -55,6 +55,7 @@ const assets = {
     pending: "/icons/pending.svg",
     search_purple: "/icons/search_purple.svg",
     cart_white: "/icons/cart_white.svg",
+    filter: "/icons/filter.svg",
   },
   onboarding: {
     step1: {
@@ -94,11 +95,6 @@ const assets = {
       apple: "/images/home-images/category-strip/apple.png",
       vegetables: "/images/home-images/category-strip/vegetables.png",
       candy: "/images/home-images/category-strip/candy.png",
-    },
-    best_sellers: {
-      img1: "/images/home-images/best-seller/img1.png",
-      img2: "/images/home-images/best-seller/img2.png",
-      img3: "/images/home-images/best-seller/img3.png",
     },
   },
 };
