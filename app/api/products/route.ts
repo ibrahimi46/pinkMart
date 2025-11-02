@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       name,
       category,
       description,
-      price: price.toString(),
+      currentPrice: price.toString(),
       stock,
       imageUrl: image_url
     }).returning();

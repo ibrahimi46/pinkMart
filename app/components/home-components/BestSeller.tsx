@@ -61,8 +61,8 @@ const BestSeller = ({ title, withBorder }: BestSellerProps) => {
                 <ProductCard
                   name={item.name}
                   icon={item.imageUrl}
-                  currentPrice={Number(item.price).toFixed(2)}
-                  oldPrice={3.99}
+                  currentPrice={Number(item.currentPrice).toFixed(2)}
+                  oldPrice={Number(item.oldPrice).toFixed(2)}
                   capacity={item.stock}
                   addToCart={() => {
                     addToCart(item.id, defaultQuantity);

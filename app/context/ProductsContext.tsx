@@ -6,7 +6,8 @@ interface Product {
   name: string;
   description: string;
   category: string;
-  price: string;
+  oldPrice: string;
+  currentPrice: string;
   stock: number;
   imageUrl: string;
 }

@@ -5,7 +5,7 @@ interface ProductCardProps {
   name: string;
   icon: string;
   currentPrice: string;
-  oldPrice?: number;
+  oldPrice: string;
   capacity: number;
   addToCart: () => void;
 }
