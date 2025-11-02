@@ -15,18 +15,10 @@ type CategoryStripProps = {
 };
 
 const CategoryIcons: Record<string, string> = {
-  drinks: assets.home.category_strip.drinks,
-  carrot: assets.home.category_strip.carrot,
-  cans: assets.home.category_strip.cans,
-  cheese: assets.home.category_strip.cheese,
-  yoghurt: assets.home.category_strip.yoghurt,
-  watermelon: assets.home.category_strip.watermelon,
-  cake: assets.home.category_strip.cake,
-  bread: assets.home.category_strip.bread,
-  snacks: assets.home.category_strip.snacks,
-  apple: assets.home.category_strip.apple,
-  vegetables: assets.home.category_strip.vegetables,
-  candy: assets.home.category_strip.candy,
+  "Fresh Fruits": assets.home.category_strip.fruits,
+  "Fresh Vegetables": assets.home.category_strip.vegetables,
+  "Dairy Products": assets.home.category_strip.dairyProducts,
+  "Meat & Poultry": assets.home.category_strip.meatPoultry,
 };
 
 const CategoryStrip = ({
@@ -85,9 +77,10 @@ const CategoryStrip = ({
               key={idx}
               name={capitalizor(item)}
               icon={CategoryIcons[item]}
+              iconStyle="h-6 w-6"
               iconPosition="left"
-              textStyles="text-body-md"
-              extraStyles={`h-10 min-w-14 max-w-28 px-6 bg-white border hover:border-primary-600 transition-all duration-300 flex-shrink-0
+              textStyles="text-body-md text-nowrap"
+              extraStyles={`h-10 min-w-14 max-w-46 px-3 bg-white border hover:border-primary-600 transition-all duration-300 flex-shrink-0
               ${selectedCategory === item && "border-primary-600"}
             `}
               handleOnClick={() => {
