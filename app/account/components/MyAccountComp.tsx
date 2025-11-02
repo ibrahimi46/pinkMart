@@ -1,8 +1,97 @@
 import Image from "next/image";
 import assets from "@/assets";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
+
+const ProfilePictureUpload = () => {
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSubmit = async () => {
+    if (!file) return;
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folderName", "profile-pics");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      const imageUrl = data.imageUrl;
+
+      console.log("am in pfp upload com");
+      console.log(imageUrl);
+
+      if (imageUrl) {
+        await fetch("/api/upload-profile-pic", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ imageUrl }),
+        });
+        console.log("done uploading");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-3 mt-2">
+      <h1 className="font-bold mb-2">Profile Picture</h1>
+      <div className="flex justify-between border border-black-300 p-3 bg-white rounded-2xl items-center">
+        <div className="flex items-center gap-3">
+          <div className="bg-primary-100 rounded-3xl p-4 flex items-center justify-center">
+            <Image
+              src={assets.icons.upload}
+              height={24}
+              width={24}
+              alt="upload"
+            />
+          </div>
+          <div>
+            <h1 className="font-bold text-body-md">Upload Photo</h1>
+            <p className="text-black-400 font-bold text-body-sm">
+              {file ? file.name : "No file selected"}
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <label
+            htmlFor="profile-upload"
+            className="bg-primary-600 text-white px-3 py-1 rounded-2xl cursor-pointer text-body-sm"
+          >
+            Choose File
+          </label>
+          <input
+            id="profile-upload"
+            type="file"
+            className="hidden"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
+          />
+          <button
+            className="bg-black-100 px-3 py-1 rounded-2xl border border-primary-600 text-body-sm"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? "Uploading..." : "Upload"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 interface AccDetailItems {
   field1?: string;
@@ -28,16 +117,21 @@ const MyAccountComp = () => {
   const { userDetails, loading } = context!;
 
   return (
-    <div className="flex flex-col gap-3 mt-2">
+    <div className="flex flex-col gap-4 mt-2">
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <Loading />
         </div>
       )}
-      <h1 className="font-bold mb-2">Account Details</h1>
-      <AccDetailItems field1="Full Name" field2={userDetails?.fullName} />
-      <AccDetailItems field1="Mobile Number" field2={userDetails?.phone} />
-      <AccDetailItems field1="Email Address" field2={userDetails?.email} />
+      <div className="flex flex-col gap-3">
+        <h1 className="font-bold mb-2">Account Details</h1>
+        <AccDetailItems field1="Full Name" field2={userDetails?.fullName} />
+        <AccDetailItems field1="Mobile Number" field2={userDetails?.phone} />
+        <AccDetailItems field1="Email Address" field2={userDetails?.email} />
+      </div>
+      <div>
+        <ProfilePictureUpload />
+      </div>
     </div>
   );
 };

@@ -114,6 +114,8 @@ interface UserDataContextType {
   adminOrders: AdminOrder[];
   adminUsers: AdminUser[];
   cartTotalItems: number;
+  userPfp: string;
+  fetchUserPfp: () => Promise<void>;
   fetchAdminUsers: () => void;
   updateUserRole: (userId: number, isAdmin: boolean) => void;
   getAdminUserDetails: (userId: number) => Promise<AdminUser | null>;
@@ -160,6 +162,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [orders, setOrders] = useState<Orders[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const [userPfp, setUserPfp] = useState<string>("");
   const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
     "cart"
   ); // Steps in cart
@@ -202,16 +205,23 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
   const getUsersList = async () => {
     try {
-      const res = await fetch("/api/users", {
+      const res = await fetch("/api/users/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const data = await res.json();
-      if (user?.isAdmin) {
-        setUsers(data.users);
-      } else {
-        setUserDetails(data.user);
+
+      setUserDetails(data.user);
+
+      if (data.user?.isAdmin) {
+        const resAll = await fetch("/api/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const allData = await resAll.json();
+        setUsers(allData.users);
       }
     } catch (err) {
       console.error(err);
@@ -638,6 +648,30 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     await getOrders();
   };
 
+  // User pfp functions
+
+  const fetchUserPfp = async () => {
+    try {
+      if (!token) return;
+
+      const res = await fetch("/api/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (data?.user?.image) setUserPfp(data.user.image);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserPfp();
+  }, [userPfp]);
   // Admin Orders
 
   const fetchAdminOrders = async () => {
@@ -749,6 +783,8 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         adminOrders,
         adminUsers,
         cartTotalItems,
+        userPfp,
+        fetchUserPfp,
         fetchAdminUsers,
         updateUserRole,
         getAdminUserDetails,

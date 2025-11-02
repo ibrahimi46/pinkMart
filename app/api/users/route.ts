@@ -22,7 +22,6 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({error: "Invalid token"}, {status: 401})
         }
 
-
         if (decoded.isAdmin) {
 
             const users = await db.select({
@@ -32,18 +31,9 @@ export async function GET(req: NextRequest) {
                 phone: usersTable.phone,
                 isAdmin: usersTable.isAdmin,
                 createdAt: usersTable.createdAt,
+                image: usersTable.image,
             }).from(usersTable).where(eq(usersTable.id, Number(decoded.userId)))
             return NextResponse.json({users})
-        } else {
-            const user = await db.select({
-                id: usersTable.id,
-                fullName: usersTable.fullName,
-                email: usersTable.email,
-                phone: usersTable.phone,
-                isAdmin: usersTable.isAdmin,
-                createdAt: usersTable.createdAt,
-            }).from(usersTable).where(eq(usersTable.id, decoded.userId));
-            return NextResponse.json({user: user[0]})
         } 
         
     }
