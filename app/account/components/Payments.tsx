@@ -242,7 +242,7 @@ const Payments = () => {
         <>
           {paymentMethods && paymentMethods.length > 0 ? (
             <div className="flex flex-col gap-4 mt-2">
-              <h1 className="font-bold">My Payments</h1>
+              <h1 className="font-bold text-body-2xl">My Payments</h1>
               {paymentMethods.map((method) => {
                 return (
                   <PaymentMethodItem
@@ -277,7 +277,7 @@ const Payments = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-4 mt-2">
-              <h1 className="font-bold">My Payments</h1>
+              <h1 className="font-bold text-body-2xl">My Payments</h1>
               <NoDataPlaceholder
                 icon={assets.icons.card_purple}
                 field1="You don't have any payment methods"

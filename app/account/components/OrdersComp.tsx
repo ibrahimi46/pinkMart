@@ -168,7 +168,7 @@ const OrdersComp = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-4 mt-2">
-          <h1 className="hidden md:block font-bold">My Orders</h1>
+          <h1 className="hidden md:block font-bold text-body-2xl">My Orders</h1>
           <NoDataPlaceholder
             btnName="Start Shopping"
             btnIcon={assets.icons.cart}

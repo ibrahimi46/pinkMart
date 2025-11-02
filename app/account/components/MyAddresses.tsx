@@ -157,7 +157,7 @@ const MyAddresses = () => {
         <>
           {addresses && addresses.length > 0 ? (
             <div className="mt-2 flex flex-col gap-6">
-              <h1 className="font-semibold">My Addresses</h1>
+              <h1 className="font-semibold text-body-2xl">My Addresses</h1>
               {addresses &&
                 addresses.map((address) => {
                   return (
@@ -192,7 +192,7 @@ const MyAddresses = () => {
           ) : (
             <>
               <div className="flex flex-col gap-4 mt-2">
-                <h1 className="font-bold">My Addresses</h1>
+                <h1 className="font-bold text-body-2xl">My Addresses</h1>
                 <NoDataPlaceholder
                   btnName="Add New Address"
                   field1="You don't have any added addresses"

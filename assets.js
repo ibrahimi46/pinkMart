@@ -56,6 +56,7 @@ const assets = {
     search_purple: "/icons/search_purple.svg",
     cart_white: "/icons/cart_white.svg",
     filter: "/icons/filter.svg",
+    card: "/icons/card.svg",
   },
   onboarding: {
     step1: {

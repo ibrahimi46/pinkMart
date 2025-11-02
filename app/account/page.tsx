@@ -15,6 +15,7 @@ import Analytics from "./(admin)/Analytics";
 import { UserDataContext } from "../context/UserDataContext";
 import { useSearchParams } from "next/navigation";
 import Loading from "../components/Loading";
+import HelpCenter from "./components/HelpCenter";
 
 const userMenu = [
   {
@@ -82,6 +83,8 @@ function MyAccountContent() {
         return <ManageUsers />;
       case "analytics":
         return <Analytics />;
+      case "help-center":
+        return <HelpCenter />;
     }
   };
   return (
@@ -138,18 +141,11 @@ function MyAccountContent() {
 
           <hr className="border-black-200 my-2 border-t-1 w-full" />
           <Button
-            name="Settings"
-            iconPosition="left"
-            icon={assets.icons.settings}
-            textStyles="text-body-md"
-            handleOnClick={() => setActiveSection("settings")}
-          />
-          <Button
             name="Help Center"
             iconPosition="left"
             icon={assets.icons.help}
             textStyles="text-body-md"
-            handleOnClick={() => setActiveSection("help")}
+            handleOnClick={() => setActiveSection("help-center")}
           />
         </div>
         <div className="w-full">
