@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { cart as CartTable, cartItems as CartItemsTable, products, cartItems } from "@/db/schema";
+import { cart as CartTable, cartItems as CartItemsTable, products } from "@/db/schema";
 import jwt from "jsonwebtoken"
 import {eq, and} from "drizzle-orm";
 
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
             cartId: CartItemsTable.cartId,
             productId: CartItemsTable.productId,
             quantity: CartItemsTable.quantity,
-            price: products.price
+            price: products.currentPrice
         }).from(CartItemsTable).innerJoin(products, eq(products.id, CartItemsTable.productId)).where(eq(CartItemsTable.cartId, userCart.id));
         return NextResponse.json({items: cartProducts}, {status: 200})
 

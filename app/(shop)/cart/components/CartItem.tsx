@@ -9,7 +9,7 @@ interface ProductProps {
     name: string;
     description: string;
     category: string;
-    price: string;
+    currentPrice: string;
     stock: number;
     imageUrl: string;
   };
@@ -36,14 +36,14 @@ const CartItem = ({
               height={48}
               width={48}
               alt=""
-              className="object-cover h-full w-full rounded-xl"
+              className="object-cover h-full w-full rounded-xl border shadow-sm"
             />
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-body-sm font-medium truncate">{product?.name}</p>
             <div className="flex gap-2 text-body-sm">
               <p className="text-primary-600">
-                ${parseFloat(product?.price).toFixed(2)}
+                ${parseFloat(product?.currentPrice).toFixed(2)}
               </p>
             </div>
           </div>
@@ -100,7 +100,7 @@ const CartItem = ({
               compact ? "hidden" : "hidden sm:block"
             }`}
           >
-            ${(Number(product.price) * quantity).toFixed(2)}
+            ${(Number(product.currentPrice) * quantity).toFixed(2)}
           </p>
         </div>
       </div>

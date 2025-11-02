@@ -21,7 +21,7 @@ const ProductCard = ({
   return (
     <div className="flex flex-col gap-3 justify-between w-full">
       {/** Item image container */}
-      <div className="relative flex items-center justify-center aspect-square">
+      <div className="relative flex items-center bg-white border shadow-sm rounded-3xl justify-center aspect-square">
         <Image src={icon} fill alt="" className="rounded-3xl" />
 
         <div
