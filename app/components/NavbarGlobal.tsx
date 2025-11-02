@@ -7,6 +7,7 @@ import { UserDataContext } from "../context/UserDataContext";
 import reverseGeocode from "../utils/reverseGeocode";
 import CartModal from "./CartModal";
 import useProducts from "../utils/useProducts";
+import { SearchContext } from "../context/SearchContext";
 
 interface NavbarGlobalProps {
   toggleSidebar: () => void;
@@ -29,6 +30,8 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
   const [address, setAddress] = useState<NominatimAddress | null>(null);
   const [showCartModal, setShowCartModal] = useState(false);
   const context = useContext(UserDataContext);
+  const searchContext = useContext(SearchContext);
+  const { searchQuery, setSearchQuery } = searchContext!;
   const { isLoggedIn, cartTotalItems, userPfp } = context!;
   const { products } = useProducts();
 
@@ -94,7 +97,8 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
             </div>
             <input
               type="text"
-              placeholder="Search by..."
+              placeholder={searchQuery || "Search by..."}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="border-none outline-0 focus:ring-0  w-full rounded-3xl px-2 py-1 text-body-md"
             />
           </div>
@@ -183,7 +187,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                           {cartTotalItems}
                         </p>
                       </div>
-                      <div>Cart</div>
+                      <div className="text-body-md">Cart</div>
                     </div>
                   </Link>
                   <div

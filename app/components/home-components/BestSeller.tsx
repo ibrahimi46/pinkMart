@@ -35,8 +35,8 @@ const BestSeller = ({ title, withBorder }: BestSellerProps) => {
 
   return (
     <div
-      className={`flex flex-col gap-6 ${
-        withBorder && "border border-black-100 p-4 rounded-3xl bg-white"
+      className={`flex flex-col gap-2 p-4 h-auto rounded-3xl bg-white ${
+        withBorder && "border border-black-100"
       }`}
     >
       {context?.loading && <Loading />}
@@ -49,21 +49,25 @@ const BestSeller = ({ title, withBorder }: BestSellerProps) => {
           </div>
         </div>
       </div>
-      <div className="flex gap-4 overflow-auto scrollbar-hide" ref={scrollRef}>
+      <div
+        className="flex gap-4 h-72 overflow-auto scrollbar-hide items-center"
+        ref={scrollRef}
+      >
         {products &&
           products.map((item) => {
             return (
-              <ProductCard
-                key={item.id}
-                name={item.name}
-                icon={item.imageUrl}
-                currentPrice={Number(item.price).toFixed(2)}
-                oldPrice={3.99}
-                capacity={item.stock}
-                addToCart={() => {
-                  addToCart(item.id, defaultQuantity);
-                }}
-              />
+              <div key={item.id} className="w-36 h-64 flex-shrink-0">
+                <ProductCard
+                  name={item.name}
+                  icon={item.imageUrl}
+                  currentPrice={Number(item.price).toFixed(2)}
+                  oldPrice={3.99}
+                  capacity={item.stock}
+                  addToCart={() => {
+                    addToCart(item.id, defaultQuantity);
+                  }}
+                />
+              </div>
             );
           })}
       </div>
