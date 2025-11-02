@@ -90,7 +90,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
 
           {/** search bar */}
           <div className="lg:w-80 xl:flex-1 md:flex hidden w-56 sm:w-72 md:max-w-2xl items-center gap-2 rounded-3xl py-1 px-3 border-primary-500 border">
-            <div className="bg-primary-200 p-1 rounded-full">
+            <div className="bg-primary-100 p-1 rounded-full">
               <Image
                 src={assets.icons.search_purple}
                 height={20}
