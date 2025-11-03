@@ -20,6 +20,8 @@ const CategoryIcons: Record<string, string> = {
   "Dairy Products": assets.home.category_strip.dairyProducts,
   "Meat & Poultry": assets.home.category_strip.meatPoultry,
   "Breakfast Foods": assets.home.category_strip.breakfast,
+  "Pasta & Noodles": assets.home.category_strip.pasta_noodles,
+  "Rice, Grains & Legumes": assets.home.category_strip.grains,
   Seafood: assets.home.category_strip.seafood,
   Bakery: assets.home.category_strip.bakery,
 };
