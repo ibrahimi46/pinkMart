@@ -4,36 +4,29 @@ import BackButton from "@/app/components/BackButton";
 import { useContext, useEffect, useState } from "react";
 import AddressItem from "@/app/components/AddressItem";
 import { UserDataContext } from "@/app/context/UserDataContext";
-import PaymentMethodItem from "@/app/components/PaymentMethodItem";
 import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
-import { PaymentMethod } from "@/types";
+import { ProductsContext } from "@/app/context/ProductsContext";
 
 interface CheckoutProps {
   handleStepNext: (step: string) => void;
   selectedDeliveryDate: string;
-  setSelectedPaymentMethod: (payment: PaymentMethod | null) => void;
-  selectedPaymentId: number | null;
   selectedAddressId: number | null;
-  setSelectedPaymentId: (value: number | null) => void;
   setSelectedAddressId: (value: number | null) => void;
 }
 
 const Checkout = ({
   selectedDeliveryDate,
   selectedAddressId,
-  selectedPaymentId,
   setSelectedAddressId,
-  setSelectedPaymentId,
-  setSelectedPaymentMethod,
   handleStepNext,
 }: CheckoutProps) => {
   const [showAddresses, setShowAddresses] = useState<boolean>(false);
-  const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
 
   const context = useContext(UserDataContext);
-  const { loading, addresses, defaultAddress, paymentMethods, defaultPayment } =
-    context!;
+  const productsContext = useContext(ProductsContext);
+  const { loading, addresses, defaultAddress, cartItems } = context!;
+  const { products } = productsContext!;
 
   useEffect(() => {
     if (defaultAddress) {
@@ -41,23 +34,9 @@ const Checkout = ({
     }
   }, [defaultAddress]);
 
-  useEffect(() => {
-    if (defaultPayment) {
-      setSelectedPaymentId(defaultPayment.id!);
-    }
-  }, [defaultPayment]);
-
   const selectedAddress = addresses.find(
     (addr) => addr.id === selectedAddressId
   );
-
-  const selectedPayment = paymentMethods.find(
-    (method) => method.id === selectedPaymentId
-  );
-
-  useEffect(() => {
-    setSelectedPaymentMethod(selectedPayment || null);
-  }, [selectedPayment, setSelectedPaymentMethod]);
 
   useEffect(() => {
     if (
@@ -68,16 +47,6 @@ const Checkout = ({
     }
   }, [addresses, selectedAddressId]);
 
-  useEffect(() => {
-    if (
-      selectedPaymentId &&
-      !paymentMethods.find((pm) => pm.id === selectedPaymentId)
-    ) {
-      setSelectedPaymentId(null);
-      setSelectedPaymentMethod(null); // clear the parent state
-    }
-  }, [paymentMethods, selectedPaymentId, setSelectedPaymentMethod]);
-
   const handleAddressSelection = (id: number) => {
     if (id !== null) {
       setSelectedAddressId(id);
@@ -85,12 +54,15 @@ const Checkout = ({
     }
   };
 
-  const handlePaymentSelection = (id: number) => {
-    if (id !== null) {
-      setSelectedPaymentId(id);
-      setShowPaymentMethods(false);
-    }
-  };
+  const cartProductImages =
+    context && products
+      ? context.cartItems
+          .map((item) => {
+            const product = products.find((p) => p.id === item.productId);
+            return product ? product.imageUrl : null;
+          })
+          .filter((img): img is string => img !== null)
+      : [];
 
   return (
     <div className="flex flex-col gap-4 bg-white p-4 rounded-3xl border border-black-100">
@@ -185,94 +157,35 @@ const Checkout = ({
           withNavigate
         />
       )}
-      {/** Payment Method Container */}
-      {paymentMethods && paymentMethods.length > 0 ? (
-        showPaymentMethods ? (
-          <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
-            {paymentMethods.map((method) => (
-              <PaymentMethodItem
-                key={method.id}
-                provider={method.provider}
-                cardNumber={method.cardNumber}
-                expiryDate={method.expiryDate}
-                isDefault={method.isDefault!}
-                onSelect={handlePaymentSelection}
-                id={method.id}
-              />
-            ))}
-          </div>
-        ) : (
-          <div
-            className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3"
-            onClick={() => setShowPaymentMethods(true)}
-          >
-            <div className="flex justify-between">
-              <h1 className="font-semibold">Payment Method</h1>
-              <Image
-                src={assets.icons.arrow_right}
-                height={25}
-                width={25}
-                alt="right"
-              />
-            </div>
-            <div className="flex gap-4 text-body-sm md:text-body-md">
-              <p>Pay with:</p>
-              <div className="flex gap-2 items-center ml-2">
-                <Image
-                  src={assets.icons.card_purple}
-                  height={25}
-                  width={25}
-                  alt="card"
-                />
-                <p className="text-primary-600">{`${selectedPayment?.provider} - ${selectedPayment?.cardNumber}`}</p>
-              </div>
-              {selectedPayment?.expiryDate && (
-                <p className="text-black-500 ml-8 text-body-sm">
-                  {selectedPayment.expiryDate}
-                </p>
-              )}
-            </div>
-          </div>
-        )
-      ) : (
-        <NoDataPlaceholder
-          btnName="Add New Payment Method"
-          field1="You don't have any added Payment Method"
-          field2="Add a payment method to place an order!"
-          btnIcon={assets.icons.plus}
-          icon={assets.icons.card_purple}
-          navigateTo="/account?page=payments"
-          withNavigate
-        />
-      )}
 
       {/** Review order container */}
 
-      <div className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3">
+      <div
+        className="border border-black-100 p-5 rounded-2xl flex flex-col gap-3 cursor-pointer"
+        onClick={() => handleStepNext("cart")}
+      >
         <div className="flex justify-between">
           <h1 className="font-semibold">Review Order</h1>
         </div>
 
-        <div
-          className="bg-black-100 p-4 rounded-xl flex justify-between"
-          onClick={() => handleStepNext("cart")}
-        >
-          <div>
-            <div className="bg-white flex items-center justify-center h-14 w-14 rounded-xl">
-              <Image
-                src={assets.home.category_strip.vegetables}
-                height={40}
-                width={40}
-                alt="item"
-              />
-            </div>
-          </div>
-          <Image
-            src={assets.icons.arrow_right}
-            height={25}
-            width={25}
-            alt="right"
-          />
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+          {cartProductImages.length > 0 ? (
+            cartProductImages.map((img, idx) => (
+              <div
+                key={idx}
+                className="bg-white flex items-center justify-center border shadow-sm h-14 w-14 rounded-xl flex-shrink-0"
+              >
+                <Image
+                  src={img!}
+                  height={50}
+                  width={50}
+                  alt={`product-${idx}`}
+                />
+              </div>
+            ))
+          ) : (
+            <p className="text-body-sm text-gray-500">No items in cart</p>
+          )}
         </div>
       </div>
     </div>

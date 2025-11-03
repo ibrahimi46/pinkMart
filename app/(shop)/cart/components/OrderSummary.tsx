@@ -2,7 +2,6 @@ import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
-import { PaymentMethod } from "@/types";
 
 type DeliveryAddress = {
   aptNumber?: string | null;
@@ -21,11 +20,9 @@ type OrderItem = {
 
 interface OrderSummaryProps {
   selectedDeliveryDate: string;
-  selectedPaymentMethod: PaymentMethod | null;
   handleStepNext: (step: string) => void;
   step: string;
   selectedAddressId: number | null;
-  selectedPaymentId: number | null;
   orderData: {
     orderId: number;
     status: string;
@@ -40,9 +37,7 @@ interface OrderSummaryProps {
 
 const OrderSummary = ({
   selectedDeliveryDate,
-  selectedPaymentMethod,
   selectedAddressId,
-  selectedPaymentId,
   orderData,
   handleStepNext,
   step,
@@ -59,15 +54,7 @@ const OrderSummary = ({
       !selectedDeliveryDate ||
       selectedDeliveryDate === "");
 
-  const isPlaceOrderDisabled =
-    step === "checkout" &&
-    (!selectedDeliveryDate ||
-      !selectedPaymentMethod ||
-      cartItems.length < 1 ||
-      context?.addresses.length === 0);
-
   const handleCheckout = async () => {
-    if (isPlaceOrderDisabled) return;
     try {
       setLoading(true);
       const res = await fetch("/api/checkout", {
@@ -82,7 +69,6 @@ const OrderSummary = ({
           finalCheckoutPrice,
           selectedDeliveryDate,
           selectedAddressId,
-          selectedPaymentId,
         }),
       });
 
@@ -100,6 +86,8 @@ const OrderSummary = ({
     }
   };
 
+  const isPlaceOrderDisabled =
+    step === "checkout" && (!selectedAddressId || !selectedDeliveryDate);
   return step !== "order_placed" ? (
     <div className="bg-white w-full p-6 rounded-3xl h-64 border border-black-100 flex flex-col gap-4">
       <h1 className="text-body-lg font-bold">Order Summary</h1>
@@ -144,16 +132,22 @@ const OrderSummary = ({
       ) : (
         <div
           className={`bg-primary-600 text-center text-white font-semibold w-full px-4 py-2 
-            text-body-md cursor-pointer rounded-full md:w-64
-            ${
-              isPlaceOrderDisabled
-                ? "cursor-not-allowed opacity-50"
-                : "cursor-pointer "
-            }
-            `}
-          onClick={handleCheckout}
+    text-body-md rounded-full md:w-64 ${
+      isPlaceOrderDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+    }`}
+          onClick={() => {
+            if (!isPlaceOrderDisabled) handleCheckout();
+          }}
         >
-          <p>Place Order</p>
+          <div className="flex gap-2 items-center justify-center">
+            <div>Pay With</div>
+            <Image
+              src={assets.icons.stripe_logo}
+              height={30}
+              width={50}
+              alt="stripe"
+            />
+          </div>
         </div>
       )}
     </div>
@@ -176,20 +170,6 @@ const OrderSummary = ({
           <h1 className="text-body-lg font-bold">Total</h1>
           <p className="mr-4">
             ${Number(orderData?.totalAmount) + deliveryFee}
-          </p>
-        </div>
-      </div>
-      <div className="bg-white p-4 rounded-3xl flex flex-col gap-2">
-        <h1 className="font-semibold text-body-md">Pay With</h1>
-        <div className="flex gap-2">
-          <Image
-            src={assets.icons.mastercard}
-            height={25}
-            width={25}
-            alt="mastercard"
-          />
-          <p className="text-primary-600 text-body-sm md:text-body-md">
-            {`${orderData?.paymentProvider} - ${orderData?.cardNumber}`}
           </p>
         </div>
       </div>

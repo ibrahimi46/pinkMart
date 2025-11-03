@@ -5,7 +5,6 @@ import assets from "@/assets";
 import Image from "next/image";
 import MyAccountComp from "./components/MyAccountComp";
 import OrdersComp from "./components/OrdersComp";
-import Payments from "./components/Payments";
 import MyAddresses from "./components/MyAddresses";
 import AdminDashboard from "./(admin)/AdminDashboard";
 import ManageProducts from "./(admin)/ManageProducts";
@@ -25,7 +24,6 @@ const userMenu = [
   },
   { name: "My Orders", icon: assets.icons.orders, key: "orders" },
   { name: "Addresses", icon: assets.icons.location, key: "addresses" },
-  { name: "Payments", icon: assets.icons.payment, key: "payments" },
 ];
 
 const adminMenu = [
@@ -62,7 +60,6 @@ function MyAccountContent() {
       setActiveSection("admin-dashboard");
     } else if (!user?.isAdmin) {
       if (section === "addresses") setActiveSection("addresses");
-      else if (section === "payments") setActiveSection("payments");
     }
   }, [user, searchParams]);
 
@@ -72,8 +69,6 @@ function MyAccountContent() {
         return <MyAccountComp />;
       case "orders":
         return <OrdersComp />;
-      case "payments":
-        return <Payments />;
       case "addresses":
         return <MyAddresses />;
       case "admin-dashboard":

@@ -58,6 +58,7 @@ const assets = {
     filter: "/icons/filter.svg",
     card: "/icons/card.svg",
     red_fail: "/icons/red_fail.svg",
+    stripe_logo: "/icons/stripe_logo.svg",
   },
   onboarding: {
     step1: {

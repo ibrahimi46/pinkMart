@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
                 userId: parseInt(metadata.userId),
                 totalAmount: metadata.finalCheckoutPrice,
                 deliveryDate: new Date (metadata.selectedDeliveryDate),
-                paymentMethodId: parseInt(metadata.selectedPaymentId),
                 deliveryAddressId: parseInt(metadata.selectedAddressId),
                 
             }).returning();

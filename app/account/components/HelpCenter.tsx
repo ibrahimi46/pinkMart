@@ -118,12 +118,6 @@ const HelpCenter = () => {
       icon: assets.icons.account,
       navigateTo: "account-details",
     },
-    {
-      title: "Payment Issues",
-      description: "Resolve payment and billing problems",
-      icon: assets.icons.card,
-      navigateTo: "payments",
-    },
   ];
 
   return (

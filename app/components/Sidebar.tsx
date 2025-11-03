@@ -146,16 +146,6 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                         textStyles="text-body-md"
                       />
                     </Link>
-                    <Link href={"/account?page=account-details"}>
-                      <Button
-                        name="My Payments"
-                        icon={assets.icons.users}
-                        handleOnClick={closeSidebar}
-                        iconPosition="left"
-                        extraStyles="px-4 border border-black-200 hover:border-primary-600 transition-all duration-300 w-full"
-                        textStyles="text-body-md"
-                      />
-                    </Link>
                   </div>
                 )}
               </>

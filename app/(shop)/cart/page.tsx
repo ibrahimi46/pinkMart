@@ -14,7 +14,7 @@ import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import { ProductsContext } from "@/app/context/ProductsContext";
-import { PaymentMethod, DeliveryDates } from "@/types";
+import { DeliveryDates } from "@/types";
 import { useSearchParams } from "next/navigation";
 import OrderFailed from "./components/OrderFailed";
 
@@ -49,12 +49,7 @@ const CartContent = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null
   );
-  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
-    null
-  );
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
-  const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<PaymentMethod | null>(null);
 
   const context = useContext(UserDataContext);
   const {
@@ -224,11 +219,8 @@ const CartContent = () => {
           <Checkout
             handleStepNext={handleStepNext}
             selectedDeliveryDate={selectedDeliveryDate}
-            setSelectedPaymentMethod={setSelectedPaymentMethod}
             selectedAddressId={selectedAddressId!}
-            selectedPaymentId={selectedPaymentId!}
             setSelectedAddressId={setSelectedAddressId}
-            setSelectedPaymentId={setSelectedPaymentId}
           />
         )}
 
@@ -292,11 +284,9 @@ const CartContent = () => {
       <div>
         <OrderSummary
           selectedDeliveryDate={selectedDeliveryDate}
-          selectedPaymentMethod={selectedPaymentMethod}
           handleStepNext={handleStepNext}
           step={step}
           selectedAddressId={selectedAddressId}
-          selectedPaymentId={selectedPaymentId}
           orderData={orderData}
         />
       </div>

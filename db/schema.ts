@@ -97,7 +97,7 @@ export const orders = pgTable("orders", {
     status: text("status").default("Pending").notNull(),
     deliveryDate: timestamp("delivery_date"),
     deliveryAddressId: integer("delivery_address_id").notNull(),
-    paymentMethodId: integer("payment_method_id").notNull(),
+    paymentMethod: text("payment_method").default("Stripe").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow()
 })
 
@@ -107,19 +107,6 @@ export const orderItems = pgTable("orderItems", {
     productId: integer("product_id").notNull(),
     quantity: integer("quantity").notNull().default(0),
     priceAtPurchase: numeric("price_at_purchase").notNull(),
-})
-
-
-export const paymentMethods = pgTable("paymentMethods", {
-    id: serial("id").primaryKey(),
-    userId: integer("user_id").notNull(),
-    type: varchar("type").notNull(),          
-    provider: varchar("provider").notNull(),  
-    cardNumber: varchar("card_number").notNull(),
-    expiryDate: varchar("expiry_date").notNull(), 
-    cvv: varchar("cvv").notNull(),
-    isDefault: boolean("is_default").default(false),
-    createdAt: timestamp("created_at").defaultNow(),
 })
 
 

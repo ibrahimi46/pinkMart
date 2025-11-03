@@ -11,7 +11,6 @@ import {
   Orders,
   UserDetails,
   CartItem,
-  PaymentMethod,
   AdminOrder,
   AdminUser,
   Address,
@@ -24,12 +23,10 @@ interface UserDataContextType {
   userDetails: UserDetails | null;
   cartItems: CartItem[];
   addresses: Address[];
-  paymentMethods: PaymentMethod[];
   loading: boolean;
   cartTotal: number;
   isLoggedIn: boolean;
   defaultAddress: Address | null;
-  defaultPayment: PaymentMethod | null;
   step: string;
   orders: Orders[];
   adminOrders: AdminOrder[];
@@ -51,13 +48,10 @@ interface UserDataContextType {
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
   logout: () => void;
-  addPaymentMethod: (paymentMethod: PaymentMethod) => Promise<void>;
-  deletePayment: (id: number) => Promise<void>;
   addToCart: (productId: number, quantity: number) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
   updateCart: (productId: number, quantity: number) => Promise<void>;
   refetchAddresses: () => Promise<void>;
-  refetchPaymentMethods: () => Promise<void>;
   refetchCartItems: () => Promise<void>;
   refetchAll: () => Promise<void>;
   setStep: (value: string) => void;
@@ -74,7 +68,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+
   const [adminOrders, setAdminOrders] = useState<AdminOrder[]>([]);
   const [orderId, setOrderId] = useState<number | null>(null);
   const [orders, setOrders] = useState<Orders[]>([]);
@@ -298,93 +292,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
   const refetchAddresses = async () => {
     await getAddresses();
-  };
-  // Payment Functions
-  const addPaymentMethod = async ({
-    type,
-    provider,
-    cardNumber,
-    expiryDate,
-    cvv,
-    isDefault,
-  }: PaymentMethod) => {
-    if (!type || !provider || !cardNumber || !expiryDate || !cvv) return;
-
-    try {
-      setLoading(true);
-      if (!token) return;
-      const res = await fetch("/api/paymentMethods", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          type,
-          provider,
-          cardNumber,
-          expiryDate,
-          cvv,
-          isDefault,
-        }),
-      });
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getPaymentMethods = async () => {
-    try {
-      setLoading(true);
-      if (!token) return;
-      const res = await fetch("/api/paymentMethods", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      setPaymentMethods(data.methods);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deletePayment = async (id: number) => {
-    if (!token) return;
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/paymentMethods/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      if (data) refetchPaymentMethods();
-      return data;
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const defaultPayment = useMemo(() => {
-    if (paymentMethods.length === 0) return null;
-    return (
-      paymentMethods?.find((method) => method.isDefault) || paymentMethods?.[0]
-    );
-  }, [paymentMethods]);
-
-  const refetchPaymentMethods = async () => {
-    await getPaymentMethods();
   };
 
   // Cart Functions
@@ -625,7 +532,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const refetchAll = useCallback(async () => {
     await Promise.all([
       refetchAddresses(),
-      refetchPaymentMethods(),
       refetchCartItems(),
       refetchOrders(),
     ]);
@@ -649,12 +555,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         userDetails,
         cartItems,
         addresses,
-        paymentMethods,
         loading,
         cartTotal,
         isLoggedIn,
         defaultAddress,
-        defaultPayment,
         step,
         orders,
         adminOrders,
@@ -675,15 +579,11 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         getAddresses,
         addAddress,
         deleteAddress,
-        addPaymentMethod,
-        deletePayment,
         addToCart,
         removeFromCart,
         updateCart,
         refetchAddresses,
         refetchCartItems,
-        refetchPaymentMethods,
-
         refetchAll,
         setStep,
         handleStepNext,

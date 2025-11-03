@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
         if (!decoded) return NextResponse.json({error: "Missing token"}, {status: 401})
 
-        const {finalCheckoutPrice, selectedDeliveryDate, cartItems, selectedAddressId, selectedPaymentId} = await req.json();
+        const {finalCheckoutPrice, selectedDeliveryDate, cartItems, selectedAddressId, selectedPaymentMethodId} = await req.json();
 
         if (!cartItems.length) return NextResponse.json({error: "cart is empty"}, {status: 400});
 
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
             userId: decoded.userId,
             totalAmount: finalCheckoutPrice,
             deliveryDate: new Date(selectedDeliveryDate),
-            paymentMethodId: selectedPaymentId,
+            paymentMethod: selectedPaymentMethodId,
             deliveryAddressId: selectedAddressId,
 
         }).returning();

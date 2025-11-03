@@ -22,16 +22,6 @@ export interface Address {
   isDefault: boolean;
 }
 
-export interface PaymentMethod {
-  id?: number;
-  type: string;
-  provider: string;
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-  isDefault?: boolean;
-}
-
 
 export interface CartItem {
   id: number;

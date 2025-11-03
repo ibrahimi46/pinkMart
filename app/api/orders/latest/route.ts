@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken"
 import { db } from "@/db";
 import { eq, desc } from "drizzle-orm";
-import { orders as OrderTable, orderItems as OrderItemsTable, products, addresses, paymentMethods } from "@/db/schema";
+import { orders as OrderTable, orderItems as OrderItemsTable, products, addresses } from "@/db/schema";
 
 export async function GET(req: NextRequest) {
     try {
@@ -25,15 +25,12 @@ export async function GET(req: NextRequest) {
                 deliveryDate: OrderTable.deliveryDate,
                 totalAmount: OrderTable.totalAmount,
                 status: OrderTable.status,
-                paymentProvider: paymentMethods.provider,
-                cardNumber: paymentMethods.cardNumber,
                 aptNumber: addresses.aptNumber,
                 streetAddress: addresses.streetAddress,
                 city: addresses.city,
                 zipCode: addresses.zipCode,
             })
             .from(OrderTable)
-            .leftJoin(paymentMethods, eq(paymentMethods.id, OrderTable.paymentMethodId))
             .leftJoin(addresses, eq(addresses.id, OrderTable.deliveryAddressId))
             .where(eq(OrderTable.userId, decoded.userId))
             .orderBy(desc(OrderTable.createdAt))
@@ -59,8 +56,6 @@ export async function GET(req: NextRequest) {
             deliveryDate: latestOrder.deliveryDate,
             totalAmount: latestOrder.totalAmount,
             status: latestOrder.status,
-            paymentProvider: latestOrder.paymentProvider,
-            cardNumber: latestOrder.cardNumber,
             deliveryAddress: {
                 aptNumber: latestOrder.aptNumber,
                 streetAddress: latestOrder.streetAddress,
