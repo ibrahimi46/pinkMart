@@ -89,6 +89,7 @@ export async function GET(req:NextRequest) {
             status: OrderTable.status,
             deliveryDate: OrderTable.deliveryDate,
             createdAt: OrderTable.createdAt,
+            deliveryAddressId: OrderTable.deliveryAddressId,
             itemCount: sql<number>`COUNT(${OrderItemsTable.id})`.as("itemCount"),
         }).from(OrderTable).leftJoin(OrderItemsTable, eq(OrderTable.id, OrderItemsTable.orderId)).where(eq(OrderTable.userId, decoded.userId)).groupBy(OrderTable.id);
         

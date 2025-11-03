@@ -57,6 +57,9 @@ export async function POST(req: NextRequest) {
             if (userCart) {
                 await db.delete(CartItemsTable).where(eq(CartItemsTable.cartId, userCart.id));
                 await db.delete(CartsTable).where(eq(CartsTable.user_id, parseInt(metadata.userId)));
+
+
+            
       }
 
 

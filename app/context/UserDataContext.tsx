@@ -94,7 +94,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
       setToken(userToken);
       return;
     }
-
     if (session?.user?.customToken) {
       setToken(session?.user?.customToken);
     }

@@ -4,6 +4,21 @@ import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 import { PaymentMethod } from "@/types";
 
+type DeliveryAddress = {
+  aptNumber?: string | null;
+  streetAddress?: string | null;
+  city?: string | null;
+  zipCode?: string | null;
+};
+
+type OrderItem = {
+  id: number;
+  name: string;
+  quantity: number;
+  priceAtPurchase: number;
+  imageUrl?: string;
+};
+
 interface OrderSummaryProps {
   selectedDeliveryDate: string;
   selectedPaymentMethod: PaymentMethod | null;
@@ -11,6 +26,16 @@ interface OrderSummaryProps {
   step: string;
   selectedAddressId: number | null;
   selectedPaymentId: number | null;
+  orderData: {
+    orderId: number;
+    status: string;
+    deliveryDate: string;
+    totalAmount: number;
+    paymentProvider: string;
+    cardNumber: string;
+    deliveryAddress: DeliveryAddress;
+    items: OrderItem[];
+  } | null;
 }
 
 const OrderSummary = ({
@@ -18,6 +43,7 @@ const OrderSummary = ({
   selectedPaymentMethod,
   selectedAddressId,
   selectedPaymentId,
+  orderData,
   handleStepNext,
   step,
 }: OrderSummaryProps) => {
@@ -25,7 +51,7 @@ const OrderSummary = ({
   const { cartTotal, cartItems, token, setLoading, user } = context!;
 
   const userId = user?.userId;
-  const deliveryFee = 5.78;
+  const deliveryFee = 6.99;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
   const isCheckoutDisabled =
     step === "cart" &&
@@ -61,7 +87,6 @@ const OrderSummary = ({
       });
 
       const data = await res.json();
-
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -139,7 +164,7 @@ const OrderSummary = ({
         <div className="mx-4">
           <div className="flex justify-between">
             <p>Items total</p>
-            <p className="text-black-400">${cartTotal.toFixed(2)}</p>
+            <p className="text-black-400">${orderData?.totalAmount}</p>
           </div>
           <div className="flex justify-between">
             <p>Delivery fee</p>
@@ -149,7 +174,9 @@ const OrderSummary = ({
         <hr />
         <div className="flex justify-between">
           <h1 className="text-body-lg font-bold">Total</h1>
-          <p className="mr-4">${finalCheckoutPrice}</p>
+          <p className="mr-4">
+            ${Number(orderData?.totalAmount) + deliveryFee}
+          </p>
         </div>
       </div>
       <div className="bg-white p-4 rounded-3xl flex flex-col gap-2">
@@ -162,7 +189,7 @@ const OrderSummary = ({
             alt="mastercard"
           />
           <p className="text-primary-600 text-body-sm md:text-body-md">
-            MasterCard 02312
+            {`${orderData?.paymentProvider} - ${orderData?.cardNumber}`}
           </p>
         </div>
       </div>
@@ -176,7 +203,7 @@ const OrderSummary = ({
             alt="mastercard"
           />
           <p className="text-primary-600 text-body-sm md:text-body-md">
-            Shopping in 07144
+            {`Shopping in ${orderData?.deliveryAddress?.aptNumber}, ${orderData?.deliveryAddress?.streetAddress}, ${orderData?.deliveryAddress?.city} - ${orderData?.deliveryAddress?.zipCode}`}
           </p>
         </div>
       </div>

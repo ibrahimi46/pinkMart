@@ -18,8 +18,32 @@ import { PaymentMethod, DeliveryDates } from "@/types";
 import { useSearchParams } from "next/navigation";
 import OrderFailed from "./components/OrderFailed";
 
+type DeliveryAddress = {
+  aptNumber?: string | null;
+  streetAddress?: string | null;
+  city?: string | null;
+  zipCode?: string | null;
+};
+
+type OrderItem = {
+  id: number;
+  name: string;
+  quantity: number;
+  priceAtPurchase: number;
+  imageUrl?: string;
+};
+
 const CartContent = () => {
-  // const [lastOrder, setLastOrder] = useState<any>(null);
+  const [orderData, setOrderData] = useState<{
+    orderId: number;
+    deliveryDate: string;
+    status: string;
+    totalAmount: number;
+    paymentProvider: string;
+    cardNumber: string;
+    deliveryAddress: DeliveryAddress;
+    items: OrderItem[];
+  } | null>(null);
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
@@ -33,8 +57,15 @@ const CartContent = () => {
     useState<PaymentMethod | null>(null);
 
   const context = useContext(UserDataContext);
-  const { cartItems, step, loading, refetchCartItems, handleStepNext } =
-    context!;
+  const {
+    cartItems,
+    step,
+    loading,
+    token,
+    refetchCartItems,
+    setLoading,
+    handleStepNext,
+  } = context!;
   const productContext = useContext(ProductsContext);
   const { products } = productContext!;
 
@@ -43,13 +74,28 @@ const CartContent = () => {
 
   useEffect(() => {
     if (page === "order_placed") {
+      const fetchOrder = async () => {
+        setLoading(true);
+        try {
+          const res = await fetch("/api/orders/latest", {
+            headers: { authorization: `Bearer ${token}` },
+          });
+          const data = await res.json();
+          setOrderData(data);
+        } catch (err) {
+          console.error("Failed to fetch order for summary:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchOrder();
       handleStepNext("order_placed");
     } else if (page === "order_failed") {
       handleStepNext("order_failed");
     } else {
       handleStepNext("cart");
     }
-  }, [page]);
+  }, [page, token]);
 
   useEffect(() => {
     const dates = generateDeliveryDates(2, 10);
@@ -186,7 +232,8 @@ const CartContent = () => {
           />
         )}
 
-        {step === "order_placed" && <OrderPlaced />}
+        {step === "order_placed" &&
+          (orderData ? <OrderPlaced orderData={orderData} /> : <Loading />)}
 
         {step === "order_failed" && <OrderFailed />}
       </div>
@@ -250,6 +297,7 @@ const CartContent = () => {
           step={step}
           selectedAddressId={selectedAddressId}
           selectedPaymentId={selectedPaymentId}
+          orderData={orderData}
         />
       </div>
     </main>
