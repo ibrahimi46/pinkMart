@@ -1,5 +1,6 @@
 import assets from "@/assets";
 import Image from "next/image";
+import { useEffect } from "react";
 
 interface DateSelectorProps {
   day: string;
@@ -14,6 +15,9 @@ const DateSelector = ({
   handleClick,
   selectedDeliveryDate,
 }: DateSelectorProps) => {
+  useEffect(() => {
+    console.log(date, selectedDeliveryDate);
+  }, []);
   return (
     <div
       onClick={handleClick}
@@ -64,12 +68,11 @@ const DeliveryDateModal = ({
             return (
               <DateSelector
                 key={idx}
-                date={item.dateStr}
+                date={item.date.toLocaleDateString("en-GB")}
                 day={item.dayName}
                 selectedDeliveryDate={selectedDeliveryDate}
                 handleClick={() => {
                   setSelectedDeliveryDate(item.fullDate);
-                  console.log(selectedDeliveryDate);
                 }}
               />
             );

@@ -40,6 +40,8 @@ const CartContent = () => {
       handleStepNext("order_placed");
     } else if (page === "order_failed") {
       handleStepNext("order_failed");
+    } else {
+      handleStepNext("cart");
     }
   }, [page]);
 

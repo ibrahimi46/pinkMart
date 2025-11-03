@@ -89,6 +89,9 @@ const assets = {
       vegetables: "/images/home-images/category-strip/vegetables.png",
       meatPoultry: "/images/home-images/category-strip/meat_poultry.png",
       dairyProducts: "/images/home-images/category-strip/dairy_products.png",
+      bakery: "/images/home-images/category-strip/bakery.png",
+      seafood: "/images/home-images/category-strip/seafood.png",
+      breakfast: "/images/home-images/category-strip/breakfast.png",
     },
   },
 };

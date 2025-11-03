@@ -34,7 +34,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
   const searchContext = useContext(SearchContext);
   const productContext = useContext(ProductsContext);
 
-  const { isLoggedIn, cartTotalItems, userPfp } = context!;
+  const { isLoggedIn, cartTotalItems, userPfp, handleStepNext } = context!;
   const { searchQuery, setSearchQuery } = searchContext!;
   const { products } = productContext!;
 
@@ -145,7 +145,10 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
             onMouseEnter={() => setShowCartModal(true)}
             onMouseLeave={() => setShowCartModal(false)}
           >
-            <Link href={"/cart"}>
+            <Link
+              href={"/cart?page=cart"}
+              onClick={() => handleStepNext("cart")}
+            >
               <Image
                 src={assets.icons.cart}
                 height={20}
@@ -177,7 +180,10 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
                   onMouseEnter={() => setShowCartModal(true)}
                   onMouseLeave={() => setShowCartModal(false)}
                 >
-                  <Link href={"/cart"}>
+                  <Link
+                    href={"/cart?page=cart"}
+                    onClick={() => handleStepNext("cart")}
+                  >
                     <div className="bg-primary-100 p-2 rounded-3xl flex gap-2 items-center">
                       <div className="bg-white rounded-3xl flex gap-1 p-1">
                         <Image

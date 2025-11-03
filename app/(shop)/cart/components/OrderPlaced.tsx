@@ -20,8 +20,6 @@ const OrderPlaced = ({
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
 
   useEffect(() => {
-    console.log("am in orderplaced comp");
-    console.log(finalCheckoutPrice, cartItems, selectedDeliveryDate);
     if (!token) return;
     const pendingOrder = localStorage.getItem("pendingOrder");
     if (pendingOrder) {
@@ -29,15 +27,10 @@ const OrderPlaced = ({
       placeOrder(orderData);
       localStorage.removeItem("pendingOrder");
     }
-
-    console.log("orderplaced");
   }, [token]);
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 bg-white p-6 rounded-3xl border border-black-100">
-        <div className="mb-4">
-          <BackButton handleBack={() => handleStepNext("cart")} />
-        </div>
         <div className="flex justify-between">
           <div className="flex flex-col gap-2">
             <h1 className="font-semibold text-body-xl">Order In Progress</h1>

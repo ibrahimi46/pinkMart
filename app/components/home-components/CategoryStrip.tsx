@@ -19,6 +19,9 @@ const CategoryIcons: Record<string, string> = {
   "Fresh Vegetables": assets.home.category_strip.vegetables,
   "Dairy Products": assets.home.category_strip.dairyProducts,
   "Meat & Poultry": assets.home.category_strip.meatPoultry,
+  "Breakfast Foods": assets.home.category_strip.breakfast,
+  Seafood: assets.home.category_strip.seafood,
+  Bakery: assets.home.category_strip.bakery,
 };
 
 const CategoryStrip = ({
