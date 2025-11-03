@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { db } from "@/db";
 import { sql, eq } from "drizzle-orm";
-import { orders as OrderTable, orderItems as OrderItemsTable } from "@/db/schema";
+import { orders as OrderTable, orderItems as OrderItemsTable, users } from "@/db/schema";
 
 export async function GET(req: NextRequest) {
   try {
@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       .select({
         id: OrderTable.id,
         userId: OrderTable.userId,
+        fullName: users.fullName,
         totalAmount: OrderTable.totalAmount,
         status: OrderTable.status,
         deliveryDate: OrderTable.deliveryDate,
@@ -31,7 +32,8 @@ export async function GET(req: NextRequest) {
       })
       .from(OrderTable)
       .leftJoin(OrderItemsTable, eq(OrderTable.id, OrderItemsTable.orderId))
-      .groupBy(OrderTable.id);
+      .leftJoin(users, eq(users.id, OrderTable.userId))
+      .groupBy(OrderTable.id, users.fullName);
 
     return NextResponse.json({ result }, { status: 200 });
   } catch (err) {

@@ -94,7 +94,7 @@ export const orders = pgTable("orders", {
     id : serial("id").primaryKey().notNull(),
     userId: integer("user_id").notNull(),
     totalAmount: numeric("total_amount").default("0").notNull(),
-    status: text("status").default("pending").notNull(),
+    status: text("status").default("Pending").notNull(),
     deliveryDate: timestamp("delivery_date"),
     createdAt: timestamp("created_at").notNull().defaultNow()
 })

@@ -1,9 +1,19 @@
-import Button from "@/app/components/Button";
-import assets from "@/assets";
+import { AdminContext } from "@/app/context/AdminContext";
+import { ProductsContext } from "@/app/context/ProductsContext";
+import { useContext, useEffect } from "react";
 
 interface DashboardInfoItemProps {
   name: string;
-  count: string;
+  count: number;
+}
+
+interface RecentOrderItemProps {
+  id: number;
+  userId: number;
+  fullName: string;
+  totalAmount: number;
+  status: string;
+  createdAt: string;
 }
 
 const DashboardInfoItem = ({ name, count }: DashboardInfoItemProps) => {
@@ -17,26 +27,47 @@ const DashboardInfoItem = ({ name, count }: DashboardInfoItemProps) => {
   );
 };
 
-const RecentOrderItem = () => {
+const RecentOrderItem = ({
+  id,
+  userId,
+  fullName,
+  totalAmount,
+  status,
+  createdAt,
+}: RecentOrderItemProps) => {
+  const statusColors: { [key: string]: string } = {
+    pending: "bg-yellow-100 border-yellow-600 text-yellow-800",
+    processing: "bg-blue-100 border-blue-600 text-blue-800",
+    shipped: "bg-purple-100 border-purple-600 text-purple-800",
+    delivered: "bg-green-100 border-green-600 text-green-800",
+    cancelled: "bg-red-100 border-red-600 text-red-800",
+  };
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
         <p>
-          <b>Order ID:</b> 192876
+          <b>Order ID:</b> {id}
         </p>
-        <div className="bg-orange-100 p-2 flex items-center justify-center rounded-full border border-red-600">
-          Rejected
+        <div
+          className={`px-3 py-1 rounded-full border ${
+            statusColors[status] || "bg-gray-100 border-gray-600 text-gray-800"
+          }`}
+        >
+          {status}
         </div>
       </div>
-      <div className="sm:flex sm:justify-between sm:mt-7">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
         <p>
-          <b>Name</b>: Shirza Poori
+          <b>Name</b>: {fullName}
         </p>
         <p>
-          <b>Date</b>: 19/07/2025
+          <b>User ID</b>: {userId}
         </p>
         <p>
-          <b>Total</b>: $200
+          <b>Date</b>: {new Date(createdAt).toLocaleDateString()}
+        </p>
+        <p>
+          <b>Total</b>: {`$${Number(totalAmount).toFixed(2)}`}
         </p>
       </div>
       <hr className="border-t mt-2" />
@@ -45,32 +76,50 @@ const RecentOrderItem = () => {
 };
 
 const AdminDashboard = () => {
+  const productContext = useContext(ProductsContext);
+  const adminContext = useContext(AdminContext);
+  const { users, orders } = adminContext!;
+  const { products } = productContext!;
+
+  const userCount = users?.length;
+  const salesCount = orders?.length;
+  const productsCount = products.length;
+
+  useEffect(() => {
+    console.log(orders);
+  });
+
   return (
     <div className="mt-2 flex flex-col gap-6 h-screen overflow-y-scroll scrollbar-hide">
-      <h1 className="font-semibold">Admin Dashboard</h1>
+      <h1 className="font-semibold text-body-2xl">Admin Dashboard</h1>
       <div className="">
         {/** sales user products */}
         <div className="border bg-white border-black-200 p-6 gap-2 rounded-2xl flex justify-evenly">
-          <DashboardInfoItem name="Sales" count="130" />
-          <DashboardInfoItem name="Users" count="956" />
-          <DashboardInfoItem name="Products" count="140" />
+          <DashboardInfoItem name="Users" count={userCount} />
+          <DashboardInfoItem name="Products" count={productsCount} />
+          <DashboardInfoItem name="Sales" count={salesCount!} />
         </div>
       </div>
       <div className="flex justify-between h-">
-        <h1 className="font-semibold">Recent Orders</h1>
-        <Button
-          name="View All(+40)"
-          icon={assets.icons.arrow_right}
-          iconPosition="right"
-          textStyles="text-body-sm"
-          extraStyles="px-4 border border-primary-600 bg-black-50 h-8"
-        />
+        <h1 className="font-semibold text-body-2xl">Recent Orders</h1>
       </div>
 
-      <div className="border bg-white border-black-200 rounded-2xl p-4 flex flex-col gap-8">
-        <RecentOrderItem />
-        <RecentOrderItem />
-        <RecentOrderItem />
+      <div className="border bg-white border-black-200 rounded-2xl p-4 text-body-md flex flex-col gap-8">
+        {orders &&
+          orders.length &&
+          orders.map((order) => {
+            return (
+              <RecentOrderItem
+                key={order.id}
+                id={order.id}
+                userId={order.userId}
+                totalAmount={order.totalAmount}
+                status={order.status}
+                fullName={order.fullName}
+                createdAt={order.createdAt}
+              />
+            );
+          })}
       </div>
     </div>
   );

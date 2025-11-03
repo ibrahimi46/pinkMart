@@ -103,7 +103,6 @@ interface UserDataContextType {
   cartItems: CartItem[];
   addresses: Address[];
   paymentMethods: PaymentMethod[];
-  users: User[];
   loading: boolean;
   cartTotal: number;
   isLoggedIn: boolean;
@@ -163,7 +162,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [adminOrders, setAdminOrders] = useState<AdminOrder[]>([]);
   const [orderId, setOrderId] = useState<number | null>(null);
   const [orders, setOrders] = useState<Orders[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [userPfp, setUserPfp] = useState<string>("");
   const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
@@ -215,19 +214,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
       });
       const data = await res.json();
 
-      console.log("am in getuserslist context");
-      console.log(data.user);
       setUserDetails(data.user);
-
-      if (data.user?.isAdmin) {
-        const resAll = await fetch("/api/users", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const allData = await resAll.json();
-        setUsers(allData.users);
-      }
     } catch (err) {
       console.error(err);
     }
@@ -779,7 +766,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         cartItems,
         addresses,
         paymentMethods,
-        users,
         loading,
         cartTotal,
         isLoggedIn,
