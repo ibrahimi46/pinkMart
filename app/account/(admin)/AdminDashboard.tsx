@@ -10,7 +10,7 @@ interface DashboardInfoItemProps {
 interface RecentOrderItemProps {
   id: number;
   userId: number;
-  fullName: string;
+  fullName?: string;
   totalAmount: number;
   status: string;
   createdAt: string;

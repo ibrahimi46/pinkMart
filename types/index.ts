@@ -50,6 +50,7 @@ export interface Orders {
   deliveryDate: string;
   createdAt: string;
   itemCount: number;
+  fullName?: string
 }
 
 export interface PlaceOrderProps {
