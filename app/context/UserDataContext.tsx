@@ -51,7 +51,8 @@ interface CartItem {
   productId: number;
   quantity: number;
   addedAt: string;
-  price: string;
+  currentPrice: string;
+  oldPrice?: string;
 }
 
 interface Orders {
@@ -573,7 +574,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
   const cartTotal = useMemo(() => {
     return cartItems.reduce((total, item) => {
-      const price = parseFloat(item.price);
+      const price = parseFloat(item.currentPrice);
       return total + price * item.quantity;
     }, 0);
   }, [cartItems]);
