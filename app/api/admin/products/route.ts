@@ -22,9 +22,9 @@ export async function POST(req:NextRequest) {
             return NextResponse.json({error: "Unauthorised to add product"}, {status: 401})
         }
 
-        const {name, description, category, price, stock, image_url} = await req.json();
+        const {name, description, category, currentPrice, oldPrice, stock, image_url} = await req.json();
 
-        if (!name || !category || !price) {
+        if (!name || !category || !currentPrice) {
             return NextResponse.json({error: "Missing required fields"}, {status: 400})
         }
 
@@ -32,7 +32,8 @@ export async function POST(req:NextRequest) {
             name,
             category,
             description, 
-            price,
+            currentPrice,
+            oldPrice,
             stock: stock || 0,
             imageUrl: image_url || null
         })

@@ -8,7 +8,8 @@ import Loading from "@/app/components/Loading";
 interface ProductItemProps {
   name: string;
   category: string;
-  price: number;
+  currentPrice: number;
+  oldPrice: number;
   createdAt: string;
   orderId: number;
   handleDelete: () => void;
@@ -17,7 +18,8 @@ interface ProductItemProps {
 const ProductItem = ({
   name,
   category,
-  price,
+  currentPrice,
+  oldPrice,
   createdAt,
   handleDelete,
 }: ProductItemProps) => {
@@ -33,7 +35,10 @@ const ProductItem = ({
           {category}
         </p>
         <p>
-          <b>Price: </b>${Number(price).toFixed(2)}
+          <b>Current Price: </b>${Number(currentPrice).toFixed(2)}
+        </p>
+        <p>
+          <b>Old Price: </b>${Number(oldPrice).toFixed(2)}
         </p>
         <p>
           <b>Created At: </b>
@@ -63,7 +68,8 @@ const AddProductForm = ({
   const [productName, setProductName] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [category, setCategory] = useState<string | null>(null);
-  const [price, setPrice] = useState<string | null>(null);
+  const [currentPrice, setCurrentPrice] = useState<string | null>(null);
+  const [oldPrice, setOldPrice] = useState<string | null>(null);
   const [stockQuantity, setStockQuantity] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -91,7 +97,7 @@ const AddProductForm = ({
 
       const token = localStorage.getItem("token");
 
-      await fetch("/api/products", {
+      await fetch("/api/admin/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,13 +107,13 @@ const AddProductForm = ({
           name: productName,
           category,
           description,
-          price: parseFloat(price || "0"),
+          currentPrice: parseFloat(currentPrice || "0"),
+          oldPrice: parseFloat(oldPrice || "0"),
           stock: stockQuantity || 0,
           image_url: imageUrl,
         }),
       });
 
-      console.log("product added successfully");
       setProductAdded(true);
     } catch (err) {
       console.error("Failed to upload form", err);
@@ -131,7 +137,7 @@ const AddProductForm = ({
             />
             <h1 className="font-semibold">Add Product</h1>
           </div>
-          <div className="mt-4 border border-black-200 rounded-3xl p-4 flex flex-col gap-4">
+          <div className="mt-4 border border-black-200 rounded-3xl p-4 flex flex-col gap-4 text-body-md">
             <input
               type="text"
               placeholder="Product Name"
@@ -156,17 +162,23 @@ const AddProductForm = ({
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Select category</option>
-                  <option value="Fruits">Fruits</option>
-                  <option value="Snacks">Snacks</option>
-                  <option value="Meat">Meat</option>
-                  <option value="Vegetables">Vegetables</option>
+                  <option value="Fresh Fruits">Fresh Fruits</option>
+                  <option value="Fresh Vegetables">Fresh Vegetables</option>
+                  <option value="Meat & Poultry">Meat & Poultry</option>
+                  <option value="Dairy Products">Dairy Products</option>
                 </select>
               </div>
               <input
                 type="number"
-                placeholder="Price"
+                placeholder="Current Price"
                 className="p-3 bg-black-100 rounded-3xl border border-black-200 min-w-0"
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => setCurrentPrice(e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Old Price"
+                className="p-3 bg-black-100 rounded-3xl border border-black-200 min-w-0"
+                onChange={(e) => setOldPrice(e.target.value)}
               />
               <input
                 type="number"
@@ -217,7 +229,8 @@ interface Product {
   name: string;
   description: string;
   category: string;
-  price: number;
+  oldPrice: number;
+  currentPrice: number;
   stock: number;
   imageUrl: string;
   createdAt: string;
@@ -231,7 +244,6 @@ const ManageProducts = () => {
   const handleDelete = async (id: number) => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    console.log("clicked");
 
     try {
       setLoading(true);
@@ -301,8 +313,9 @@ const ManageProducts = () => {
                         name={product.name}
                         category={product.category}
                         orderId={product.id}
-                        price={product.price}
+                        currentPrice={product.currentPrice}
                         createdAt={product.createdAt}
+                        oldPrice={product.oldPrice}
                         handleDelete={() => handleDelete(product.id)}
                       />
                     );
