@@ -14,14 +14,24 @@ const OrderPlaced = ({
   selectedDeliveryDate,
 }: OrderPlacedProps) => {
   const context = useContext(UserDataContext);
-  const { placeOrder, cartTotal, cartItems } = context!;
+  const { placeOrder, cartTotal, cartItems, token } = context!;
 
   const deliveryFee = 5.78;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
 
   useEffect(() => {
-    placeOrder({ finalCheckoutPrice, cartItems, selectedDeliveryDate });
-  }, []);
+    console.log("am in orderplaced comp");
+    console.log(finalCheckoutPrice, cartItems, selectedDeliveryDate);
+    if (!token) return;
+    const pendingOrder = localStorage.getItem("pendingOrder");
+    if (pendingOrder) {
+      const orderData = JSON.parse(pendingOrder);
+      placeOrder(orderData);
+      localStorage.removeItem("pendingOrder");
+    }
+
+    console.log("orderplaced");
+  }, [token]);
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 bg-white p-6 rounded-3xl border border-black-100">

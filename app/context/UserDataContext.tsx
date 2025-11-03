@@ -522,6 +522,9 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       setLoading(true);
+      console.log("placeorder context");
+      console.log(cartItems, finalCheckoutPrice, selectedDeliveryDate);
+      console.log("selected delviery", selectedDeliveryDate);
       if (!token) return;
       const res = await fetch("/api/orders", {
         method: "POST",

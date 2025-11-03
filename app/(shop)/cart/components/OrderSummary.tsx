@@ -51,6 +51,14 @@ const OrderSummary = ({
       const data = await res.json();
 
       if (data.url) {
+        localStorage.setItem(
+          "pendingOrder",
+          JSON.stringify({
+            cartItems,
+            finalCheckoutPrice,
+            selectedDeliveryDate,
+          })
+        );
         window.location.href = data.url;
       } else {
         handleStepNext("order_failed");
