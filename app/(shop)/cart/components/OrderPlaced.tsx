@@ -5,12 +5,12 @@ import { useEffect, useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface OrderPlacedProps {
-  handleStepBack: (step?: string) => void;
+  handleStepNext: (step: string) => void;
   selectedDeliveryDate: string;
 }
 
 const OrderPlaced = ({
-  handleStepBack,
+  handleStepNext,
   selectedDeliveryDate,
 }: OrderPlacedProps) => {
   const context = useContext(UserDataContext);
@@ -26,7 +26,7 @@ const OrderPlaced = ({
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 bg-white p-6 rounded-3xl border border-black-100">
         <div className="mb-4">
-          <BackButton handleBack={() => handleStepBack()} />
+          <BackButton handleBack={() => handleStepNext("cart")} />
         </div>
         <div className="flex justify-between">
           <div className="flex flex-col gap-2">

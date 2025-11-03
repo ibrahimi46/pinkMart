@@ -10,13 +10,13 @@ import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import { PaymentMethod } from "@/types";
 
 interface CheckoutProps {
-  handleStepBack: (step?: string) => void;
+  handleStepNext: (step: string) => void;
   selectedDeliveryDate: string;
   setSelectedPaymentMethod: (payment: PaymentMethod | null) => void;
 }
 
 const Checkout = ({
-  handleStepBack,
+  handleStepNext,
   selectedDeliveryDate,
   setSelectedPaymentMethod,
 }: CheckoutProps) => {
@@ -98,7 +98,7 @@ const Checkout = ({
         </div>
       )}
       <div className="mb-4">
-        <BackButton handleBack={() => handleStepBack()} />
+        <BackButton handleBack={() => handleStepNext("cart")} />
       </div>
       <div className="flex justify-between">
         <div className="flex gap-3 items-center">
@@ -251,7 +251,7 @@ const Checkout = ({
 
         <div
           className="bg-black-100 p-4 rounded-xl flex justify-between"
-          onClick={() => handleStepBack()}
+          onClick={() => handleStepNext("cart")}
         >
           <div>
             <div className="bg-white flex items-center justify-center h-14 w-14 rounded-xl">

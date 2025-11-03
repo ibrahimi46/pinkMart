@@ -84,8 +84,6 @@ export interface AdminUser {
   }[];
 }
 
-export type CheckoutStep = "cart" | "checkout" | "order_placed" | "order_failed";
-
 
 export interface Product {
   id: number;

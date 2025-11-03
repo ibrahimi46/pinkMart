@@ -6,7 +6,7 @@ import Image from "next/image";
 import CartItem from "./components/CartItem";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import DeliveryDateModal from "./components/DeliveryDateModal";
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { generateDeliveryDates } from "@/app/utils/generateDeliveryDates";
 import OrderPlaced from "./components/OrderPlaced";
 import Checkout from "./components/Checkout";
@@ -15,8 +15,10 @@ import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import { ProductsContext } from "@/app/context/ProductsContext";
 import { PaymentMethod, DeliveryDates } from "@/types";
+import { useSearchParams } from "next/navigation";
+import OrderFailed from "./components/OrderFailed";
 
-const Cart = () => {
+const CartContent = () => {
   // const [lastOrder, setLastOrder] = useState<any>(null);
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
@@ -25,16 +27,21 @@ const Cart = () => {
     useState<PaymentMethod | null>(null);
 
   const context = useContext(UserDataContext);
-  const {
-    cartItems,
-    step,
-    loading,
-    refetchCartItems,
-    handleStepBack,
-    handleStepNext,
-  } = context!;
+  const { cartItems, step, loading, refetchCartItems, handleStepNext } =
+    context!;
   const productContext = useContext(ProductsContext);
   const { products } = productContext!;
+
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+
+  useEffect(() => {
+    if (page === "order_placed") {
+      handleStepNext("order_placed");
+    } else if (page === "order_failed") {
+      handleStepNext("order_failed");
+    }
+  }, [page]);
 
   useEffect(() => {
     const dates = generateDeliveryDates(2, 10);
@@ -161,17 +168,20 @@ const Cart = () => {
 
         {step === "checkout" && (
           <Checkout
-            handleStepBack={handleStepBack}
+            handleStepNext={handleStepNext}
             selectedDeliveryDate={selectedDeliveryDate}
             setSelectedPaymentMethod={setSelectedPaymentMethod}
           />
         )}
+
         {step === "order_placed" && (
           <OrderPlaced
-            handleStepBack={handleStepBack}
+            handleStepNext={handleStepNext}
             selectedDeliveryDate={selectedDeliveryDate}
           />
         )}
+
+        {step === "order_failed" && <OrderFailed />}
       </div>
 
       {/* local market container on smalll devices */}
@@ -234,6 +244,14 @@ const Cart = () => {
         />
       </div>
     </main>
+  );
+};
+
+const Cart = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <CartContent />
+    </Suspense>
   );
 };
 

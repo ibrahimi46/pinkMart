@@ -12,7 +12,6 @@ import {
   UserDetails,
   CartItem,
   PaymentMethod,
-  CheckoutStep,
   AdminOrder,
   AdminUser,
   Address,
@@ -32,7 +31,7 @@ interface UserDataContextType {
   isLoggedIn: boolean;
   defaultAddress: Address | null;
   defaultPayment: PaymentMethod | null;
-  step: CheckoutStep;
+  step: string;
   orders: Orders[];
   adminOrders: AdminOrder[];
   adminUsers: AdminUser[];
@@ -67,9 +66,8 @@ interface UserDataContextType {
   refetchPaymentMethods: () => Promise<void>;
   refetchCartItems: () => Promise<void>;
   refetchAll: () => Promise<void>;
-  setStep: (value: CheckoutStep) => void;
-  handleStepNext: () => void;
-  handleStepBack: () => void;
+  setStep: (value: string) => void;
+  handleStepNext: (step: string) => void;
 }
 
 export const UserDataContext = createContext<UserDataContextType | null>(null);
@@ -89,9 +87,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
   const [loading, setLoading] = useState(false);
   const [userPfp, setUserPfp] = useState<string>("");
-  const [step, setStep] = useState<
-    "cart" | "checkout" | "order_placed" | "order_failed"
-  >("cart"); // Steps in cart
+  const [step, setStep] = useState<string>("cart"); // steps in cart
   const { data: session, status } = useSession();
 
   const isLoggedIn = !!user;
@@ -681,14 +677,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   }, [refetchAll]);
 
   // For handling checkout steps in cart page
-  const handleStepNext = () => {
-    if (step === "cart") setStep("checkout");
-    else if (step === "checkout") setStep("order_placed");
-  };
-
-  const handleStepBack = () => {
-    if (step === "order_placed") setStep("checkout");
-    else if (step === "checkout") setStep("cart");
+  const handleStepNext = (value: string) => {
+    if (value) {
+      setStep(value);
+    }
   };
 
   return (
@@ -736,7 +728,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         refetchAll,
         setStep,
         handleStepNext,
-        handleStepBack,
         getOrders,
       }}
     >
