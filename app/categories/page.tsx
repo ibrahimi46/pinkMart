@@ -102,8 +102,8 @@ const CategoriesPageContent = () => {
                   key={product.id}
                   icon={product.imageUrl}
                   name={product.name}
-                  currentPrice={Number(product.currentPrice).toFixed(2)}
-                  oldPrice={Number(product.oldPrice).toFixed(2)}
+                  currentPrice={product.currentPrice}
+                  oldPrice={product.oldPrice}
                   capacity={product.stock}
                   addToCart={() => addToCart(product.id, 1)}
                 />

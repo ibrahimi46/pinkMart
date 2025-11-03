@@ -6,97 +6,20 @@ import {
   useMemo,
   createContext,
 } from "react";
+import {
+  User,
+  Orders,
+  UserDetails,
+  CartItem,
+  PaymentMethod,
+  CheckoutStep,
+  AdminOrder,
+  AdminUser,
+  Address,
+  PlaceOrderProps,
+} from "@/types";
 import { jwtDecode } from "jwt-decode";
 import { signOut, useSession } from "next-auth/react";
-
-// Interfaces
-
-interface User {
-  userId: string;
-  isAdmin: boolean;
-  full_name?: string;
-}
-
-interface UserDetails {
-  id: string;
-  fullName: string;
-  phone: string;
-  email: string;
-  password: string;
-}
-
-interface Address {
-  id?: number;
-  type: string;
-  streetAddress: string;
-  aptNumber: string;
-  zipCode: string;
-  city: string;
-  isDefault: boolean;
-}
-
-interface PaymentMethod {
-  id?: number;
-  type: string;
-  provider: string;
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-  isDefault?: boolean;
-}
-
-interface CartItem {
-  id: number;
-  cartId: number;
-  productId: number;
-  quantity: number;
-  addedAt: string;
-  currentPrice: number;
-  oldPrice?: string;
-}
-
-interface Orders {
-  id: number;
-  userId: number;
-  totalAmount: number;
-  status: string;
-  deliveryDate: string;
-  createdAt: string;
-  itemCount: number;
-}
-
-interface PlaceOrderProps {
-  finalCheckoutPrice: string;
-  selectedDeliveryDate: string;
-  cartItems: CartItem[];
-}
-
-interface AdminOrder {
-  id: number;
-  userId: number;
-  totalAmount: number;
-  status: string;
-  deliveryDate: string | null;
-  createdAt: string;
-  itemCount: number;
-}
-
-interface AdminUser {
-  id: number;
-  fullName: string;
-  email: string;
-  phone: string | null;
-  isAdmin: boolean;
-  createdAt: string;
-  orders?: {
-    id: number;
-    totalAmount: number;
-    status: string;
-    createdAt: string;
-  }[];
-}
-
-type CheckoutStep = "cart" | "checkout" | "order_placed" | "order_failed";
 
 interface UserDataContextType {
   user: User | null;
@@ -487,7 +410,15 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
       const data = await res.json();
       console.log("am in fetchcartitem");
       console.log(data.items);
-      setCartItems(data.items || []);
+
+      const dataWithNumbers = data.items.map((item: CartItem) => ({
+        ...item,
+        currentPrice: Number(item.currentPrice),
+      }));
+
+      console.log("datawithnumbers");
+      console.log(dataWithNumbers);
+      setCartItems(dataWithNumbers || []);
     } catch (err) {
       console.error("Failed to fetch cart:", err);
     } finally {

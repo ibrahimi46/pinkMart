@@ -41,9 +41,20 @@ export async function POST(req: NextRequest) {
     // add or update
     
     if (existingItem.length) {
-        await db.update(CartItemsTable).set({quantity: Number(existingItem[0].quantity) + quantity}).where(eq(CartItemsTable.id, existingItem[0].id))
+        await db.update(CartItemsTable).set({quantity: (existingItem[0].quantity) + quantity}).where(eq(CartItemsTable.id, existingItem[0].id))
     } else {
-        await db.insert(CartItemsTable).values({cartId, productId, quantity})
+        const product = await db
+        .select({ currentPrice: products.currentPrice })
+        .from(products)
+        .where(eq(products.id, productId))
+        .limit(1);
+
+      if (!product.length) {
+        return NextResponse.json({ error: "Product not found" }, { status: 404 });
+      }
+
+      const price = (product[0].currentPrice);
+        await db.insert(CartItemsTable).values({cartId, productId, quantity, price})
     }
 
 
@@ -84,7 +95,7 @@ export async function GET(req: NextRequest) {
             cartId: CartItemsTable.cartId,
             productId: CartItemsTable.productId,
             quantity: CartItemsTable.quantity,
-            currentPrice: products.currentPrice
+            price: products.currentPrice
         }).from(CartItemsTable).innerJoin(products, eq(products.id, CartItemsTable.productId)).where(eq(CartItemsTable.cartId, userCart.id));
         return NextResponse.json({items: cartProducts}, {status: 200})
 
@@ -112,6 +123,7 @@ export async function PUT(req:NextRequest) {
     const cart = await db.select().from(CartTable).where(eq(CartTable.user_id, decoded?.userId))
     const userCart = cart[0];
     const {productId, quantity} = await req.json();
+
     await db.update(CartItemsTable).set({quantity}).where(and(eq(CartItemsTable.cartId, userCart.id), eq(CartItemsTable.productId, productId)))
     return NextResponse.json({ success: true, message: "Quantity updated" });
 
