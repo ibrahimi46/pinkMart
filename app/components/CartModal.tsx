@@ -3,7 +3,6 @@ import { UserDataContext } from "../context/UserDataContext";
 import Image from "next/image";
 import assets from "@/assets";
 import CartItem from "../(shop)/cart/components/CartItem";
-import { cart, products } from "@/db/schema";
 import Button from "./Button";
 import Link from "next/link";
 
@@ -12,7 +11,7 @@ interface Product {
   name: string;
   description: string;
   category: string;
-  price: string;
+  currentPrice: string;
   stock: number;
   imageUrl: string;
 }

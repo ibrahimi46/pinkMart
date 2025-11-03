@@ -16,7 +16,8 @@ interface Product {
   name: string;
   description: string;
   category: string;
-  price: string;
+  currentPrice: string;
+  oldPrice: string;
   stock: number;
   imageUrl: string;
 }
@@ -60,8 +61,8 @@ const CategoriesPageContent = () => {
 
     filtered = filtered.filter(
       (product) =>
-        Number(product.price) >= priceFilter.min &&
-        Number(product.price) <= priceFilter.max
+        Number(product.currentPrice) >= priceFilter.min &&
+        Number(product.currentPrice) <= priceFilter.max
     );
 
     if (stockFilter) {
@@ -101,7 +102,8 @@ const CategoriesPageContent = () => {
                   key={product.id}
                   icon={product.imageUrl}
                   name={product.name}
-                  currentPrice={Number(product.price).toFixed(2)}
+                  currentPrice={Number(product.currentPrice).toFixed(2)}
+                  oldPrice={Number(product.oldPrice).toFixed(2)}
                   capacity={product.stock}
                   addToCart={() => addToCart(product.id, 1)}
                 />
