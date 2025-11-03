@@ -13,19 +13,21 @@ interface CheckoutProps {
   handleStepNext: (step: string) => void;
   selectedDeliveryDate: string;
   setSelectedPaymentMethod: (payment: PaymentMethod | null) => void;
+  selectedPaymentId: number | null;
+  selectedAddressId: number | null;
+  setSelectedPaymentId: (value: number | null) => void;
+  setSelectedAddressId: (value: number | null) => void;
 }
 
 const Checkout = ({
-  handleStepNext,
   selectedDeliveryDate,
+  selectedAddressId,
+  selectedPaymentId,
+  setSelectedAddressId,
+  setSelectedPaymentId,
   setSelectedPaymentMethod,
+  handleStepNext,
 }: CheckoutProps) => {
-  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
-    null
-  );
-  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
-    null
-  );
   const [showAddresses, setShowAddresses] = useState<boolean>(false);
   const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
 
@@ -35,13 +37,13 @@ const Checkout = ({
 
   useEffect(() => {
     if (defaultAddress) {
-      setSelectedAddressId(defaultAddress.id || null);
+      setSelectedAddressId(defaultAddress.id!);
     }
   }, [defaultAddress]);
 
   useEffect(() => {
     if (defaultPayment) {
-      setSelectedPaymentId(defaultPayment.id || null);
+      setSelectedPaymentId(defaultPayment.id!);
     }
   }, [defaultPayment]);
 

@@ -1,30 +1,18 @@
 import Image from "next/image";
 import assets from "@/assets";
-import BackButton from "@/app/components/BackButton";
 import { useEffect, useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
 
-interface OrderPlacedProps {
-  handleStepNext: (step: string) => void;
-  selectedDeliveryDate: string;
-}
-
-const OrderPlaced = ({
-  handleStepNext,
-  selectedDeliveryDate,
-}: OrderPlacedProps) => {
+const OrderPlaced = () => {
   const context = useContext(UserDataContext);
-  const { placeOrder, cartTotal, cartItems, token } = context!;
-
-  const deliveryFee = 5.78;
-  const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
+  const { cartTotal, token } = context!;
 
   useEffect(() => {
     if (!token) return;
     const pendingOrder = localStorage.getItem("pendingOrder");
     if (pendingOrder) {
       const orderData = JSON.parse(pendingOrder);
-      placeOrder(orderData);
+
       localStorage.removeItem("pendingOrder");
     }
   }, [token]);

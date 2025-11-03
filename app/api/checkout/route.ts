@@ -3,22 +3,22 @@ import Stripe from "stripe"
 import { db } from "@/db"
 import { products } from "@/db/schema"
 import { inArray } from "drizzle-orm"
-
+import { CartItem } from "@/types"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {apiVersion: "2025-10-29.clover"})
 
-interface CartItem {
-  id: number;
-  cartId: number;
-  productId: number;
-  quantity: number;
-  addedAt: string;
-  currentPrice: number;
-  oldPrice?: string;
+interface CheckoutProps {
+    cartItems: CartItem[];
+    userId: number,
+    finalCheckoutPrice: number,
+    selectedDeliveryDate: Date,
+    selectedAddressId: number,
+    selectedPaymentId: number,
+
 }
 
 export async function POST(req: NextRequest) {
-    const { cartItems } : {cartItems: CartItem[]} = await req.json();
+    const { userId, cartItems, finalCheckoutPrice, selectedAddressId, selectedDeliveryDate, selectedPaymentId}: CheckoutProps = await req.json();
 
     const productsTable = await db.select().from(products).where(inArray(products.id, cartItems.map(item => item.id)))
     
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
             price_data: {
             currency: "usd",
             product_data: {name: product?.name || "Unknown Product"},
-            unit_amount: Math.round(item.currentPrice * 100)
+            unit_amount: Math.round(item.price * 100)
         },
         quantity: item.quantity
         }
@@ -42,6 +42,14 @@ export async function POST(req: NextRequest) {
         mode: "payment",
         success_url: process.env.NEXT_PUBLIC_STRIPE_SUCCESS_URL!,
         cancel_url: process.env.NEXT_PUBLIC_STRIPE_CANCEL_URL!,
+        metadata: {
+            userId: userId.toString(), 
+            cartItems: JSON.stringify(cartItems), 
+            selectedAddressId: selectedAddressId?.toString() || "", 
+            selectedPaymentId: selectedPaymentId?.toString() || "", 
+            finalCheckoutPrice: finalCheckoutPrice.toString() || "",
+            selectedDeliveryDate: selectedDeliveryDate.toString(),
+        }
     })
 
 

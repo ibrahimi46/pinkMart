@@ -44,11 +44,6 @@ interface UserDataContextType {
   fetchAdminUsers: () => void;
   updateUserRole: (userId: number, isAdmin: boolean) => void;
   getAdminUserDetails: (userId: number) => Promise<AdminUser | null>;
-  placeOrder: ({
-    finalCheckoutPrice,
-    selectedDeliveryDate,
-    cartItems,
-  }: PlaceOrderProps) => Promise<void>;
   getOrders: () => Promise<void>;
   fetchAdminOrders: () => void;
   updateOrderStatus: (orderId: number, status: string) => void;
@@ -513,39 +508,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
   // Order Functions
 
-  const placeOrder = async ({
-    finalCheckoutPrice,
-    selectedDeliveryDate,
-    cartItems,
-  }: PlaceOrderProps) => {
-    if (!finalCheckoutPrice || !selectedDeliveryDate || !cartItems) return;
-
-    try {
-      setLoading(true);
-      if (!token) return;
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          cartItems,
-          finalCheckoutPrice,
-          selectedDeliveryDate,
-        }),
-      });
-      const data = await res.json();
-      setOrderId(data.orderId);
-      await refetchCartItems();
-      await refetchOrders();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const getOrders = async () => {
     try {
       if (!token) return;
@@ -723,7 +685,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         refetchAddresses,
         refetchCartItems,
         refetchPaymentMethods,
-        placeOrder,
+
         refetchAll,
         setStep,
         handleStepNext,

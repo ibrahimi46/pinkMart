@@ -9,17 +9,22 @@ interface OrderSummaryProps {
   selectedPaymentMethod: PaymentMethod | null;
   handleStepNext: (step: string) => void;
   step: string;
+  selectedAddressId: number | null;
+  selectedPaymentId: number | null;
 }
 
 const OrderSummary = ({
   selectedDeliveryDate,
   selectedPaymentMethod,
+  selectedAddressId,
+  selectedPaymentId,
   handleStepNext,
   step,
 }: OrderSummaryProps) => {
   const context = useContext(UserDataContext);
-  const { cartTotal, cartItems, token, setLoading } = context!;
+  const { cartTotal, cartItems, token, setLoading, user } = context!;
 
+  const userId = user?.userId;
   const deliveryFee = 5.78;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
   const isCheckoutDisabled =
@@ -45,20 +50,19 @@ const OrderSummary = ({
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cartItems }),
+        body: JSON.stringify({
+          userId,
+          cartItems,
+          finalCheckoutPrice,
+          selectedDeliveryDate,
+          selectedAddressId,
+          selectedPaymentId,
+        }),
       });
 
       const data = await res.json();
 
       if (data.url) {
-        localStorage.setItem(
-          "pendingOrder",
-          JSON.stringify({
-            cartItems,
-            finalCheckoutPrice,
-            selectedDeliveryDate,
-          })
-        );
         window.location.href = data.url;
       } else {
         handleStepNext("order_failed");

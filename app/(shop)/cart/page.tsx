@@ -22,6 +22,12 @@ const CartContent = () => {
   // const [lastOrder, setLastOrder] = useState<any>(null);
   const [isPickDeliveryDate, setIsPickDeliveryDate] = useState<boolean>(false);
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
+    null
+  );
+  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
+    null
+  );
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethod | null>(null);
@@ -173,15 +179,14 @@ const CartContent = () => {
             handleStepNext={handleStepNext}
             selectedDeliveryDate={selectedDeliveryDate}
             setSelectedPaymentMethod={setSelectedPaymentMethod}
+            selectedAddressId={selectedAddressId!}
+            selectedPaymentId={selectedPaymentId!}
+            setSelectedAddressId={setSelectedAddressId}
+            setSelectedPaymentId={setSelectedPaymentId}
           />
         )}
 
-        {step === "order_placed" && (
-          <OrderPlaced
-            handleStepNext={handleStepNext}
-            selectedDeliveryDate={selectedDeliveryDate}
-          />
-        )}
+        {step === "order_placed" && <OrderPlaced />}
 
         {step === "order_failed" && <OrderFailed />}
       </div>
@@ -243,6 +248,8 @@ const CartContent = () => {
           selectedPaymentMethod={selectedPaymentMethod}
           handleStepNext={handleStepNext}
           step={step}
+          selectedAddressId={selectedAddressId}
+          selectedPaymentId={selectedPaymentId}
         />
       </div>
     </main>
