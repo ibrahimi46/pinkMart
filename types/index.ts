@@ -32,13 +32,14 @@ export interface PaymentMethod {
   isDefault?: boolean;
 }
 
+
 export interface CartItem {
   id: number;
   cartId: number;
   productId: number;
   quantity: number;
   addedAt: string;
-  currentPrice: number;
+  price: number;
 }
 
 export interface Orders {
@@ -83,3 +84,24 @@ export interface AdminUser {
 }
 
 export type CheckoutStep = "cart" | "checkout" | "order_placed" | "order_failed";
+
+
+export interface Product {
+  id: number;
+  name: string;
+  description: string;
+  category: string;
+  currentPrice: string;
+  oldPrice?: string;
+  stock: string;
+  imageUrl: string;
+}
+
+
+
+export interface DeliveryDates {
+  date: Date;
+  dayName: string;
+  dateStr: string;
+  fullDate: string;
+}

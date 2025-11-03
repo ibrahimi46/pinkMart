@@ -1,25 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserDataContext } from "./UserDataContext";
-
-interface Order {
-  id: number;
-  userId: number;
-  totalAmount: number;
-  status: string;
-  deliveryDate: string;
-  createdAt: string;
-  itemCount: number;
-  fullName: string;
-}
-
-interface User {
-  userId: string;
-  isAdmin: boolean;
-  full_name?: string;
-}
+import { User, Orders } from "@/types";
 
 interface AdminContextProps {
-  orders: Order[] | null;
+  orders: Orders[] | null;
   users: User[];
   getUsersList: () => Promise<void>;
   getOrders: () => Promise<void>;
@@ -29,10 +13,10 @@ export const AdminContext = createContext<AdminContextProps | null>(null);
 
 export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<User[]>([]);
-  const [orders, setOrders] = useState<Order[] | null>(null);
+  const [orders, setOrders] = useState<Orders[] | null>(null);
 
   const context = useContext(UserDataContext);
-  const { token } = context!;
+  const { token, user } = context!;
 
   const getUsersList = async () => {
     try {
@@ -66,8 +50,10 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    getUsersList();
-    getOrders();
+    if (token && user?.isAdmin) {
+      getUsersList();
+      getOrders();
+    }
   }, [token]);
 
   return (

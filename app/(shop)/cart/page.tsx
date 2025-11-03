@@ -14,22 +14,7 @@ import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import { ProductsContext } from "@/app/context/ProductsContext";
-
-interface DeliveryDates {
-  date: Date;
-  dayName: string;
-  dateStr: string;
-  fullDate: string;
-}
-
-interface Payment {
-  type: string;
-  provider: string;
-  expiryDate: string;
-  cvv?: string;
-  isDefault?: boolean;
-  cardNumber: string;
-}
+import { PaymentMethod, DeliveryDates } from "@/types";
 
 const Cart = () => {
   // const [lastOrder, setLastOrder] = useState<any>(null);
@@ -37,7 +22,7 @@ const Cart = () => {
   const [deliveryDates, setDeliveryDates] = useState<DeliveryDates[]>([]);
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<Payment | null>(null);
+    useState<PaymentMethod | null>(null);
 
   const context = useContext(UserDataContext);
   const {

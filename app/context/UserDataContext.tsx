@@ -101,10 +101,11 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     const userToken = localStorage.getItem("token");
     if (userToken) {
       setToken(userToken);
-    } else if (session?.user?.customToken) {
-      setToken(session.user.customToken);
-    } else {
-      console.log("no tokens found");
+      return;
+    }
+
+    if (session?.user?.customToken) {
+      setToken(session?.user?.customToken);
     }
   }, [session]);
 
@@ -408,16 +409,12 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         },
       });
       const data = await res.json();
-      console.log("am in fetchcartitem");
-      console.log(data.items);
-
       const dataWithNumbers = data.items.map((item: CartItem) => ({
         ...item,
-        currentPrice: Number(item.currentPrice),
+        currentPrice: Number(item.price),
+        quantity: Number(item.quantity),
       }));
 
-      console.log("datawithnumbers");
-      console.log(dataWithNumbers);
       setCartItems(dataWithNumbers || []);
     } catch (err) {
       console.error("Failed to fetch cart:", err);
@@ -506,11 +503,11 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const cartTotal = useMemo(() => {
-    console.log("am in cartotal context");
     return cartItems.reduce((total, item) => {
-      const price = item.currentPrice;
-      console.log(price);
-      return total + price * item.quantity;
+      const price = Number(item.price);
+      const quantity = Number(item.quantity);
+
+      return total + price * quantity;
     }, 0);
   }, [cartItems]);
 

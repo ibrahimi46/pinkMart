@@ -7,20 +7,12 @@ import { UserDataContext } from "@/app/context/UserDataContext";
 import PaymentMethodItem from "@/app/components/PaymentMethodItem";
 import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
-
-interface Payment {
-  type: string;
-  provider: string;
-  expiryDate: string;
-  cvv?: string;
-  isDefault?: boolean;
-  cardNumber: string;
-}
+import { PaymentMethod } from "@/types";
 
 interface CheckoutProps {
   handleStepBack: (step?: string) => void;
   selectedDeliveryDate: string;
-  setSelectedPaymentMethod: (payment: Payment | null) => void;
+  setSelectedPaymentMethod: (payment: PaymentMethod | null) => void;
 }
 
 const Checkout = ({

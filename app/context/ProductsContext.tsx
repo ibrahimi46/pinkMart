@@ -1,16 +1,6 @@
 import React, { createContext, useCallback, useEffect } from "react";
 import { useState } from "react";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  category: string;
-  oldPrice: number;
-  currentPrice: number;
-  stock: number;
-  imageUrl: string;
-}
+import { Product } from "@/types";
 
 interface ProductsProps {
   products: Product[];

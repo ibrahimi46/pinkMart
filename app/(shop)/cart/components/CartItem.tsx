@@ -9,8 +9,8 @@ interface ProductProps {
     name: string;
     description: string;
     category: string;
-    currentPrice: number;
-    stock: number;
+    currentPrice: string;
+    stock: string;
     imageUrl: string;
   };
   quantity: number;

@@ -8,17 +8,7 @@ import { ProductsContext } from "@/app/context/ProductsContext";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import assets from "@/assets";
 import { SearchContext } from "@/app/context/SearchContext";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  category: string;
-  currentPrice: string;
-  oldPrice?: string;
-  stock: number;
-  imageUrl: string;
-}
+import { Product } from "@/types";
 
 // later dont forget to optimize this and categories page cause both do the same thing on mount
 const SearchPage = () => {
@@ -56,7 +46,7 @@ const SearchPage = () => {
     );
 
     if (stockFilter) {
-      filtered = filtered.filter((product) => product.stock > 0);
+      filtered = filtered.filter((product) => Number(product.stock) > 0);
     }
 
     setFilteredProducts(filtered);
@@ -83,9 +73,9 @@ const SearchPage = () => {
                 key={product.id}
                 icon={product.imageUrl}
                 name={product.name}
-                currentPrice={Number(product.currentPrice).toFixed(2)}
-                oldPrice={Number(product.oldPrice).toFixed(2)}
-                capacity={product.stock}
+                currentPrice={Number(product.currentPrice)}
+                oldPrice={Number(product.oldPrice)}
+                capacity={Number(product.stock)}
                 addToCart={() => addToCart(product.id, 1)}
               />
             );

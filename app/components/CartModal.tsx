@@ -5,16 +5,7 @@ import assets from "@/assets";
 import CartItem from "../(shop)/cart/components/CartItem";
 import Button from "./Button";
 import Link from "next/link";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  category: string;
-  currentPrice: number;
-  stock: number;
-  imageUrl: string;
-}
+import { Product } from "@/types";
 
 interface CartModalProps {
   products: Product[];

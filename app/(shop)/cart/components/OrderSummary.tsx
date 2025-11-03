@@ -2,19 +2,11 @@ import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
-
-interface Payment {
-  type: string;
-  provider: string;
-  expiryDate: string;
-  cvv?: string;
-  isDefault?: boolean;
-  cardNumber: string;
-}
+import { PaymentMethod } from "@/types";
 
 interface OrderSummaryProps {
   selectedDeliveryDate: string;
-  selectedPaymentMethod: Payment | null;
+  selectedPaymentMethod: PaymentMethod | null;
   handleStepNext: (step: string) => void;
   step: string;
 }

@@ -10,17 +10,7 @@ import FilterSidebar from "./components/FilterSidebar";
 import { Suspense } from "react";
 import { ProductsContext } from "../context/ProductsContext";
 import { SearchContext } from "../context/SearchContext";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  category: string;
-  currentPrice: number;
-  oldPrice: number;
-  stock: number;
-  imageUrl: string;
-}
+import { Product } from "@/types";
 
 const CategoriesPage = () => {
   return (
@@ -66,7 +56,7 @@ const CategoriesPageContent = () => {
     );
 
     if (stockFilter) {
-      filtered = filtered.filter((product) => product.stock > 0);
+      filtered = filtered.filter((product) => Number(product.stock) > 0);
     }
 
     setFilteredProducts(filtered);
@@ -102,9 +92,9 @@ const CategoriesPageContent = () => {
                   key={product.id}
                   icon={product.imageUrl}
                   name={product.name}
-                  currentPrice={product.currentPrice}
-                  oldPrice={product.oldPrice}
-                  capacity={product.stock}
+                  currentPrice={Number(product.currentPrice)}
+                  oldPrice={Number(product.oldPrice)}
+                  capacity={Number(product.stock)}
                   addToCart={() => addToCart(product.id, 1)}
                 />
               );
