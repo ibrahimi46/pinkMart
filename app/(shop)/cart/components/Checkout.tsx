@@ -98,7 +98,7 @@ const Checkout = ({
         </div>
       )}
       <div className="mb-4">
-        <BackButton handleBack={() => handleStepNext("cart")} />
+        <BackButton handleBack={() => handleStepNext("checkout")} />
       </div>
       <div className="flex justify-between">
         <div className="flex gap-3 items-center">
@@ -180,6 +180,7 @@ const Checkout = ({
           btnIcon={assets.icons.plus}
           icon={assets.icons.location_purple}
           navigateTo="/account?page=addresses"
+          withNavigate
         />
       )}
       {/** Payment Method Container */}
@@ -239,6 +240,7 @@ const Checkout = ({
           btnIcon={assets.icons.plus}
           icon={assets.icons.card_purple}
           navigateTo="/account?page=payments"
+          withNavigate
         />
       )}
 

@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
     // add or update
     
     if (existingItem.length) {
-        await db.update(CartItemsTable).set({quantity: (existingItem[0].quantity) + quantity}).where(eq(CartItemsTable.id, existingItem[0].id))
+        
+        await db.update(CartItemsTable).set({quantity: String(Number(existingItem[0].quantity) + Number(quantity))}).where(eq(CartItemsTable.id, existingItem[0].id))
     } else {
         const product = await db
         .select({ currentPrice: products.currentPrice })

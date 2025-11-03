@@ -62,10 +62,10 @@ const SearchPage = () => {
         />
       </div>
 
-      {filteredProducts && filteredProducts.length > 0 ? (
+      {filteredProducts.length > 0 ? (
         <div
           className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-4
-         md:gap-y-8 p-4 overflow-y-auto scrollbar-hide 2xl:grid-cols-7"
+         md:gap-y-8 p-4 overflow-y-auto scrollbar-hide 2xl:grid-cols-7 auto-rows-min"
         >
           {filteredProducts.map((product) => {
             return (

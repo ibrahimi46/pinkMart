@@ -11,6 +11,8 @@ import { Suspense } from "react";
 import { ProductsContext } from "../context/ProductsContext";
 import { SearchContext } from "../context/SearchContext";
 import { Product } from "@/types";
+import NoDataPlaceholder from "../account/components/NoDataPlaceholder";
+import assets from "@/assets";
 
 const CategoriesPage = () => {
   return (
@@ -80,13 +82,13 @@ const CategoriesPageContent = () => {
           />
         </div>
         <hr />
-        <div
-          className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6  gap-x-4
+
+        {filteredProducts.length > 0 ? (
+          <div
+            className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6  gap-x-4
          md:gap-y-8 p-4 overflow-y-auto scrollbar-hide"
-        >
-          {filteredProducts &&
-            filteredProducts.length &&
-            filteredProducts.map((product) => {
+          >
+            {filteredProducts.map((product) => {
               return (
                 <ProductCard
                   key={product.id}
@@ -99,7 +101,20 @@ const CategoriesPageContent = () => {
                 />
               );
             })}
-        </div>
+          </div>
+        ) : (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="w-96">
+              <NoDataPlaceholder
+                icon={assets.icons.close}
+                field1="No products found"
+                field2="Try adjusting your filters"
+                btnName="Clear Filters"
+                handleAction={() => {}}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

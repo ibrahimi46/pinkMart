@@ -58,8 +58,11 @@ function MyAccountContent() {
     const section = searchParams.get("page");
     if (section) {
       setActiveSection(section);
-    } else if (user) {
-      setActiveSection(user.isAdmin ? "admin-dashboard" : "account-details");
+    } else if (user?.isAdmin) {
+      setActiveSection("admin-dashboard");
+    } else if (!user?.isAdmin) {
+      if (section === "addresses") setActiveSection("addresses");
+      else if (section === "payments") setActiveSection("payments");
     }
   }, [user, searchParams]);
 

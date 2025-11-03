@@ -1,6 +1,5 @@
 import assets from "@/assets";
 import Image from "next/image";
-import { useEffect } from "react";
 
 interface DateSelectorProps {
   day: string;
@@ -15,15 +14,18 @@ const DateSelector = ({
   handleClick,
   selectedDeliveryDate,
 }: DateSelectorProps) => {
-  useEffect(() => {
-    console.log(date, selectedDeliveryDate);
-  }, []);
+  const isSelected = selectedDeliveryDate == date;
+
   return (
     <div
-      onClick={handleClick}
+      onClick={() => {
+        console.log(isSelected);
+        console.log(date, day, selectedDeliveryDate);
+        handleClick();
+      }}
       className={`flex flex-col border cursor-pointer hover:border hover:border-black-700 border-black-100 hover:bg-black-100 transition-all duration-300 
         items-center justify-center bg-black-50 h-[70px] w-20 rounded-xl
-        ${selectedDeliveryDate === date ? "border border-black-500" : ""}
+        ${isSelected && "border-black-500"}
         `}
     >
       <p className="text-black-500 text-body-md">{day}</p>
@@ -72,7 +74,9 @@ const DeliveryDateModal = ({
                 day={item.dayName}
                 selectedDeliveryDate={selectedDeliveryDate}
                 handleClick={() => {
-                  setSelectedDeliveryDate(item.fullDate);
+                  setSelectedDeliveryDate(
+                    item.date.toLocaleDateString("en-GB")
+                  );
                 }}
               />
             );

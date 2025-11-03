@@ -11,9 +11,10 @@ export function generateDeliveryDates(processingDays: number = 2, numOfDates: nu
             dates.push({
                 date: new Date(currentDate),
                 dayName: currentDate.toLocaleDateString('en-US', { weekday: 'short' }),
-                dateStr: currentDate.toLocaleDateString('en-US', { 
+                dateStr: currentDate.toLocaleDateString('en-GB', { 
                 month: '2-digit', 
-                day: '2-digit' 
+                day: '2-digit',
+                year: "numeric"
                 }),
                 fullDate: currentDate.toISOString().split('T')[0],
             })

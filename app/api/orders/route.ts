@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken"
 import { db } from "@/db";
 import { eq, sql } from "drizzle-orm";
-import { orders as OrderTable, orderItems as OrderItemsTable, cart as CartsTable, cartItems as CartItemsTable } from "@/db/schema";
+import { orders as OrderTable, orderItems as OrderItemsTable, cart as CartsTable, cartItems as CartItemsTable, products } from "@/db/schema";
 
 export async function POST(req: NextRequest) {
     try {
@@ -40,6 +40,10 @@ export async function POST(req: NextRequest) {
                 priceAtPurchase: item.currentPrice
                 
             })
+
+            await db.update(products).set({
+                stock: sql`GREATEST(${products.stock} - ${item.quantity}, 0)`
+            }).where(eq(products.id, item.productId))
         }
 
 
