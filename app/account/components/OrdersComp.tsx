@@ -1,5 +1,5 @@
 import assets from "@/assets";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Image from "next/image";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import NoDataPlaceholder from "./NoDataPlaceholder";

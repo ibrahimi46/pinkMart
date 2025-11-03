@@ -15,10 +15,9 @@ import {
   AdminOrder,
   AdminUser,
   Address,
-  PlaceOrderProps,
 } from "@/types";
 import { jwtDecode } from "jwt-decode";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 interface UserDataContextType {
   user: User | null;
@@ -83,7 +82,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false);
   const [userPfp, setUserPfp] = useState<string>("");
   const [step, setStep] = useState<string>("cart"); // steps in cart
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const isLoggedIn = !!user;
 

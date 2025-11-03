@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     try {
         decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: number, isAdmin: boolean}
     } catch (err) {
-        return NextResponse.json({error: "error"}, {status: 400})
+        return NextResponse.json({error: err}, {status: 400})
     }
 
 

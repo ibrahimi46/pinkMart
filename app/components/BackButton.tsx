@@ -6,7 +6,7 @@ interface BackButtonProps {
   handleBack?: () => void;
 }
 
-const BackButton = ({ handleBack, ...props }: BackButtonProps) => {
+const BackButton = ({ handleBack }: BackButtonProps) => {
   return (
     <>
       <Link

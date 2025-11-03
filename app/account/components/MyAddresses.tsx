@@ -20,7 +20,7 @@ const AddAddressComp = ({ setShowAddAddrModal }: AddAddressModalProps) => {
   const [isDefault, setIsDefault] = useState<boolean>(false);
 
   const context = useContext(UserDataContext);
-  const { addAddress, loading } = context!;
+  const { addAddress } = context!;
   return (
     <div className="flex flex-col gap-6 text-body-sm md:text-body-md p-4">
       <div className="flex justify-between items-center">

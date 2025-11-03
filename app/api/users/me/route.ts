@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
                 
     } catch(err) {
-        return NextResponse.json({error: "an error occurred"}, {status: 404})
+        return NextResponse.json({error: err}, {status: 404})
     }
 }
 

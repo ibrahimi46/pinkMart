@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { db } from "@/db";
 import { addresses } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 const capitalizeFirst = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
