@@ -110,7 +110,7 @@ interface AdminOrder {
   items?: {
     id: number;
     productName: string;
-    price: number;
+    currentPrice: number;
     quantity: number;
     imageUrl?: string;
   }[];
@@ -202,7 +202,7 @@ const OrderDetails = ({ orderId, handleBack }: OrderDetailsProps) => {
                         </p>
                       </div>
                     </div>
-                    <p className="font-semibold">${item.price}</p>
+                    <p className="font-semibold">${item.currentPrice}</p>
                   </div>
                 ))}
             </div>

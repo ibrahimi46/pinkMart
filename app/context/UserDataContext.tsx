@@ -51,7 +51,7 @@ interface CartItem {
   productId: number;
   quantity: number;
   addedAt: string;
-  currentPrice: string;
+  currentPrice: number;
   oldPrice?: string;
 }
 
@@ -96,7 +96,7 @@ interface AdminUser {
   }[];
 }
 
-type CheckoutStep = "cart" | "checkout" | "order_placed";
+type CheckoutStep = "cart" | "checkout" | "order_placed" | "order_failed";
 
 interface UserDataContextType {
   user: User | null;
@@ -166,9 +166,9 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
   const [loading, setLoading] = useState(false);
   const [userPfp, setUserPfp] = useState<string>("");
-  const [step, setStep] = useState<"cart" | "checkout" | "order_placed">(
-    "cart"
-  ); // Steps in cart
+  const [step, setStep] = useState<
+    "cart" | "checkout" | "order_placed" | "order_failed"
+  >("cart"); // Steps in cart
   const { data: session, status } = useSession();
 
   const isLoggedIn = !!user;
@@ -485,6 +485,8 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         },
       });
       const data = await res.json();
+      console.log("am in fetchcartitem");
+      console.log(data.items);
       setCartItems(data.items || []);
     } catch (err) {
       console.error("Failed to fetch cart:", err);
@@ -573,8 +575,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const cartTotal = useMemo(() => {
+    console.log("am in cartotal context");
     return cartItems.reduce((total, item) => {
-      const price = parseFloat(item.currentPrice);
+      const price = item.currentPrice;
+      console.log(price);
       return total + price * item.quantity;
     }, 0);
   }, [cartItems]);

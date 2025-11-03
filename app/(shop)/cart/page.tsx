@@ -182,7 +182,10 @@ const Cart = () => {
           />
         )}
         {step === "order_placed" && (
-          <OrderPlaced handleStepBack={handleStepBack} />
+          <OrderPlaced
+            handleStepBack={handleStepBack}
+            selectedDeliveryDate={selectedDeliveryDate}
+          />
         )}
       </div>
 

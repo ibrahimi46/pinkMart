@@ -57,6 +57,7 @@ const assets = {
     cart_white: "/icons/cart_white.svg",
     filter: "/icons/filter.svg",
     card: "/icons/card.svg",
+    red_fail: "/icons/red_fail.svg",
   },
   onboarding: {
     step1: {

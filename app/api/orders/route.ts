@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
                 orderId: orderId,
                 productId: item.productId,
                 quantity: item.quantity,
-                priceAtPurchase: item.price
+                priceAtPurchase: item.currentPrice
                 
             })
         }

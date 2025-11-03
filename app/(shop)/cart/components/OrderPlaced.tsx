@@ -1,12 +1,27 @@
 import Image from "next/image";
 import assets from "@/assets";
 import BackButton from "@/app/components/BackButton";
+import { useEffect, useContext } from "react";
+import { UserDataContext } from "@/app/context/UserDataContext";
 
 interface OrderPlacedProps {
   handleStepBack: (step?: string) => void;
+  selectedDeliveryDate: string;
 }
 
-const OrderPlaced = ({ handleStepBack }: OrderPlacedProps) => {
+const OrderPlaced = ({
+  handleStepBack,
+  selectedDeliveryDate,
+}: OrderPlacedProps) => {
+  const context = useContext(UserDataContext);
+  const { placeOrder, cartTotal, cartItems } = context!;
+
+  const deliveryFee = 5.78;
+  const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
+
+  useEffect(() => {
+    placeOrder({ finalCheckoutPrice, cartItems, selectedDeliveryDate });
+  }, []);
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 bg-white p-6 rounded-3xl border border-black-100">

@@ -4,7 +4,7 @@ import assets from "@/assets";
 interface ProductCardProps {
   name: string;
   icon: string;
-  currentPrice: string;
+  currentPrice: number;
   oldPrice: string;
   capacity: number;
   addToCart: () => void;

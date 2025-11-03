@@ -9,7 +9,7 @@ interface ProductProps {
     name: string;
     description: string;
     category: string;
-    currentPrice: string;
+    currentPrice: number;
     stock: number;
     imageUrl: string;
   };
@@ -42,9 +42,7 @@ const CartItem = ({
           <div className="flex flex-col gap-1">
             <p className="text-body-sm font-medium truncate">{product?.name}</p>
             <div className="flex gap-2 text-body-sm">
-              <p className="text-primary-600">
-                ${parseFloat(product?.currentPrice).toFixed(2)}
-              </p>
+              <p className="text-primary-600">${product?.currentPrice}</p>
             </div>
           </div>
         </div>

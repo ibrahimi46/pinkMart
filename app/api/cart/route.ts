@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
             cartId: CartItemsTable.cartId,
             productId: CartItemsTable.productId,
             quantity: CartItemsTable.quantity,
-            price: products.currentPrice
+            currentPrice: products.currentPrice
         }).from(CartItemsTable).innerJoin(products, eq(products.id, CartItemsTable.productId)).where(eq(CartItemsTable.cartId, userCart.id));
         return NextResponse.json({items: cartProducts}, {status: 200})
 

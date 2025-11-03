@@ -26,7 +26,7 @@ const OrderSummary = ({
   step,
 }: OrderSummaryProps) => {
   const context = useContext(UserDataContext);
-  const { cartTotal, cartItems, placeOrder } = context!;
+  const { cartTotal, cartItems, token, setLoading } = context!;
 
   const deliveryFee = 5.78;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
@@ -42,6 +42,34 @@ const OrderSummary = ({
       !selectedPaymentMethod ||
       cartItems.length < 1 ||
       context?.addresses.length === 0);
+
+  const handleCheckout = async () => {
+    if (isPlaceOrderDisabled) return;
+    try {
+      setLoading(true);
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartItems }),
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        handleStepNext("order_failed");
+      }
+    } catch (err) {
+      console.error(err);
+      handleStepNext("order_failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return step !== "order_placed" ? (
     <div className="bg-white w-full p-6 rounded-3xl h-64 border border-black-100 flex flex-col gap-4">
@@ -94,16 +122,7 @@ const OrderSummary = ({
                 : "cursor-pointer "
             }
             `}
-          onClick={async () => {
-            if (isPlaceOrderDisabled) return;
-            await placeOrder({
-              finalCheckoutPrice,
-              selectedDeliveryDate,
-              cartItems,
-            });
-
-            handleStepNext("order_placed");
-          }}
+          onClick={handleCheckout}
         >
           <p>Place Order</p>
         </div>
