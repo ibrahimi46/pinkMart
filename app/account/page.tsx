@@ -32,6 +32,7 @@ const adminMenu = [
     icon: assets.icons.dashboard,
     key: "admin-dashboard",
   },
+  { name: "Admin Addresses", icon: assets.icons.location, key: "addresses" },
   {
     name: "Manage Products",
     icon: assets.icons.products,
