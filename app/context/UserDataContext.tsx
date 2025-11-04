@@ -1,49 +1,37 @@
 import {
   ReactNode,
   useState,
-  useEffect,
   useCallback,
-  useMemo,
   createContext,
   useContext,
 } from "react";
-import { Orders, CartItem, AdminOrder, AdminUser, Address } from "@/types";
+import { AdminOrder, AdminUser } from "@/types";
 import { AuthContext } from "./AuthContext";
 
 interface UserDataContextType {
   loading: boolean;
-
   adminOrders: AdminOrder[];
   adminUsers: AdminUser[];
-
   setLoading: (value: boolean) => void;
   fetchAdminUsers: () => void;
   updateUserRole: (userId: number, isAdmin: boolean) => void;
   getAdminUserDetails: (userId: number) => Promise<AdminUser | null>;
-
   fetchAdminOrders: () => void;
   updateOrderStatus: (orderId: number, status: string) => void;
   getOrderDetails: (orderId: number) => Promise<AdminOrder | null>;
-
-  refetchAll: () => Promise<void>;
 }
 
 export const UserDataContext = createContext<UserDataContextType | null>(null);
 
 export const UserDataProvider = ({ children }: { children: ReactNode }) => {
-  // Get auth data from AuthContext
   const authContext = useContext(AuthContext);
   const { token, user } = authContext!;
 
-  // States
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
-
   const [adminOrders, setAdminOrders] = useState<AdminOrder[]>([]);
-
   const [loading, setLoading] = useState(false);
 
   // Admin User Functions
-
   const fetchAdminUsers = async () => {
     if (!token) return;
 
@@ -105,7 +93,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   );
 
   // Admin Orders
-
   const fetchAdminOrders = async () => {
     if (!token) return;
 
@@ -168,30 +155,12 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     [token]
   );
 
-  const cartTotalItems = useMemo(() => {
-    return cartItems.reduce((total, item) => total + Number(item.quantity), 0);
-  }, [cartItems]);
-
-  const refetchAll = useCallback(async () => {
-    await Promise.all([
-      refetchAddresses(),
-      refetchCartItems(),
-      refetchOrders(),
-    ]);
-  }, [token]);
-
-  useEffect(() => {
-    refetchAll();
-  }, [refetchAll]);
-
   return (
     <UserDataContext.Provider
       value={{
         loading,
-
         adminOrders,
         adminUsers,
-        cartTotalItems,
         setLoading,
         fetchAdminUsers,
         updateUserRole,
@@ -199,7 +168,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         updateOrderStatus,
         getOrderDetails,
         fetchAdminOrders,
-        refetchAll,
       }}
     >
       {children}

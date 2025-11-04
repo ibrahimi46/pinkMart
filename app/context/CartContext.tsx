@@ -1,4 +1,10 @@
-import { createContext, useState, useCallback, useContext } from "react";
+import {
+  createContext,
+  useState,
+  useCallback,
+  useContext,
+  useMemo,
+} from "react";
 import { CartItem } from "@/types";
 import { AuthContext } from "./AuthContext";
 
@@ -7,12 +13,14 @@ interface CartContextType {
   cartTotal: number;
   cartTotalItems: number;
   step: string;
+  loading: boolean;
   addToCart: (productId: number, quantity: number) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
   updateCart: (productId: number, quantity: number) => Promise<void>;
   setStep: (value: string) => void;
   handleStepNext: (step: string) => void;
   refetchCartItems: () => Promise<void>;
+  setLoading: (value: boolean) => void;
 }
 
 export const CartContext = createContext<CartContextType | null>(null);
@@ -22,11 +30,12 @@ export const CartContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [step, setStep] = useState<string>("cart"); // steps in cart
-
   const authContext = useContext(AuthContext);
   const { token } = authContext!;
+
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [step, setStep] = useState<string>("cart");
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Cart Functions
   const fetchCartItems = useCallback(async () => {
@@ -132,6 +141,10 @@ export const CartContextProvider = ({
     [token, fetchCartItems]
   );
 
+  const cartTotalItems = useMemo(() => {
+    return cartItems.reduce((total, item) => total + Number(item.quantity), 0);
+  }, [cartItems]);
+
   const cartTotal = useMemo(() => {
     return cartItems.reduce((total, item) => {
       const price = Number(item.price);
@@ -151,4 +164,25 @@ export const CartContextProvider = ({
       setStep(value);
     }
   };
+
+  return (
+    <CartContext.Provider
+      value={{
+        step,
+        cartItems,
+        cartTotal,
+        loading,
+        cartTotalItems,
+        setLoading,
+        addToCart,
+        removeFromCart,
+        updateCart,
+        refetchCartItems,
+        handleStepNext,
+        setStep,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };

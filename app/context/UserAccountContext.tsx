@@ -1,8 +1,9 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useMemo } from "react";
 import { Orders, Address } from "@/types";
 import { AuthContext } from "./AuthContext";
 
 interface UserAccountContextType {
+  loading: boolean;
   addresses: Address[];
   defaultAddress: Address | null;
   orders: Orders[];
@@ -11,6 +12,7 @@ interface UserAccountContextType {
   deleteAddress: (id: number) => Promise<void>;
   refetchAddresses: () => Promise<void>;
   getOrders: () => Promise<void>;
+  setLoading: (value: boolean) => void;
 }
 
 export const UserAccountContext = createContext<UserAccountContextType | null>(
@@ -22,11 +24,12 @@ export const UserAccountContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [addresses, setAddresses] = useState<Address[]>([]);
-  const [orders, setOrders] = useState<Orders[]>([]);
-
   const authContext = useContext(AuthContext);
   const { token } = authContext!;
+
+  const [loading, setLoading] = useState(false);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [orders, setOrders] = useState<Orders[]>([]);
 
   useEffect(() => {
     if (token) {
@@ -151,5 +154,22 @@ export const UserAccountContextProvider = ({
     await getOrders();
   };
 
-  return <UserAccountContextProvider>{children}</UserAccountContextProvider>;
+  return (
+    <UserAccountContext.Provider
+      value={{
+        loading,
+        addresses,
+        defaultAddress,
+        orders,
+        setLoading,
+        getOrders,
+        addAddress,
+        getAddresses,
+        deleteAddress,
+        refetchAddresses,
+      }}
+    >
+      {children}
+    </UserAccountContext.Provider>
+  );
 };

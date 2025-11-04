@@ -5,6 +5,8 @@ import { User, Orders } from "@/types";
 interface AdminContextProps {
   orders: Orders[] | null;
   users: User[];
+  loading: boolean;
+  setLoading: (value: boolean) => void;
   getUsersList: () => Promise<void>;
   getOrders: () => Promise<void>;
 }
@@ -12,11 +14,12 @@ interface AdminContextProps {
 export const AdminContext = createContext<AdminContextProps | null>(null);
 
 export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [orders, setOrders] = useState<Orders[] | null>(null);
-
   const authContext = useContext(AuthContext);
   const { token, user } = authContext!;
+
+  const [users, setUsers] = useState<User[]>([]);
+  const [orders, setOrders] = useState<Orders[] | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const getUsersList = async () => {
     try {
@@ -57,7 +60,9 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
   }, [token, user]);
 
   return (
-    <AdminContext.Provider value={{ orders, users, getUsersList, getOrders }}>
+    <AdminContext.Provider
+      value={{ orders, users, loading, setLoading, getUsersList, getOrders }}
+    >
       {children}
     </AdminContext.Provider>
   );
