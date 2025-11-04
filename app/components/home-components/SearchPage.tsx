@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext, useState } from "react";
 import Loading from "../Loading";
 import FilterSidebar from "@/app/categories/components/FilterSidebar";
 import ProductCard from "../ProductCard";
@@ -7,10 +7,10 @@ import { ProductsContext } from "@/app/context/ProductsContext";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import assets from "@/assets";
 import { SearchContext } from "@/app/context/SearchContext";
-import { Product } from "@/types";
 import { CartContext } from "@/app/context/CartContext";
+import { useProductFilter } from "@/app/utils/useProductFilter";
 
-// later dont forget to optimize this and categories page cause both do the same thing on mount
+// optimized (:
 const SearchPage = () => {
   const searchParams = useSearchParams();
 
@@ -21,37 +21,15 @@ const SearchPage = () => {
   const { addToCart, loading } = cartContext!;
   const { searchQuery } = searchContext!;
 
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>(
     searchParams.get("category") || ""
   );
-  const [priceFilter, setPriceFilter] = useState({ min: 0, max: 100 });
-  const [stockFilter, setStockFilter] = useState(false);
 
-  useEffect(() => {
-    if (!products) return;
-    let filtered = selectedCategory
-      ? products.filter((product) => product.category === selectedCategory)
-      : products;
-
-    if (searchQuery) {
-      filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    filtered = filtered.filter(
-      (product) =>
-        Number(product.currentPrice) >= priceFilter.min &&
-        Number(product.currentPrice) <= priceFilter.max
-    );
-
-    if (stockFilter) {
-      filtered = filtered.filter((product) => Number(product.stock) > 0);
-    }
-
-    setFilteredProducts(filtered);
-  }, [products, selectedCategory, priceFilter, stockFilter, searchQuery]);
+  const { filteredProducts, setPriceFilter, setStockFilter } = useProductFilter(
+    products,
+    searchQuery,
+    selectedCategory
+  );
 
   return (
     <div className="flex gap-4">

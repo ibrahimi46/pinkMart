@@ -113,7 +113,7 @@ export const orderItems = pgTable("orderItems", {
 
 export const addresses = pgTable("addresses", {
     id: serial("id").primaryKey(),
-    userId: serial("user_id").notNull(),
+    userId: integer("user_id").notNull(),
     type: varchar("type", {length: 50}).notNull(),
     streetAddress: text("street_address").notNull(),
     city: varchar("city", {length: 100}).notNull(),

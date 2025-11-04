@@ -14,6 +14,7 @@ export interface UserDetails {
 
 export interface Address {
   id?: number;
+  userId?: number;
   type: string;
   streetAddress: string;
   aptNumber: string;

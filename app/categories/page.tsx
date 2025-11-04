@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import CategoryStrip from "../components/home-components/CategoryStrip";
 import useCategories from "../utils/useCategories";
 import ProductCard from "../components/ProductCard";
@@ -10,10 +10,10 @@ import FilterSidebar from "./components/FilterSidebar";
 import { Suspense } from "react";
 import { ProductsContext } from "../context/ProductsContext";
 import { SearchContext } from "../context/SearchContext";
-import { Product } from "@/types";
 import NoDataPlaceholder from "../account/components/NoDataPlaceholder";
 import assets from "@/assets";
 import { CartContext } from "../context/CartContext";
+import { useProductFilter } from "../utils/useProductFilter";
 
 const CategoriesPage = () => {
   return (
@@ -38,34 +38,11 @@ const CategoriesPageContent = () => {
   const searchContext = useContext(SearchContext);
   const { searchQuery } = searchContext!;
 
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [priceFilter, setPriceFilter] = useState({ min: 0, max: 100 });
-  const [stockFilter, setStockFilter] = useState(false);
-
-  useEffect(() => {
-    if (!products) return;
-    let filtered = selectedCategory
-      ? products.filter((product) => product.category === selectedCategory)
-      : products;
-
-    if (searchQuery) {
-      filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    filtered = filtered.filter(
-      (product) =>
-        Number(product.currentPrice) >= priceFilter.min &&
-        Number(product.currentPrice) <= priceFilter.max
-    );
-
-    if (stockFilter) {
-      filtered = filtered.filter((product) => Number(product.stock) > 0);
-    }
-
-    setFilteredProducts(filtered);
-  }, [products, selectedCategory, priceFilter, stockFilter, searchQuery]);
+  const { filteredProducts, setPriceFilter, setStockFilter } = useProductFilter(
+    products,
+    searchQuery,
+    selectedCategory
+  );
 
   return (
     <main className="flex gap-4 mx-4">

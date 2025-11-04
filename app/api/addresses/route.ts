@@ -55,8 +55,13 @@ export async function POST(req: NextRequest) {
         }
 
         await db.insert(addresses).values({
-            userId: decoded?.userId,
-            type: capitalizeFirst(type), streetAddress: capitalizeFirst(streetAddress), city: capitalizeFirst(city), aptNumber, zipCode, isDefault
+            userId: Number(decoded?.userId),
+            type: capitalizeFirst(type),
+            streetAddress: capitalizeFirst(streetAddress),
+            city: capitalizeFirst(city),
+            aptNumber,
+            zipCode,
+            isDefault
         });
 
         return NextResponse.json({ success: true }, { status: 200 });
