@@ -13,7 +13,7 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
   const context = useContext(UserDataContext);
-  const { logout, user } = context!;
+  const { logout, user, userDetails } = context!;
 
   return (
     <div
@@ -57,7 +57,7 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                     height={50}
                     alt="profile"
                   />
-                  <p className="font-bold">{user.full_name}</p>
+                  <p className="font-bold">{userDetails?.fullName}</p>
                 </div>
                 {user.isAdmin ? (
                   <>

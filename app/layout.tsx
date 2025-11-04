@@ -11,7 +11,7 @@ import Sidebar from "./components/Sidebar";
 import { UserDataProvider } from "./context/UserDataContext";
 import Providers from "./providers";
 import { SearchProvider } from "./context/SearchContext";
-import { ProductProvider, ProductsContext } from "./context/ProductsContext";
+import { ProductProvider } from "./context/ProductsContext";
 import { AdminProvider } from "./context/AdminContext";
 
 const geistSans = Geist({

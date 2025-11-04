@@ -70,7 +70,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [addresses, setAddresses] = useState<Address[]>([]);
 
   const [adminOrders, setAdminOrders] = useState<AdminOrder[]>([]);
-  const [orderId, setOrderId] = useState<number | null>(null);
   const [orders, setOrders] = useState<Orders[]>([]);
 
   const [loading, setLoading] = useState(false);
