@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { db } from "@/db";
-import { orders, orderItems, products, cart as CartsTable, cartItems as CartItemsTable } from "@/db/schema";
+import { orders, orderItems, products, cart as CartsTable, cartItems as CartItemsTable, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { sql } from "drizzle-orm";
+import {  sendEmail, sendOrderEmail } from "@/app/lib/email";
+
+
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -35,30 +38,61 @@ export async function POST(req: NextRequest) {
         deliveryAddressId: parseInt(metadata.selectedAddressId),
         stripeSessionId: session.id,
     }).returning();
+
+    type OrderItem = {
+        id: number;
+        name: string;
+        quantity: number;
+        priceAtPurchase: number;
+        imageUrl?: string;
+        
+    };
+
+    const emailOrderItems: OrderItem[] = [];
+    const cartItems = JSON.parse(metadata.cartItems);
+    const orderId = order[0].id;    
     
-            const cartItems = JSON.parse(metadata.cartItems);
-            const orderId = order[0].id;
+    for (const item of cartItems){
+        await db.insert(orderItems).values({
+            orderId,
+            productId: item.productId,
+            quantity: item.quantity,
+            priceAtPurchase: item.currentPrice
+        })
+        
+        await db.update(products).set({
+        stock: sql`GREATEST(${products.stock} - ${item.quantity}, 0)`
+        }).where(eq(products.id, item.productId));
 
-            
-            for (const item of cartItems){
-                await db.insert(orderItems).values({
-                    orderId,
-                    productId: item.productId,
-                    quantity: item.quantity,
-                    priceAtPurchase: item.currentPrice
-                })
+        const [product] = await db.select({name: products.name, imageUrl: products.imageUrl}).from(products).where(eq(item.productId, products.id));
 
-                     await db.update(products).set({
-                stock: sql`GREATEST(${products.stock} - ${item.quantity}, 0)`
-                }).where(eq(products.id, item.productId));
-            }
+        emailOrderItems.push({
+            id: item.productId,
+            name: product.name,
+            quantity: item.quantity,
+            priceAtPurchase: item.currentPrice,
+            imageUrl: product.imageUrl || undefined,
+         
+        });
+    }
 
-            const [userCart] = await db.select().from(CartsTable).where(eq(CartsTable.user_id, parseInt(metadata.userId))).limit(1);
-      
-            if (userCart) {
-                await db.delete(CartItemsTable).where(eq(CartItemsTable.cartId, userCart.id));
-                await db.delete(CartsTable).where(eq(CartsTable.user_id, parseInt(metadata.userId)));
 
+    // we send an email on successfull insertion
+    const [user] = await db.select({fullName: users.fullName, email: users.email}).from(users).where(eq(users.id, parseInt(metadata.userId)))
+        await sendOrderEmail(user.email!, {
+    orderId,
+    fullName: user.fullName,
+    totalAmount: parseInt(metadata.finalCheckoutPrice),
+    status: "Pending",
+    deliveryDate: metadata.selectedDeliveryDate,
+    items: emailOrderItems,
+    });
+
+    const [userCart] = await db.select().from(CartsTable).where(eq(CartsTable.user_id, parseInt(metadata.userId))).limit(1);
+
+    if (userCart) {
+        await db.delete(CartItemsTable).where(eq(CartItemsTable.cartId, userCart.id));
+        await db.delete(CartsTable).where(eq(CartsTable.user_id, parseInt(metadata.userId)));
 
             
       }

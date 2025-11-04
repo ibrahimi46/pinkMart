@@ -1,12 +1,17 @@
-// @ts-expect-error maybe error bro idk leave me alone!
-import SibApiV3Sdk from 'sib-api-v3-sdk';
+import "dotenv/config"
 import assets from "@/assets";
+import nodemailer from "nodemailer";
 
-const client = SibApiV3Sdk.ApiClient.instance;
-const apiKey = client.authentications['api-key'];
-apiKey.apiKey = process.env.BREVO_API_KEY!; 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.USER_MAIL!,
+    pass: process.env.USER_MAIL_PASS!,
+  },
+  logger: true,
+  debug: true,
+})
 
-const transactionalEmails = new SibApiV3Sdk.TransactionalEmailsApi();
 
 interface EmailProps {
   to: string;
@@ -32,20 +37,40 @@ interface Order {
 }
 
 export async function sendEmail({ to, subject, html }: EmailProps) {
-  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail({
-    to: [{ email: to }],
-    sender: { email: process.env.FROM_EMAIL!, name: 'PinkMart' },
-    subject,
-    htmlContent: html,
-  });
-
   try {
-    const response = await transactionalEmails.sendTransacEmail(sendSmtpEmail);
-    console.log('Email sent:', response);
+    const info = await transporter.sendMail({
+      from: `"PinkMart" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      html,
+    });
+    console.log("Email sent:", info.messageId);
   } catch (err) {
-    console.error('Error sending email:', err);
+    console.error("Error sending email:", err);
     throw err;
   }
+}
+
+
+type OrderEmailData = {
+  orderId: number;
+  fullName: string;
+  totalAmount: number;
+  status: string;
+  items: OrderItem[];
+  deliveryDate: string;
+};
+
+
+export async function sendOrderEmail(userEmail: string, orderData: OrderEmailData) {
+  const htmlString = generateOrderConfirmationMail(orderData);
+
+  await transporter.sendMail({
+    from: `"PinkMart" <${process.env.SMTP_FROM_EMAIL}>`,
+    to: userEmail,
+    subject: `Order #${orderData.orderId} confirmed!`,
+    html: htmlString,
+  });
 }
 
 export function generateOrderConfirmationMail({
@@ -93,7 +118,7 @@ export function generateOrderConfirmationMail({
           
           <!-- Header -->
           <div style="background-color: #f3e8ff; padding: 24px; text-align: center; border-bottom: 1px solid #e5e7eb;">
-            <img src="${assets.logo}" width="120" alt="PinkMart Logo" style="margin: 0 auto;">
+            <img src="https://pink-mart.vercel.app/icons/logo.svg" width="120" alt="PinkMart Logo" style="margin: 0 auto;">
           </div>
 
           <!-- Content -->
