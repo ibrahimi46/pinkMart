@@ -92,7 +92,7 @@ const Login = () => {
                     <p className="text-body-md">Phone</p>
                     <input
                       type="text"
-                      placeholder="Enter your email"
+                      placeholder="Enter your phone"
                       className="border-2 w-full h-10 p-4 text-body-md rounded-md"
                       onChange={(e) => setPhone(e.target.value)}
                     />

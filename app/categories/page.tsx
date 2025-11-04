@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import CategoryStrip from "../components/home-components/CategoryStrip";
 import useCategories from "../utils/useCategories";
 import ProductCard from "../components/ProductCard";
@@ -25,9 +25,16 @@ const CategoriesPage = () => {
 
 const CategoriesPageContent = () => {
   const searchParams = useSearchParams();
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    searchParams.get("category") || ""
-  );
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get("category");
+    if (categoryFromUrl) {
+      setSelectedCategory(decodeURIComponent(categoryFromUrl));
+    } else {
+      setSelectedCategory("");
+    }
+  }, [searchParams]);
 
   const { categories } = useCategories();
 
@@ -46,7 +53,6 @@ const CategoriesPageContent = () => {
 
   return (
     <main className="flex gap-4 mx-4">
-      {loading && <Loading />}
       <div className="w-60 h-[600px] hidden md:flex bg-primary-50 flex-shrink-0">
         <FilterSidebar
           onPriceFilter={(min, max) => setPriceFilter({ min, max })}
@@ -63,37 +69,45 @@ const CategoriesPageContent = () => {
         </div>
         <hr />
 
-        {filteredProducts.length > 0 ? (
-          <div
-            className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6  gap-x-4
-         md:gap-y-8 p-4 overflow-y-auto scrollbar-hide"
-          >
-            {filteredProducts.map((product) => {
-              return (
-                <ProductCard
-                  key={product.id}
-                  icon={product.imageUrl}
-                  name={product.name}
-                  currentPrice={Number(product.currentPrice)}
-                  oldPrice={Number(product.oldPrice)}
-                  capacity={Number(product.stock)}
-                  addToCart={() => addToCart(product.id, 1)}
-                />
-              );
-            })}
+        {productContext?.loading ? (
+          <div>
+            <Loading />
           </div>
         ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="w-96">
-              <NoDataPlaceholder
-                icon={assets.icons.close}
-                field1="No products found"
-                field2="Try adjusting your filters"
-                btnName="Clear Filters"
-                handleAction={() => {}}
-              />
-            </div>
-          </div>
+          <>
+            {filteredProducts.length > 0 ? (
+              <div
+                className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6  gap-x-4
+         md:gap-y-8 p-4 overflow-y-auto scrollbar-hide"
+              >
+                {filteredProducts.map((product) => {
+                  return (
+                    <ProductCard
+                      key={product.id}
+                      icon={product.imageUrl}
+                      name={product.name}
+                      currentPrice={Number(product.currentPrice)}
+                      oldPrice={Number(product.oldPrice)}
+                      capacity={Number(product.stock)}
+                      addToCart={() => addToCart(product.id, 1)}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex-1 flex items-center justify-center">
+                <div className="w-96">
+                  <NoDataPlaceholder
+                    icon={assets.icons.close}
+                    field1="No products found"
+                    field2="Try adjusting your filters"
+                    btnName="Clear Filters"
+                    handleAction={() => {}}
+                  />
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </main>

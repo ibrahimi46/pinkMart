@@ -11,8 +11,11 @@ export const useProductFilter = (products: Product[],
 
 
     useEffect(() => {
-    if (!products) return;
-    let filtered = selectedCategory
+    if (!products || products.length === 0) {
+      setFilteredProducts([]);
+      return;
+    }
+    let filtered = selectedCategory && selectedCategory.trim() !== ""
       ? products.filter((product) => product.category === selectedCategory)
       : products;
 

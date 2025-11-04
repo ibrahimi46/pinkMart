@@ -90,7 +90,9 @@ const CategoryStrip = ({
             `}
               handleOnClick={() => {
                 if (redirectOnClick) {
-                  router.push(`/categories?category=${item}`);
+                  router.push(
+                    `/categories?category=${encodeURIComponent(item)}`
+                  );
                 } else {
                   setSelectedCategory(item);
                 }

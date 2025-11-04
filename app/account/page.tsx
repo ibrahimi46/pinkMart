@@ -57,10 +57,12 @@ function MyAccountContent() {
     const section = searchParams.get("page");
     if (section) {
       setActiveSection(section);
-    } else if (user?.isAdmin) {
-      setActiveSection("admin-dashboard");
-    } else if (!user?.isAdmin) {
-      if (section === "addresses") setActiveSection("addresses");
+    } else {
+      if (user?.isAdmin) {
+        setActiveSection("admin-dashboard");
+      } else {
+        setActiveSection("account-details");
+      }
     }
   }, [user, searchParams]);
 
