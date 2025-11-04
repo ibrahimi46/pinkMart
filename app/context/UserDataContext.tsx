@@ -5,38 +5,29 @@ import {
   useCallback,
   useMemo,
   createContext,
+  useContext,
 } from "react";
 import {
-  User,
   Orders,
-  UserDetails,
   CartItem,
   AdminOrder,
   AdminUser,
   Address,
 } from "@/types";
-import { jwtDecode } from "jwt-decode";
-import { useSession } from "next-auth/react";
+import { AuthContext } from "./AuthContext";
 
 interface UserDataContextType {
-  user: User | null;
-  userDetails: UserDetails | null;
   cartItems: CartItem[];
   addresses: Address[];
   loading: boolean;
   cartTotal: number;
-  isLoggedIn: boolean;
   defaultAddress: Address | null;
   step: string;
   orders: Orders[];
   adminOrders: AdminOrder[];
   adminUsers: AdminUser[];
   cartTotalItems: number;
-  userPfp: string;
-  token: string;
-  setUserPfp: React.Dispatch<React.SetStateAction<string>>;
   setLoading: (value: boolean) => void;
-  fetchUserPfp: () => Promise<void>;
   fetchAdminUsers: () => void;
   updateUserRole: (userId: number, isAdmin: boolean) => void;
   getAdminUserDetails: (userId: number) => Promise<AdminUser | null>;
@@ -47,7 +38,6 @@ interface UserDataContextType {
   getAddresses: () => void;
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
-  logout: () => void;
   addToCart: (productId: number, quantity: number) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
   updateCart: (productId: number, quantity: number) => Promise<void>;
@@ -61,11 +51,12 @@ interface UserDataContextType {
 export const UserDataContext = createContext<UserDataContextType | null>(null);
 
 export const UserDataProvider = ({ children }: { children: ReactNode }) => {
+  // Get auth data from AuthContext
+  const authContext = useContext(AuthContext);
+  const { token, user } = authContext!;
+
   // States
-  const [token, setToken] = useState<string>("");
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
-  const [user, setUser] = useState<User | null>(null); // Current user
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
 
@@ -73,70 +64,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [orders, setOrders] = useState<Orders[]>([]);
 
   const [loading, setLoading] = useState(false);
-  const [userPfp, setUserPfp] = useState<string>("");
   const [step, setStep] = useState<string>("cart"); // steps in cart
-  const { data: session } = useSession();
-
-  const isLoggedIn = !!user;
-
-  // On mount identifies the user token
-  useEffect(() => {
-    const userToken = localStorage.getItem("token");
-    if (userToken) {
-      setToken(userToken);
-      return;
-    }
-    if (session?.user?.customToken) {
-      setToken(session?.user?.customToken);
-    }
-  }, [session]);
-
-  useEffect(() => {
-    if (token) getUser();
-  }, [token]);
-
-  useEffect(() => {
-    if (user) {
-      getUsersList();
-    }
-  }, [user]);
-
-  // User Functions
-  const getUser = () => {
-    try {
-      const decoded = jwtDecode<User>(token);
-      setUser(decoded);
-    } catch (err) {
-      console.error("Invalid token", err);
-      setUser(null);
-    }
-  };
-
-  const getUsersList = async () => {
-    try {
-      const res = await fetch("/api/users/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      setUserDetails(data.user);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const logout = async () => {
-    localStorage.removeItem("token");
-    setUser(null);
-
-    if (session) {
-      const { signOut } = await import("next-auth/react");
-      signOut({ callbackUrl: "/" });
-    } else {
-      window.location.href = "/";
-    }
-  };
 
   // Admin User Functions
 
@@ -433,31 +361,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     await getOrders();
   };
 
-  // User pfp functions
-
-  const fetchUserPfp = async () => {
-    try {
-      if (!token) return;
-
-      const res = await fetch("/api/users/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      if (data?.user?.image) setUserPfp(data.user.image);
-      console.log(userPfp);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserPfp();
-  }, [token]);
 
   // Admin Orders
 
@@ -549,31 +452,23 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   return (
     <UserDataContext.Provider
       value={{
-        user,
-        userDetails,
         cartItems,
         addresses,
         loading,
         cartTotal,
-        isLoggedIn,
         defaultAddress,
         step,
         orders,
         adminOrders,
         adminUsers,
         cartTotalItems,
-        userPfp,
-        token,
         setLoading,
-        setUserPfp,
-        fetchUserPfp,
         fetchAdminUsers,
         updateUserRole,
         getAdminUserDetails,
         updateOrderStatus,
         getOrderDetails,
         fetchAdminOrders,
-        logout,
         getAddresses,
         addAddress,
         deleteAddress,

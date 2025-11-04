@@ -5,6 +5,7 @@ import assets from "@/assets";
 import Link from "next/link";
 import { useContext } from "react";
 import { UserDataContext } from "../context/UserDataContext";
+import { AuthContext } from "../context/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -12,8 +13,8 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
-  const context = useContext(UserDataContext);
-  const { logout, user, userDetails } = context!;
+  const authContext = useContext(AuthContext);
+  const { logout, user, userDetails } = authContext!;
 
   return (
     <div

@@ -5,6 +5,7 @@ import TwoColumnGrid from "./components/home-components/TwoColumnGrid";
 import { useState, useEffect, useContext } from "react";
 import { SearchContext } from "./context/SearchContext";
 import SearchPage from "./components/home-components/SearchPage";
+import WelcomeModal from "./components/WelcomeModal";
 
 export default function Home() {
   const [categories, setCategories] = useState([]);
@@ -24,6 +25,7 @@ export default function Home() {
 
   return (
     <main className="md:px-10 px-6 mb-6 flex flex-col gap-12">
+      <WelcomeModal />
       {showSearchPage ? (
         <SearchPage />
       ) : (

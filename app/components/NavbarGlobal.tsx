@@ -4,6 +4,7 @@ import Button from "./Button";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserDataContext } from "../context/UserDataContext";
+import { AuthContext } from "../context/AuthContext";
 import reverseGeocode from "../utils/reverseGeocode";
 import CartModal from "./CartModal";
 import { SearchContext } from "../context/SearchContext";
@@ -31,10 +32,12 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
   const [showCartModal, setShowCartModal] = useState(false);
 
   const context = useContext(UserDataContext);
+  const authContext = useContext(AuthContext);
   const searchContext = useContext(SearchContext);
   const productContext = useContext(ProductsContext);
 
-  const { isLoggedIn, cartTotalItems, userPfp, handleStepNext } = context!;
+  const { isLoggedIn, userPfp } = authContext!;
+  const { cartTotalItems, handleStepNext } = context!;
   const { searchQuery, setSearchQuery } = searchContext!;
   const { products } = productContext!;
 

@@ -12,6 +12,7 @@ import ManageOrders from "./(admin)/ManageOrders";
 import ManageUsers from "./(admin)/ManageUsers";
 import Analytics from "./(admin)/Analytics";
 import { UserDataContext } from "../context/UserDataContext";
+import { AuthContext } from "../context/AuthContext";
 import { useSearchParams } from "next/navigation";
 import Loading from "../components/Loading";
 import HelpCenter from "./components/HelpCenter";
@@ -48,8 +49,8 @@ const adminMenu = [
 
 function MyAccountContent() {
   const [activeSection, setActiveSection] = useState<string>("");
-  const context = useContext(UserDataContext);
-  const { logout, userDetails, user, userPfp } = context!;
+  const authContext = useContext(AuthContext);
+  const { logout, userDetails, user, userPfp } = authContext!;
   const searchParams = useSearchParams();
 
   useEffect(() => {

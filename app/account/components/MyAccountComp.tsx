@@ -2,12 +2,15 @@ import Image from "next/image";
 import assets from "@/assets";
 import { useContext, useState } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
+import { AuthContext } from "@/app/context/AuthContext";
 import Loading from "@/app/components/Loading";
 
 const ProfilePictureUpload = () => {
   const [file, setFile] = useState<File | null>(null);
+  const authContext = useContext(AuthContext);
   const context = useContext(UserDataContext);
-  const { userPfp, setUserPfp, token, setLoading, loading } = context!;
+  const { userPfp, setUserPfp, token } = authContext!;
+  const { setLoading, loading } = context!;
 
   const handleSubmit = async () => {
     if (!file) return;
@@ -124,8 +127,10 @@ const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
 };
 
 const MyAccountComp = () => {
+  const authContext = useContext(AuthContext);
   const context = useContext(UserDataContext);
-  const { userDetails, loading } = context!;
+  const { userDetails } = authContext!;
+  const { loading } = context!;
 
   return (
     <div className="flex flex-col gap-4 mt-2">

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { UserDataContext } from "./UserDataContext";
+import { AuthContext } from "./AuthContext";
 import { User, Orders } from "@/types";
 
 interface AdminContextProps {
@@ -15,8 +15,8 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [orders, setOrders] = useState<Orders[] | null>(null);
 
-  const context = useContext(UserDataContext);
-  const { token, user } = context!;
+  const authContext = useContext(AuthContext);
+  const { token, user } = authContext!;
 
   const getUsersList = async () => {
     try {

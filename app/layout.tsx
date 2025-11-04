@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import { UserDataProvider } from "./context/UserDataContext";
+import { AuthProvider } from "./context/AuthContext";
 import Providers from "./providers";
 import { SearchProvider } from "./context/SearchContext";
 import { ProductProvider } from "./context/ProductsContext";
@@ -45,27 +46,29 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-screen bg-black-50`}
       >
         <Providers>
-          <UserDataProvider>
-            <SearchProvider>
-              <ProductProvider>
-                <AdminProvider>
-                  {!isAuthPage && (
-                    <>
-                      <NavbarGlobal
-                        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                      />
-                      <Sidebar
-                        isOpen={isSidebarOpen}
-                        closeSidebar={() => setIsSidebarOpen(false)}
-                      />
-                    </>
-                  )}
-                  <main>{children}</main>
-                  {!isAccountPage && <Footer />}
-                </AdminProvider>
-              </ProductProvider>
-            </SearchProvider>
-          </UserDataProvider>
+          <AuthProvider>
+            <UserDataProvider>
+              <SearchProvider>
+                <ProductProvider>
+                  <AdminProvider>
+                    {!isAuthPage && (
+                      <>
+                        <NavbarGlobal
+                          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                        />
+                        <Sidebar
+                          isOpen={isSidebarOpen}
+                          closeSidebar={() => setIsSidebarOpen(false)}
+                        />
+                      </>
+                    )}
+                    <main>{children}</main>
+                    {!isAccountPage && <Footer />}
+                  </AdminProvider>
+                </ProductProvider>
+              </SearchProvider>
+            </UserDataProvider>
+          </AuthProvider>
         </Providers>
       </body>
     </html>
