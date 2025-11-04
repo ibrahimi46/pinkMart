@@ -1,21 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import assets from "@/assets";
 
-const WelcomeModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+let hasbeenClosed = false;
 
-  useEffect(() => {
-    const hasSeenModal = localStorage.getItem("hasSeenWelcomeModal");
-    if (!hasSeenModal) {
-      setIsOpen(true);
-    }
-  }, []);
+const WelcomeModal = () => {
+  const [isOpen, setIsOpen] = useState(!hasbeenClosed);
 
   const handleClose = () => {
     setIsOpen(false);
-    localStorage.setItem("hasSeenWelcomeModal", "true");
+    hasbeenClosed = true;
   };
 
   return (
@@ -42,7 +37,10 @@ const WelcomeModal = () => {
           <h2 className="text-body-lg font-semibold">Welcome to pinkMart</h2>
           <hr />
           <div className="flex flex-col gap-3 text-body-md">
-            <p>For demo purposes you may access admin account with the following credentials</p>
+            <p>
+              For demo purposes you may access admin account with the following
+              credentials
+            </p>
             <div className="bg-black-100 p-3 rounded-2xl">
               <p className="font-semibold mb-1">username:</p>
               <p className="text-primary-600">johndoe@pinkmart.net</p>
@@ -50,11 +48,11 @@ const WelcomeModal = () => {
               <p className="text-primary-600">admin</p>
             </div>
             <p className="text-black-400 text-body-sm">
-              Note: please do not delete all the products or users you may delete a few for demo purposes
+              Note: Please do not delete all the products or users you may
+              delete a few for demo purposes
             </p>
-            <p className="text-black-400 text-body-sm">Enjoy</p>
             <p className="text-black-400 text-body-sm">
-              For suggestions: please contact:{" "}
+              For suggestions: Please contact:{" "}
               <a
                 href="mailto:anasibrahimi4664@gmail.com"
                 className="text-primary-600 hover:underline"
@@ -70,4 +68,3 @@ const WelcomeModal = () => {
 };
 
 export default WelcomeModal;
-

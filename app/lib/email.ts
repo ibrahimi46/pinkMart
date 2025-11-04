@@ -145,7 +145,7 @@ export function generateOrderConfirmationMail({
 
               <div style="margin-bottom: 12px;">
                 <p style="font-size: 14px; color: #6b7280; margin: 0;">
-                  <strong>Delivery Date:</strong> ${new Date(deliveryDate).toLocaleDateString()}
+                  <strong>Delivery Date:</strong> ${deliveryDate && !isNaN(new Date(deliveryDate).getTime()) ? new Date(deliveryDate).toLocaleDateString() : "To be confirmed"}
                 </p>
               </div>
 
@@ -301,7 +301,7 @@ export function generateOrderStatusUpdateMail({
             ${deliveryDate && status !== "cancelled" ? `
               <div style="background-color: #f9fafb; border-radius: 12px; padding: 16px; border: 1px solid #e5e7eb; margin-bottom: 24px;">
                 <p style="font-size: 14px; color: #6b7280; margin: 0;">
-                  <strong>Expected Delivery:</strong> ${new Date(deliveryDate).toLocaleDateString()}
+                    <strong>Expected Delivery:</strong> ${deliveryDate && !isNaN(new Date(deliveryDate).getTime()) ? new Date(deliveryDate).toLocaleDateString() : "To be confirmed"}
                 </p>
               </div>
             ` : ''}

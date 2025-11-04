@@ -7,6 +7,8 @@ import Loading from "../Loading";
 import ProductCard from "../ProductCard";
 import { ProductsContext } from "@/app/context/ProductsContext";
 import { CartContext } from "@/app/context/CartContext";
+import { Product } from "@/types";
+import { useState, useEffect } from "react";
 
 interface BestSellerProps {
   title: string;
@@ -16,6 +18,7 @@ interface BestSellerProps {
 const BestSeller = ({ title, withBorder }: BestSellerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const [bestSellerProducts, setBestSellerProducts] = useState<Product[]>([]);
   const productContext = useContext(ProductsContext);
   const { products } = productContext!;
   const cartContext = useContext(CartContext);
@@ -37,6 +40,15 @@ const BestSeller = ({ title, withBorder }: BestSellerProps) => {
     }
   };
 
+  useEffect(() => {
+    const fetchBestSellerProducts = async () => {
+      const res = await fetch("/api/products?bestSellers=true");
+      const data = await res.json();
+      setBestSellerProducts(data.products);
+    };
+    fetchBestSellerProducts();
+  }, []);
+
   return (
     <div
       className={`flex flex-col gap-2 h-auto rounded-3xl  ${
@@ -57,8 +69,8 @@ const BestSeller = ({ title, withBorder }: BestSellerProps) => {
         className="flex gap-4 h-72 overflow-auto scrollbar-hide items-center"
         ref={scrollRef}
       >
-        {products &&
-          products.map((item) => {
+        {bestSellerProducts &&
+          bestSellerProducts.map((item) => {
             return (
               <div key={item.id} className="w-36 h-64 flex-shrink-0">
                 <ProductCard

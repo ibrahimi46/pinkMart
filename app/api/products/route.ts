@@ -1,21 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db"
 import { products as productsTable}  from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, gte, desc } from "drizzle-orm";
 import jwt from "jsonwebtoken"
 
 
 export async function GET(req: NextRequest) {
     try {
         const category = req.nextUrl.searchParams.get("category");
+        const bestSellers = req.nextUrl.searchParams.get("bestSellers");
         let products;
 
-        if (category) {
-            products = await db.select().from(productsTable).where(eq(productsTable.category, category))
+
+        if (bestSellers === "true") {
+          products = await db.select().from(productsTable).orderBy(desc(productsTable.buyCount)).limit(10);
         }
-        else {
-            products = await db.select().from(productsTable);
+        else if (category) {
+          products = await db.select().from(productsTable).where(
+              and(
+                  eq(productsTable.category, category),
+                  gte(productsTable.stock, "3")
+              )
+          )
+      }
+      else {
+            products = await db.select().from(productsTable).where(gte(productsTable.stock, "3"));
         }
+
         return NextResponse.json({products})
 
     }

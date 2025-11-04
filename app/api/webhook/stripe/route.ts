@@ -29,12 +29,32 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({received: true}, {status: 200})
     }
     
+    // admin user gets error for some reason
+    // error says date.toisostring
     const metadata = session.metadata!;
+
+
+    const deliveryDateString = metadata.selectedDeliveryDate;
+    let deliveryDate : Date | null = null;
+
+    if (deliveryDateString && deliveryDateString.trim() !== "") {
+        const parsedDate = new Date(deliveryDateString);
+        if (!isNaN(parsedDate.getTime())) {
+            deliveryDate = parsedDate;
+        }
+    }
+
+    // otherwise lets set random day
+    if (!deliveryDate) {
+        deliveryDate = new Date();
+        deliveryDate.setDate(deliveryDate.getDate() + 7);
+    }
+    
     
     const order = await db.insert(orders).values({
         userId: parseInt(metadata.userId),
         totalAmount: metadata.finalCheckoutPrice,
-        deliveryDate: new Date(metadata.selectedDeliveryDate),
+        deliveryDate: deliveryDate,
         deliveryAddressId: parseInt(metadata.selectedAddressId),
         stripeSessionId: session.id,
     }).returning();
@@ -61,7 +81,8 @@ export async function POST(req: NextRequest) {
         })
         
         await db.update(products).set({
-        stock: sql`GREATEST(${products.stock} - ${item.quantity}, 0)`
+        stock: sql`GREATEST(${products.stock} - ${item.quantity}, 0)`,
+        buyCount: sql`${products.buyCount} + ${item.quantity}`
         }).where(eq(products.id, item.productId));
 
         const [product] = await db.select({name: products.name, imageUrl: products.imageUrl}).from(products).where(eq(products.id, item.productId));
@@ -76,7 +97,7 @@ export async function POST(req: NextRequest) {
         });
     }
 
-
+    
     // we send an email on successfull insertion
     const [user] = await db.select({fullName: users.fullName, email: users.email}).from(users).where(eq(users.id, parseInt(metadata.userId)))
         await sendOrderEmail(user.email!, {
@@ -84,7 +105,7 @@ export async function POST(req: NextRequest) {
     fullName: user.fullName,
     totalAmount: parseInt(metadata.finalCheckoutPrice),
     status: "Pending",
-    deliveryDate: metadata.selectedDeliveryDate,
+    deliveryDate: deliveryDate? deliveryDate.toISOString() : new Date().toISOString(),
     items: emailOrderItems,
     });
 

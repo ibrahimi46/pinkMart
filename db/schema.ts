@@ -11,6 +11,7 @@ export const products = pgTable("products", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     stock: numeric("stock").default("0").notNull(),
     imageUrl: text("image_url"),
+    buyCount: integer("buy_count").default(0).notNull(),
 })
 
 
