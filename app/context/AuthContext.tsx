@@ -15,8 +15,6 @@ interface AuthContextType {
   token: string;
   isLoggedIn: boolean;
   userPfp: string;
-  loading: boolean;
-  setLoading: (value: boolean) => void;
   setUserPfp: React.Dispatch<React.SetStateAction<string>>;
   fetchUserPfp: () => Promise<void>;
   logout: () => Promise<void>;
@@ -28,7 +26,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
-  const [loading, setLoading] = useState(false);
   const [userPfp, setUserPfp] = useState<string>("");
   const { data: session } = useSession();
 
@@ -134,8 +131,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         token,
         isLoggedIn,
         userPfp,
-        loading,
-        setLoading,
         setUserPfp,
         fetchUserPfp,
         logout,

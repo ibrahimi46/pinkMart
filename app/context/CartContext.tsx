@@ -3,6 +3,7 @@ import {
   useState,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
 } from "react";
 import { CartItem } from "@/types";
@@ -20,7 +21,6 @@ interface CartContextType {
   setStep: (value: string) => void;
   handleStepNext: (step: string) => void;
   refetchCartItems: () => Promise<void>;
-  setLoading: (value: boolean) => void;
 }
 
 export const CartContext = createContext<CartContextType | null>(null);
@@ -61,6 +61,12 @@ export const CartContextProvider = ({
       setLoading(false);
     }
   }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      fetchCartItems();
+    }
+  }, [token, fetchCartItems]);
 
   const addToCart = useCallback(
     async (productId: number, quantity: number) => {
@@ -173,7 +179,6 @@ export const CartContextProvider = ({
         cartTotal,
         loading,
         cartTotalItems,
-        setLoading,
         addToCart,
         removeFromCart,
         updateCart,

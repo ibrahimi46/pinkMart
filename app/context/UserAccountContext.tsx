@@ -1,4 +1,11 @@
-import { createContext, useState, useEffect, useContext, useMemo } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  useCallback,
+} from "react";
 import { Orders, Address } from "@/types";
 import { AuthContext } from "./AuthContext";
 
@@ -11,8 +18,8 @@ interface UserAccountContextType {
   addAddress: (address: Address) => Promise<void>;
   deleteAddress: (id: number) => Promise<void>;
   refetchAddresses: () => Promise<void>;
+  refetchOrders: () => Promise<void>;
   getOrders: () => Promise<void>;
-  setLoading: (value: boolean) => void;
 }
 
 export const UserAccountContext = createContext<UserAccountContextType | null>(
@@ -30,13 +37,6 @@ export const UserAccountContextProvider = ({
   const [loading, setLoading] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [orders, setOrders] = useState<Orders[]>([]);
-
-  useEffect(() => {
-    if (token) {
-      getAddresses();
-      getOrders();
-    }
-  }, [token]);
 
   // Address Functions
   const addAddress = async ({
@@ -80,7 +80,7 @@ export const UserAccountContextProvider = ({
     }
   };
 
-  const getAddresses = async () => {
+  const getAddresses = useCallback(async () => {
     try {
       setLoading(true);
       if (!token) return;
@@ -97,7 +97,7 @@ export const UserAccountContextProvider = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   const deleteAddress = async (id: number) => {
     if (!token) return;
@@ -132,7 +132,7 @@ export const UserAccountContextProvider = ({
 
   // Order Functions
 
-  const getOrders = async () => {
+  const getOrders = useCallback(async () => {
     try {
       if (!token) return;
       setLoading(true);
@@ -148,11 +148,18 @@ export const UserAccountContextProvider = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   const refetchOrders = async () => {
     await getOrders();
   };
+
+  useEffect(() => {
+    if (token) {
+      getAddresses();
+      getOrders();
+    }
+  }, [token, getAddresses, getOrders]);
 
   return (
     <UserAccountContext.Provider
@@ -161,8 +168,8 @@ export const UserAccountContextProvider = ({
         addresses,
         defaultAddress,
         orders,
-        setLoading,
         getOrders,
+        refetchOrders,
         addAddress,
         getAddresses,
         deleteAddress,

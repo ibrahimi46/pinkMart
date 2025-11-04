@@ -5,7 +5,6 @@ import { Product } from "@/types";
 interface ProductsProps {
   products: Product[];
   loading: boolean;
-  setLoading: (value: boolean) => void;
   refetchProducts: () => Promise<void>;
 }
 
@@ -36,11 +35,11 @@ export const ProductProvider = ({
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   return (
     <ProductsContext.Provider
-      value={{ products, loading, setLoading, refetchProducts: fetchProducts }}
+      value={{ products, loading, refetchProducts: fetchProducts }}
     >
       {children}
     </ProductsContext.Provider>
