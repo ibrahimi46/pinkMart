@@ -6,6 +6,7 @@ import { useState, useEffect, useContext } from "react";
 import { SearchContext } from "./context/SearchContext";
 import SearchPage from "./components/home-components/SearchPage";
 import WelcomeModal from "./components/WelcomeModal";
+import CategoryProducts from "./components/home-components/CategoryProducts";
 
 export default function Home() {
   const [categories, setCategories] = useState([]);
@@ -38,6 +39,16 @@ export default function Home() {
             setSelectedCategory={() => {}}
           />
           <BestSeller title="Best Seller" withBorder={false} />
+          {categories &&
+            categories.slice(0, 5).map((category) => {
+              return (
+                <CategoryProducts
+                  key={category}
+                  categoryName={category}
+                  withBorder={false}
+                />
+              );
+            })}
         </>
       )}
     </main>
