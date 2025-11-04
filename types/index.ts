@@ -53,6 +53,8 @@ export interface AdminOrder {
   id: number;
   userId: number;
   totalAmount: number;
+  email?: string;
+  fullName?: string;
   status: string;
   deliveryDate: string | null;
   createdAt: string;

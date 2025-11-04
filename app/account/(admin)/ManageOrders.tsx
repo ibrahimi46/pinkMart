@@ -4,13 +4,16 @@ import Button from "@/app/components/Button";
 import { useContext, useEffect, useState } from "react";
 import Loading from "@/app/components/Loading";
 import { UserDataContext } from "@/app/context/UserDataContext";
+import { sendUpdateStatusEmail } from "@/app/lib/email";
 
 interface OrderItemProps {
   orderId: number;
   userId: number;
   total: number;
   status: string;
+  email: string;
   createdAt: string;
+  fullName: string;
   deliveryDate: string | null;
   itemCount: number;
   handleStatusChange: (status: string) => void;
@@ -22,8 +25,10 @@ const OrderItem = ({
   userId,
   total,
   status,
+  email,
   createdAt,
   deliveryDate,
+  fullName,
   itemCount,
   handleStatusChange,
   handleViewDetails,
@@ -73,7 +78,24 @@ const OrderItem = ({
       <div className="flex flex-col sm:flex-row gap-2">
         <select
           value={status}
-          onChange={(e) => handleStatusChange(e.target.value)}
+          onChange={async (e) => {
+            handleStatusChange(e.target.value);
+            await fetch("/api/admin/orders/send-status-email", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userEmail: email,
+                orderData: {
+                  fullName,
+                  orderId,
+                  status: e.target.value,
+                  deliveryDate,
+                },
+              }),
+            });
+          }}
           className="flex-1 p-2 bg-white rounded-3xl border border-black-200 text-body-sm cursor-pointer"
         >
           <option value="pending">Pending</option>
@@ -104,6 +126,8 @@ interface AdminOrder {
   userId: number;
   totalAmount: number;
   status: string;
+  email?: string;
+  fullName?: string;
   deliveryDate: string | null;
   createdAt: string;
   itemCount: number;
@@ -235,6 +259,10 @@ const ManageOrders = () => {
   };
 
   useEffect(() => {
+    console.log(adminOrders);
+  }, []);
+
+  useEffect(() => {
     fetchAdminOrders();
   }, []);
 
@@ -337,6 +365,8 @@ const ManageOrders = () => {
                       total={order.totalAmount}
                       status={order.status}
                       createdAt={order.createdAt}
+                      fullName={order.fullName!}
+                      email={order.email!}
                       deliveryDate={order.deliveryDate}
                       itemCount={order.itemCount}
                       handleStatusChange={(newStatus) =>

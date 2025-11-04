@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
         stock: sql`GREATEST(${products.stock} - ${item.quantity}, 0)`
         }).where(eq(products.id, item.productId));
 
-        const [product] = await db.select({name: products.name, imageUrl: products.imageUrl}).from(products).where(eq(item.productId, products.id));
+        const [product] = await db.select({name: products.name, imageUrl: products.imageUrl}).from(products).where(eq(products.id, item.productId));
 
         emailOrderItems.push({
             id: item.productId,

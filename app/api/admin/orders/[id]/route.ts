@@ -6,7 +6,7 @@ import { orders as OrderTable } from "@/db/schema";
 
 export async function GET(req: NextRequest, context: {params: Promise<{id: string}>}) {
   try {
-    const orderId = await context.params
+    const orderId = (await context.params).id
     const authHeader = req.headers.get("authorization");
     if (!authHeader) return NextResponse.json({ error: "Missing header" }, { status: 401 });
 
@@ -37,7 +37,7 @@ export async function PATCH(req: NextRequest, context: {params: Promise<{id: str
     if (!decoded.isAdmin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
     const { status } = await req.json();
-    await db.update(OrderTable).set({ status }).where(eq(OrderTable.id, Number(orderId)));
+    await db.update(OrderTable).set({ status }).where(eq(OrderTable.id, Number(orderId.id)));
 
     return NextResponse.json({ success: "Order status updated" });
   } catch (err) {

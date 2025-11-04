@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
         id: OrderTable.id,
         userId: OrderTable.userId,
         fullName: users.fullName,
+        email: users.email,
         totalAmount: OrderTable.totalAmount,
         status: OrderTable.status,
         deliveryDate: OrderTable.deliveryDate,
@@ -33,7 +34,7 @@ export async function GET(req: NextRequest) {
       .from(OrderTable)
       .leftJoin(OrderItemsTable, eq(OrderTable.id, OrderItemsTable.orderId))
       .leftJoin(users, eq(users.id, OrderTable.userId))
-      .groupBy(OrderTable.id, users.fullName);
+      .groupBy(OrderTable.id, users.fullName, users.email);
 
     return NextResponse.json({ result }, { status: 200 });
   } catch (err) {

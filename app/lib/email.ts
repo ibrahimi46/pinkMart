@@ -329,3 +329,14 @@ export function generateOrderStatusUpdateMail({
     </html>
   `;
 }
+
+export async function sendUpdateStatusEmail(userEmail: string, orderData: OrderStatusUpdate) {
+  const htmlString = generateOrderStatusUpdateMail(orderData);
+
+  await transporter.sendMail({
+    from: `"PinkMart" <${process.env.SMTP_FROM_EMAIL}>`,
+    to: userEmail,
+    subject: `Order #${orderData.orderId} confirmed!`,
+    html: htmlString,
+  });
+}
