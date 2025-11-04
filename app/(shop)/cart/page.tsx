@@ -68,7 +68,7 @@ const CartContent = () => {
   const page = searchParams.get("page");
 
   useEffect(() => {
-    if (page === "order_placed") {
+    if (page === "order_placed" && token) {
       const fetchOrder = async () => {
         setLoading(true);
         try {
@@ -76,6 +76,9 @@ const CartContent = () => {
             headers: { authorization: `Bearer ${token}` },
           });
           const data = await res.json();
+          // DEBUG
+          console.log("data");
+          console.log(data);
           setOrderData(data);
         } catch (err) {
           console.error("Failed to fetch order for summary:", err);

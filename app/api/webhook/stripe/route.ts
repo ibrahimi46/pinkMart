@@ -26,6 +26,12 @@ export async function POST(req: NextRequest) {
             const session = event.data.object;
             const metadata = session.metadata!;
 
+            // DEBUG
+            console.log(metadata.userId)
+            console.log(metadata.totalAmount)
+            console.log(metadata.deliveryDate)
+            console.log(metadata.deliveryAddressId)
+            
             const order = await db.insert(orders).values({
                 userId: parseInt(metadata.userId),
                 totalAmount: metadata.finalCheckoutPrice,

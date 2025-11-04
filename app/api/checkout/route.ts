@@ -18,7 +18,7 @@ interface CheckoutProps {
 }
 
 export async function POST(req: NextRequest) {
-    const { userId, cartItems, finalCheckoutPrice, selectedAddressId, selectedDeliveryDate, selectedPaymentId}: CheckoutProps = await req.json();
+    const { userId, cartItems, finalCheckoutPrice, selectedAddressId, selectedDeliveryDate}: CheckoutProps = await req.json();
 
     const productsTable = await db.select().from(products).where(inArray(products.id, cartItems.map(item => item.id)))
     
@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
             userId: userId.toString(), 
             cartItems: JSON.stringify(cartItems), 
             selectedAddressId: selectedAddressId?.toString() || "", 
-            selectedPaymentId: selectedPaymentId?.toString() || "", 
             finalCheckoutPrice: finalCheckoutPrice.toString() || "",
             selectedDeliveryDate: selectedDeliveryDate.toString(),
         }

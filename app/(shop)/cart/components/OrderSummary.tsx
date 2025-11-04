@@ -158,7 +158,10 @@ const OrderSummary = ({
         <div className="mx-4">
           <div className="flex justify-between">
             <p>Items total</p>
-            <p className="text-black-400">${orderData?.totalAmount}</p>
+            {/** DEBUG */}
+            <p className="text-black-400">
+              ${(Number(orderData?.totalAmount) - deliveryFee).toFixed(2)}
+            </p>
           </div>
           <div className="flex justify-between">
             <p>Delivery fee</p>
@@ -168,9 +171,7 @@ const OrderSummary = ({
         <hr />
         <div className="flex justify-between">
           <h1 className="text-body-lg font-bold">Total</h1>
-          <p className="mr-4">
-            ${Number(orderData?.totalAmount) + deliveryFee}
-          </p>
+          <p className="mr-4">${Number(orderData?.totalAmount).toFixed(2)}</p>
         </div>
       </div>
       <div className="bg-white p-4 rounded-3xl flex flex-col gap-2">
