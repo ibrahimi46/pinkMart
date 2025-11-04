@@ -7,13 +7,7 @@ import {
   createContext,
   useContext,
 } from "react";
-import {
-  Orders,
-  CartItem,
-  AdminOrder,
-  AdminUser,
-  Address,
-} from "@/types";
+import { Orders, CartItem, AdminOrder, AdminUser, Address } from "@/types";
 import { AuthContext } from "./AuthContext";
 
 interface UserDataContextType {
@@ -360,7 +354,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const refetchOrders = async () => {
     await getOrders();
   };
-
 
   // Admin Orders
 
