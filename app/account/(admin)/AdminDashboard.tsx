@@ -1,6 +1,6 @@
 import { AdminContext } from "@/app/context/AdminContext";
 import { ProductsContext } from "@/app/context/ProductsContext";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 interface DashboardInfoItemProps {
   name: string;
@@ -81,32 +81,23 @@ const AdminDashboard = () => {
   const { users, orders } = adminContext!;
   const { products } = productContext!;
 
-  const userCount = users?.length;
-  const salesCount = orders?.length;
-  const productsCount = products.length;
-
-  useEffect(() => {
-    console.log(orders);
-  });
+  const userCount = users?.length || 0;
+  const salesCount = orders?.length || 0;
+  const productsCount = products.length || 0;
 
   return (
     <div className="mt-2 flex flex-col gap-6 h-screen overflow-y-scroll scrollbar-hide">
       <h1 className="font-semibold text-body-2xl">Admin Dashboard</h1>
-      <div className="">
-        {/** sales user products */}
-        <div className="border bg-white border-black-200 p-6 gap-2 rounded-2xl flex justify-evenly">
-          <DashboardInfoItem name="Users" count={userCount} />
-          <DashboardInfoItem name="Products" count={productsCount} />
-          <DashboardInfoItem name="Sales" count={salesCount!} />
-        </div>
+      <div className="border bg-white border-black-200 p-6 gap-2 rounded-2xl flex justify-evenly">
+        <DashboardInfoItem name="Users" count={userCount} />
+        <DashboardInfoItem name="Products" count={productsCount} />
+        <DashboardInfoItem name="Sales" count={salesCount} />
       </div>
-      <div className="flex justify-between h-">
+      <div className="flex justify-between">
         <h1 className="font-semibold text-body-2xl">Recent Orders</h1>
       </div>
-
       <div className="border bg-white border-black-200 rounded-2xl p-4 text-body-md flex flex-col gap-8">
-        {orders &&
-          orders.length &&
+        {orders && orders.length > 0 ? (
           orders.map((order) => {
             return (
               <RecentOrderItem
@@ -119,7 +110,10 @@ const AdminDashboard = () => {
                 createdAt={order.createdAt}
               />
             );
-          })}
+          })
+        ) : (
+          <p className="text-center text-black-400 py-8">No orders found</p>
+        )}
       </div>
     </div>
   );

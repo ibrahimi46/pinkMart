@@ -54,7 +54,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
       getUsersList();
       getOrders();
     }
-  }, [token]);
+  }, [token, user]);
 
   return (
     <AdminContext.Provider value={{ orders, users, getUsersList, getOrders }}>
