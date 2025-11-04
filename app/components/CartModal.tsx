@@ -1,19 +1,19 @@
 import { useContext } from "react";
-import { UserDataContext } from "../context/UserDataContext";
 import Image from "next/image";
 import assets from "@/assets";
 import CartItem from "../(shop)/cart/components/CartItem";
 import Button from "./Button";
 import Link from "next/link";
 import { Product } from "@/types";
+import { CartContext } from "../context/CartContext";
 
 interface CartModalProps {
   products: Product[];
 }
 
 const CartModal = ({ products }: CartModalProps) => {
-  const context = useContext(UserDataContext);
-  const { cartTotalItems, cartItems, cartTotal } = context!;
+  const cartContext = useContext(CartContext);
+  const { cartTotalItems, cartItems, cartTotal } = cartContext!;
 
   return (
     <div className="flex flex-col gap-2">

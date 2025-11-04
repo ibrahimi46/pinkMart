@@ -21,6 +21,7 @@ interface CartContextType {
   setStep: (value: string) => void;
   handleStepNext: (step: string) => void;
   refetchCartItems: () => Promise<void>;
+  setLoading: (value: boolean) => void;
 }
 
 export const CartContext = createContext<CartContextType | null>(null);
@@ -185,6 +186,7 @@ export const CartContextProvider = ({
         refetchCartItems,
         handleStepNext,
         setStep,
+        setLoading,
       }}
     >
       {children}

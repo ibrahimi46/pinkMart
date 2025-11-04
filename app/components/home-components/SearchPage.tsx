@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "../Loading";
 import FilterSidebar from "@/app/categories/components/FilterSidebar";
 import ProductCard from "../ProductCard";
@@ -9,23 +8,25 @@ import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import assets from "@/assets";
 import { SearchContext } from "@/app/context/SearchContext";
 import { Product } from "@/types";
+import { CartContext } from "@/app/context/CartContext";
 
 // later dont forget to optimize this and categories page cause both do the same thing on mount
 const SearchPage = () => {
   const searchParams = useSearchParams();
+
+  const cartContext = useContext(CartContext);
+  const productContext = useContext(ProductsContext);
+  const searchContext = useContext(SearchContext);
+  const { products } = productContext!;
+  const { addToCart, loading } = cartContext!;
+  const { searchQuery } = searchContext!;
+
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>(
     searchParams.get("category") || ""
   );
   const [priceFilter, setPriceFilter] = useState({ min: 0, max: 100 });
   const [stockFilter, setStockFilter] = useState(false);
-
-  const context = useContext(UserDataContext);
-  const productContext = useContext(ProductsContext);
-  const searchContext = useContext(SearchContext);
-  const { products } = productContext!;
-  const { addToCart, loading } = context!;
-  const { searchQuery } = searchContext!;
 
   useEffect(() => {
     if (!products) return;

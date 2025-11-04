@@ -1,9 +1,9 @@
 "use client";
+
 import React, { useContext, useEffect, useState } from "react";
 import CategoryStrip from "../components/home-components/CategoryStrip";
 import useCategories from "../utils/useCategories";
 import ProductCard from "../components/ProductCard";
-import { UserDataContext } from "../context/UserDataContext";
 import Loading from "../components/Loading";
 import { useSearchParams } from "next/navigation";
 import FilterSidebar from "./components/FilterSidebar";
@@ -13,6 +13,7 @@ import { SearchContext } from "../context/SearchContext";
 import { Product } from "@/types";
 import NoDataPlaceholder from "../account/components/NoDataPlaceholder";
 import assets from "@/assets";
+import { CartContext } from "../context/CartContext";
 
 const CategoriesPage = () => {
   return (
@@ -27,17 +28,19 @@ const CategoriesPageContent = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(
     searchParams.get("category") || ""
   );
+
+  const { categories } = useCategories();
+
+  const productContext = useContext(ProductsContext);
+  const { products } = productContext!;
+  const cartContext = useContext(CartContext);
+  const { addToCart, loading } = cartContext!;
+  const searchContext = useContext(SearchContext);
+  const { searchQuery } = searchContext!;
+
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [priceFilter, setPriceFilter] = useState({ min: 0, max: 100 });
   const [stockFilter, setStockFilter] = useState(false);
-
-  const { categories } = useCategories();
-  const productContext = useContext(ProductsContext);
-  const { products } = productContext!;
-  const context = useContext(UserDataContext);
-  const { addToCart, loading } = context!;
-  const searchContext = useContext(SearchContext);
-  const { searchQuery } = searchContext!;
 
   useEffect(() => {
     if (!products) return;

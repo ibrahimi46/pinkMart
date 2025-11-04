@@ -3,12 +3,12 @@ import assets from "@/assets";
 import Button from "./Button";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
-import { UserDataContext } from "../context/UserDataContext";
 import { AuthContext } from "../context/AuthContext";
 import reverseGeocode from "../utils/reverseGeocode";
 import CartModal from "./CartModal";
 import { SearchContext } from "../context/SearchContext";
 import { ProductsContext } from "../context/ProductsContext";
+import { CartContext } from "../context/CartContext";
 
 interface NavbarGlobalProps {
   toggleSidebar: () => void;
@@ -28,18 +28,17 @@ interface NominatimAddress {
 }
 
 const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
-  const [address, setAddress] = useState<NominatimAddress | null>(null);
-  const [showCartModal, setShowCartModal] = useState(false);
-
-  const context = useContext(UserDataContext);
+  const cartContext = useContext(CartContext);
   const authContext = useContext(AuthContext);
   const searchContext = useContext(SearchContext);
   const productContext = useContext(ProductsContext);
-
   const { isLoggedIn, userPfp } = authContext!;
-  const { cartTotalItems, handleStepNext } = context!;
+  const { cartTotalItems, handleStepNext } = cartContext!;
   const { searchQuery, setSearchQuery } = searchContext!;
   const { products } = productContext!;
+
+  const [address, setAddress] = useState<NominatimAddress | null>(null);
+  const [showCartModal, setShowCartModal] = useState(false);
 
   useEffect(() => {
     if (!navigator.geolocation) return;

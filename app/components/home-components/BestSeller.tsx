@@ -1,11 +1,12 @@
 "use client";
+
 import BackButton from "../BackButton";
 import ForwardButton from "../ForwardButton";
 import { useRef, useContext } from "react";
-import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "../Loading";
 import ProductCard from "../ProductCard";
 import { ProductsContext } from "@/app/context/ProductsContext";
+import { CartContext } from "@/app/context/CartContext";
 
 interface BestSellerProps {
   title: string;
@@ -14,10 +15,12 @@ interface BestSellerProps {
 
 const BestSeller = ({ title, withBorder }: BestSellerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+
   const productContext = useContext(ProductsContext);
   const { products } = productContext!;
-  const context = useContext(UserDataContext);
-  const { addToCart } = context!;
+  const cartContext = useContext(CartContext);
+  const { addToCart } = cartContext!;
+
   const defaultQuantity = 1;
 
   const scroll = (direction: "left" | "right") => {
@@ -40,7 +43,7 @@ const BestSeller = ({ title, withBorder }: BestSellerProps) => {
         withBorder && "border border-black-100 bg-white p-4"
       }`}
     >
-      {context?.loading && <Loading />}
+      {cartContext?.loading && <Loading />}
       <div className="flex justify-between items-end">
         <h1 className="text-body-lg font-bold">{title}</h1>
         <div className="sm:flex hidden items-center gap-6">

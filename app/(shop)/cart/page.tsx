@@ -10,13 +10,14 @@ import { Suspense, useContext, useEffect, useState } from "react";
 import { generateDeliveryDates } from "@/app/utils/generateDeliveryDates";
 import OrderPlaced from "./components/OrderPlaced";
 import Checkout from "./components/Checkout";
-import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import { ProductsContext } from "@/app/context/ProductsContext";
 import { DeliveryDates } from "@/types";
 import { useSearchParams } from "next/navigation";
 import OrderFailed from "./components/OrderFailed";
+import { CartContext } from "@/app/context/CartContext";
+import { AuthContext } from "@/app/context/AuthContext";
 
 type DeliveryAddress = {
   aptNumber?: string | null;
@@ -51,16 +52,17 @@ const CartContent = () => {
   );
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>("");
 
-  const context = useContext(UserDataContext);
+  const cartContext = useContext(CartContext);
+  const authContext = useContext(AuthContext);
+  const { token } = authContext!;
   const {
     cartItems,
     step,
     loading,
-    token,
-    refetchCartItems,
     setLoading,
+    refetchCartItems,
     handleStepNext,
-  } = context!;
+  } = cartContext!;
   const productContext = useContext(ProductsContext);
   const { products } = productContext!;
 

@@ -3,9 +3,9 @@ import { useContext, useState } from "react";
 import Image from "next/image";
 import BestSeller from "@/app/components/home-components/BestSeller";
 import NoDataPlaceholder from "./NoDataPlaceholder";
-import { UserDataContext } from "@/app/context/UserDataContext";
 import capitalizor from "@/app/utils/capitalizor";
 import { dateFormatter } from "@/app/utils/dateFormatter";
+import { UserAccountContext } from "@/app/context/UserAccountContext";
 
 interface OrderItemProps {
   status: string;
@@ -96,9 +96,10 @@ const OrderItem = ({
 };
 
 const OrdersComp = () => {
+  const userAccountContext = useContext(UserAccountContext);
+  const { orders } = userAccountContext!;
+
   const [filter, setFilter] = useState<string>("all");
-  const context = useContext(UserDataContext);
-  const { orders } = context!;
 
   const filteredOrders = orders.filter((order) => {
     if (filter === "all") return true;

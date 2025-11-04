@@ -3,8 +3,7 @@ import assets from "@/assets";
 import Button from "@/app/components/Button";
 import { useContext, useEffect, useState } from "react";
 import Loading from "@/app/components/Loading";
-import { UserDataContext } from "@/app/context/UserDataContext";
-import { sendUpdateStatusEmail } from "@/app/lib/email";
+import { AdminContext } from "@/app/context/AdminContext";
 
 interface OrderItemProps {
   orderId: number;
@@ -141,9 +140,10 @@ interface AdminOrder {
 }
 
 const OrderDetails = ({ orderId, handleBack }: OrderDetailsProps) => {
+  const adminContext = useContext(AdminContext);
+  const { getOrderDetails, loading } = adminContext!;
+
   const [orderDetails, setOrderDetails] = useState<AdminOrder | null>(null);
-  const context = useContext(UserDataContext);
-  const { getOrderDetails, loading } = context!;
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -247,12 +247,12 @@ const OrderDetails = ({ orderId, handleBack }: OrderDetailsProps) => {
 };
 
 const ManageOrders = () => {
+  const adminContext = useContext(AdminContext);
+  const { adminOrders, fetchAdminOrders, updateOrderStatus, loading } =
+    adminContext!;
+
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
-
-  const context = useContext(UserDataContext);
-  const { adminOrders, fetchAdminOrders, updateOrderStatus, loading } =
-    context!;
 
   const handleStatusChange = async (orderId: number, newStatus: string) => {
     await updateOrderStatus(orderId, newStatus);

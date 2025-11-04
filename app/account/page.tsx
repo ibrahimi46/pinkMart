@@ -11,7 +11,6 @@ import ManageProducts from "./(admin)/ManageProducts";
 import ManageOrders from "./(admin)/ManageOrders";
 import ManageUsers from "./(admin)/ManageUsers";
 import Analytics from "./(admin)/Analytics";
-import { UserDataContext } from "../context/UserDataContext";
 import { AuthContext } from "../context/AuthContext";
 import { useSearchParams } from "next/navigation";
 import Loading from "../components/Loading";

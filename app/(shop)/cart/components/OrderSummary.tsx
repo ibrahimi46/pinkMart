@@ -2,8 +2,8 @@
 import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
-import { UserDataContext } from "@/app/context/UserDataContext";
 import { AuthContext } from "@/app/context/AuthContext";
+import { CartContext } from "@/app/context/CartContext";
 
 type DeliveryAddress = {
   aptNumber?: string | null;
@@ -44,9 +44,9 @@ const OrderSummary = ({
   handleStepNext,
   step,
 }: OrderSummaryProps) => {
-  const context = useContext(UserDataContext);
+  const cartContext = useContext(CartContext);
   const authContext = useContext(AuthContext);
-  const { cartTotal, cartItems, setLoading } = context!;
+  const { cartTotal, cartItems, setLoading } = cartContext!;
   const { token, user } = authContext!;
 
   const userId = user?.userId;

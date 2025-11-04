@@ -1,7 +1,7 @@
 import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
-import { UserDataContext } from "@/app/context/UserDataContext";
+import { CartContext } from "@/app/context/CartContext";
 
 interface ProductProps {
   product: {
@@ -24,8 +24,8 @@ const CartItem = ({
   onUpdate,
   compact = false,
 }: ProductProps) => {
-  const context = useContext(UserDataContext);
-  const { updateCart, removeFromCart } = context!;
+  const cartContext = useContext(CartContext);
+  const { updateCart, removeFromCart } = cartContext!;
   return (
     <>
       <div className="flex justify-between items-end mt-4">

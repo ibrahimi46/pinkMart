@@ -3,10 +3,11 @@ import assets from "@/assets";
 import BackButton from "@/app/components/BackButton";
 import { useContext, useEffect, useState } from "react";
 import AddressItem from "@/app/components/AddressItem";
-import { UserDataContext } from "@/app/context/UserDataContext";
 import Loading from "@/app/components/Loading";
 import NoDataPlaceholder from "@/app/account/components/NoDataPlaceholder";
 import { ProductsContext } from "@/app/context/ProductsContext";
+import { UserAccountContext } from "@/app/context/UserAccountContext";
+import { CartContext } from "@/app/context/CartContext";
 
 interface CheckoutProps {
   handleStepNext: (step: string) => void;
@@ -23,9 +24,11 @@ const Checkout = ({
 }: CheckoutProps) => {
   const [showAddresses, setShowAddresses] = useState<boolean>(false);
 
-  const context = useContext(UserDataContext);
+  const userAccountContext = useContext(UserAccountContext);
   const productsContext = useContext(ProductsContext);
-  const { loading, addresses, defaultAddress, cartItems } = context!;
+  const cartContext = useContext(CartContext);
+  const { cartItems } = cartContext!;
+  const { loading, addresses, defaultAddress } = userAccountContext!;
   const { products } = productsContext!;
 
   useEffect(() => {
@@ -55,8 +58,8 @@ const Checkout = ({
   };
 
   const cartProductImages =
-    context && products
-      ? context.cartItems
+    cartContext && products
+      ? cartContext.cartItems
           .map((item) => {
             const product = products.find((p) => p.id === item.productId);
             return product ? product.imageUrl : null;

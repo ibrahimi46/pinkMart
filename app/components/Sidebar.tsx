@@ -4,7 +4,6 @@ import Button from "./Button";
 import assets from "@/assets";
 import Link from "next/link";
 import { useContext } from "react";
-import { UserDataContext } from "../context/UserDataContext";
 import { AuthContext } from "../context/AuthContext";
 
 interface SidebarProps {

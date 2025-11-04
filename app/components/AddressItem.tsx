@@ -1,8 +1,8 @@
 import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
-import { UserDataContext } from "../context/UserDataContext";
 import Loading from "./Loading";
+import { UserAccountContext } from "../context/UserAccountContext";
 
 interface Address {
   id?: number;
@@ -30,8 +30,8 @@ const AddressItem = ({
   isDefault,
   onSelect,
 }: AddressItemProps) => {
-  const context = useContext(UserDataContext);
-  const { loading, deleteAddress } = context!;
+  const userAccountContext = useContext(UserAccountContext);
+  const { loading, deleteAddress } = userAccountContext!;
 
   return (
     <div

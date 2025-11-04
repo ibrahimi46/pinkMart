@@ -3,7 +3,7 @@ import assets from "@/assets";
 import Button from "@/app/components/Button";
 import { useContext, useEffect, useState } from "react";
 import Loading from "@/app/components/Loading";
-import { UserDataContext } from "@/app/context/UserDataContext";
+import { AdminContext } from "@/app/context/AdminContext";
 
 interface UserItemProps {
   userId: number;
@@ -106,9 +106,10 @@ interface AdminUser {
 }
 
 const UserDetails = ({ userId, handleBack }: UserDetailsProps) => {
+  const adminContext = useContext(AdminContext);
+  const { getAdminUserDetails, loading } = adminContext!;
+
   const [userDetails, setUserDetails] = useState<AdminUser | null>(null);
-  const context = useContext(UserDataContext);
-  const { getAdminUserDetails, loading } = context!;
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -200,8 +201,8 @@ const UserDetails = ({ userId, handleBack }: UserDetailsProps) => {
                           order.status === "delivered"
                             ? "text-green-600"
                             : order.status === "cancelled"
-                            ? "text-red-600"
-                            : "text-yellow-600"
+                              ? "text-red-600"
+                              : "text-yellow-600"
                         }`}
                       >
                         {order.status}
@@ -230,11 +231,12 @@ const UserDetails = ({ userId, handleBack }: UserDetailsProps) => {
 };
 
 const ManageUsers = () => {
+  const adminContext = useContext(AdminContext);
+  const { adminUsers, fetchAdminUsers, updateUserRole, loading } =
+    adminContext!;
+
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [filterRole, setFilterRole] = useState<string>("all");
-
-  const context = useContext(UserDataContext);
-  const { adminUsers, fetchAdminUsers, updateUserRole, loading } = context!;
 
   const handleRoleChange = async (userId: number, isAdmin: boolean) => {
     await updateUserRole(userId, isAdmin);

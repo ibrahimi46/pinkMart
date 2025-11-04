@@ -3,15 +3,18 @@ import NoDataPlaceholder from "./NoDataPlaceholder";
 import assets from "@/assets";
 import Image from "next/image";
 import Button from "@/app/components/Button";
-import { UserDataContext } from "@/app/context/UserDataContext";
 import AddressItem from "@/app/components/AddressItem";
 import Loading from "@/app/components/Loading";
+import { UserAccountContext } from "@/app/context/UserAccountContext";
 
 interface AddAddressModalProps {
   setShowAddAddrModal: (value: boolean) => void;
 }
 
 const AddAddressComp = ({ setShowAddAddrModal }: AddAddressModalProps) => {
+  const userAccountContext = useContext(UserAccountContext);
+  const { addAddress } = userAccountContext!;
+
   const [type, setType] = useState<string>("home");
   const [address, setAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
@@ -19,8 +22,6 @@ const AddAddressComp = ({ setShowAddAddrModal }: AddAddressModalProps) => {
   const [zipCode, setzipCode] = useState<string>("");
   const [isDefault, setIsDefault] = useState<boolean>(false);
 
-  const context = useContext(UserDataContext);
-  const { addAddress } = context!;
   return (
     <div className="flex flex-col gap-6 text-body-sm md:text-body-md p-4">
       <div className="flex justify-between items-center">
@@ -139,10 +140,10 @@ const AddAddressComp = ({ setShowAddAddrModal }: AddAddressModalProps) => {
 };
 
 const MyAddresses = () => {
-  const [showAddAddrComp, setShowAddAddrComp] = useState<boolean>(false);
+  const userAccountContext = useContext(UserAccountContext);
+  const { addresses, loading } = userAccountContext!;
 
-  const context = useContext(UserDataContext);
-  const { addresses, loading } = context!;
+  const [showAddAddrComp, setShowAddAddrComp] = useState<boolean>(false);
 
   return (
     <div>
