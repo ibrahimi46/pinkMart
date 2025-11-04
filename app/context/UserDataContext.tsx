@@ -11,35 +11,21 @@ import { Orders, CartItem, AdminOrder, AdminUser, Address } from "@/types";
 import { AuthContext } from "./AuthContext";
 
 interface UserDataContextType {
-  cartItems: CartItem[];
-  addresses: Address[];
   loading: boolean;
-  cartTotal: number;
-  defaultAddress: Address | null;
-  step: string;
-  orders: Orders[];
+
   adminOrders: AdminOrder[];
   adminUsers: AdminUser[];
-  cartTotalItems: number;
+
   setLoading: (value: boolean) => void;
   fetchAdminUsers: () => void;
   updateUserRole: (userId: number, isAdmin: boolean) => void;
   getAdminUserDetails: (userId: number) => Promise<AdminUser | null>;
-  getOrders: () => Promise<void>;
+
   fetchAdminOrders: () => void;
   updateOrderStatus: (orderId: number, status: string) => void;
   getOrderDetails: (orderId: number) => Promise<AdminOrder | null>;
-  getAddresses: () => void;
-  addAddress: (address: Address) => Promise<void>;
-  deleteAddress: (id: number) => Promise<void>;
-  addToCart: (productId: number, quantity: number) => Promise<void>;
-  removeFromCart: (productId: number) => Promise<void>;
-  updateCart: (productId: number, quantity: number) => Promise<void>;
-  refetchAddresses: () => Promise<void>;
-  refetchCartItems: () => Promise<void>;
+
   refetchAll: () => Promise<void>;
-  setStep: (value: string) => void;
-  handleStepNext: (step: string) => void;
 }
 
 export const UserDataContext = createContext<UserDataContextType | null>(null);
@@ -51,14 +37,10 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
 
   // States
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [addresses, setAddresses] = useState<Address[]>([]);
 
   const [adminOrders, setAdminOrders] = useState<AdminOrder[]>([]);
-  const [orders, setOrders] = useState<Orders[]>([]);
 
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState<string>("cart"); // steps in cart
 
   // Admin User Functions
 
@@ -121,239 +103,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     },
     [token]
   );
-
-  // Address Functions
-  const addAddress = async ({
-    type,
-    streetAddress,
-    aptNumber,
-    zipCode,
-    city,
-    isDefault,
-  }: Address) => {
-    if (!type || !streetAddress || !aptNumber || !zipCode) return;
-
-    try {
-      setLoading(true);
-      if (!token) return;
-      const res = await fetch("/api/addresses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          type,
-          streetAddress,
-          aptNumber,
-          zipCode,
-          city,
-          isDefault,
-        }),
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        await refetchAddresses();
-      }
-      return data;
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getAddresses = async () => {
-    try {
-      setLoading(true);
-      if (!token) return;
-      const res = await fetch("/api/addresses", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      setAddresses(data.addresses);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deleteAddress = async (id: number) => {
-    if (!token) return;
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/addresses/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      if (data.success) {
-        await refetchAddresses();
-      }
-      return data;
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const defaultAddress = useMemo(() => {
-    if (addresses.length === 0) return null;
-    return addresses?.find((addr) => addr.isDefault) || addresses?.[0];
-  }, [addresses]);
-
-  const refetchAddresses = async () => {
-    await getAddresses();
-  };
-
-  // Cart Functions
-  const fetchCartItems = useCallback(async () => {
-    if (!token) return;
-    setLoading(true);
-    try {
-      const res = await fetch("/api/cart", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      const dataWithNumbers = data.items.map((item: CartItem) => ({
-        ...item,
-        currentPrice: Number(item.price),
-        quantity: Number(item.quantity),
-      }));
-
-      setCartItems(dataWithNumbers || []);
-    } catch (err) {
-      console.error("Failed to fetch cart:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
-
-  const addToCart = useCallback(
-    async (productId: number, quantity: number) => {
-      if (!token) return;
-      setLoading(true);
-      try {
-        await fetch("/api/cart", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ productId, quantity }),
-        });
-        await fetchCartItems();
-      } catch (err) {
-        console.error("Error adding to cart:", err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [token, fetchCartItems]
-  );
-
-  const removeFromCart = useCallback(
-    async (productId: number) => {
-      if (!token) return;
-      setLoading(true);
-      try {
-        const res = await fetch("/api/cart", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ productId }),
-        });
-
-        if (!res.ok) {
-          const data = await res.json();
-          console.error("Failed to remove item:", data.error);
-          return;
-        }
-
-        setCartItems((prev) =>
-          prev.filter((item) => item.productId !== productId)
-        );
-        fetchCartItems();
-      } catch (err) {
-        console.error("Error removing from cart:", err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [token, fetchCartItems]
-  );
-
-  const updateCart = useCallback(
-    async (productId: number, quantity: number) => {
-      if (!token) return;
-      setLoading(true);
-      try {
-        await fetch("/api/cart", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ productId, quantity }),
-        });
-        await fetchCartItems();
-      } catch (err) {
-        console.error("Error updating cart:", err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [token, fetchCartItems]
-  );
-
-  const cartTotal = useMemo(() => {
-    return cartItems.reduce((total, item) => {
-      const price = Number(item.price);
-      const quantity = Number(item.quantity);
-
-      return total + price * quantity;
-    }, 0);
-  }, [cartItems]);
-
-  const refetchCartItems = async () => {
-    await fetchCartItems();
-  };
-
-  // Order Functions
-
-  const getOrders = async () => {
-    try {
-      if (!token) return;
-      setLoading(true);
-      const res = await fetch("/api/orders", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      if (data) setOrders(data.result);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const refetchOrders = async () => {
-    await getOrders();
-  };
 
   // Admin Orders
 
@@ -435,23 +184,11 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     refetchAll();
   }, [refetchAll]);
 
-  // For handling checkout steps in cart page
-  const handleStepNext = (value: string) => {
-    if (value) {
-      setStep(value);
-    }
-  };
-
   return (
     <UserDataContext.Provider
       value={{
-        cartItems,
-        addresses,
         loading,
-        cartTotal,
-        defaultAddress,
-        step,
-        orders,
+
         adminOrders,
         adminUsers,
         cartTotalItems,
@@ -462,18 +199,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         updateOrderStatus,
         getOrderDetails,
         fetchAdminOrders,
-        getAddresses,
-        addAddress,
-        deleteAddress,
-        addToCart,
-        removeFromCart,
-        updateCart,
-        refetchAddresses,
-        refetchCartItems,
         refetchAll,
-        setStep,
-        handleStepNext,
-        getOrders,
       }}
     >
       {children}

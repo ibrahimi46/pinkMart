@@ -3,6 +3,7 @@ import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
 import { UserDataContext } from "@/app/context/UserDataContext";
+import { AuthContext } from "@/app/context/AuthContext";
 
 type DeliveryAddress = {
   aptNumber?: string | null;
@@ -44,10 +45,12 @@ const OrderSummary = ({
   step,
 }: OrderSummaryProps) => {
   const context = useContext(UserDataContext);
-  const { cartTotal, cartItems, token, setLoading, user } = context!;
+  const authContext = useContext(AuthContext);
+  const { cartTotal, cartItems, setLoading } = context!;
+  const { token, user } = authContext!;
 
   const userId = user?.userId;
-  const deliveryFee = 6.99;
+  const deliveryFee = cartItems.length === 0 ? 0 : 6.99;
   const finalCheckoutPrice = (cartTotal + deliveryFee).toFixed(2);
   const isCheckoutDisabled =
     step === "cart" &&
@@ -97,10 +100,12 @@ const OrderSummary = ({
           <p>Items total</p>
           <p className="text-black-400">${cartTotal.toFixed(2)}</p>
         </div>
-        <div className="flex justify-between">
-          <p>Delivery fee</p>
-          <p className="text-black-400">${deliveryFee}</p>
-        </div>
+        {deliveryFee > 0 && (
+          <div className="flex justify-between">
+            <p>Delivery fee</p>
+            <p className="text-black-400">${deliveryFee}</p>
+          </div>
+        )}
       </div>
       <hr />
       <div className="flex justify-between">
@@ -160,13 +165,36 @@ const OrderSummary = ({
           <div className="flex justify-between">
             <p>Items total</p>
             <p className="text-black-400">
-              ${(Number(orderData?.totalAmount) - deliveryFee).toFixed(2)}
+              $
+              {orderData?.items
+                ? orderData.items
+                    .reduce(
+                      (sum, item) =>
+                        sum + Number(item.priceAtPurchase) * item.quantity,
+                      0
+                    )
+                    .toFixed(2)
+                : (Number(orderData?.totalAmount) - 6.99).toFixed(2)}
             </p>
           </div>
-          <div className="flex justify-between">
-            <p>Delivery fee</p>
-            <p className="text-black-400">${deliveryFee}</p>
-          </div>
+          {orderData?.items
+            ? Number(orderData.totalAmount) >
+                orderData.items.reduce(
+                  (sum, item) =>
+                    sum + Number(item.priceAtPurchase) * item.quantity,
+                  0
+                ) && (
+                <div className="flex justify-between">
+                  <p>Delivery fee</p>
+                  <p className="text-black-400">$6.99</p>
+                </div>
+              )
+            : Number(orderData?.totalAmount) >= 6.99 && (
+                <div className="flex justify-between">
+                  <p>Delivery fee</p>
+                  <p className="text-black-400">$6.99</p>
+                </div>
+              )}
         </div>
         <hr />
         <div className="flex justify-between">
