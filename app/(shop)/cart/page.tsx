@@ -76,9 +76,6 @@ const CartContent = () => {
             headers: { authorization: `Bearer ${token}` },
           });
           const data = await res.json();
-          // DEBUG
-          console.log("data");
-          console.log(data);
           setOrderData(data);
         } catch (err) {
           console.error("Failed to fetch order for summary:", err);

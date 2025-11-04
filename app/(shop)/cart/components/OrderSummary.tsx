@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import assets from "@/assets";
 import { useContext } from "react";
@@ -158,7 +159,6 @@ const OrderSummary = ({
         <div className="mx-4">
           <div className="flex justify-between">
             <p>Items total</p>
-            {/** DEBUG */}
             <p className="text-black-400">
               ${(Number(orderData?.totalAmount) - deliveryFee).toFixed(2)}
             </p>

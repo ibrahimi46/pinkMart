@@ -93,6 +93,7 @@ export const cartItems = pgTable("cartItems", {
 export const orders = pgTable("orders", {
     id : serial("id").primaryKey().notNull(),
     userId: integer("user_id").notNull(),
+    stripeSessionId: text("stripe_session_id").unique(),
     totalAmount: numeric("total_amount").default("0").notNull(),
     status: text("status").default("Pending").notNull(),
     deliveryDate: timestamp("delivery_date"),

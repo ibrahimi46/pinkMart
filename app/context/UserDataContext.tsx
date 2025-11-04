@@ -96,7 +96,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   }, [token]);
 
   useEffect(() => {
-    if (user?.isAdmin) {
+    if (user) {
       getUsersList();
     }
   }, [user]);
@@ -120,7 +120,6 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         },
       });
       const data = await res.json();
-
       setUserDetails(data.user);
     } catch (err) {
       console.error(err);

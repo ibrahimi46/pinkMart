@@ -14,7 +14,6 @@ const ProfilePictureUpload = () => {
 
     try {
       setLoading(true);
-      console.log("am in handlesubmit myacc");
       if (!token) return;
       const formData = new FormData();
       formData.append("file", file);
