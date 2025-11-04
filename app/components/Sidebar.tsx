@@ -126,7 +126,7 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                         textStyles="text-body-md"
                       />
                     </Link>
-                    <Link href={"/account?page=account-details"}>
+                    <Link href={"/account?page=orders"}>
                       <Button
                         name="My Orders"
                         icon={assets.icons.orders}
@@ -136,7 +136,7 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                         textStyles="text-body-md"
                       />
                     </Link>
-                    <Link href={"/account?page=account-details"}>
+                    <Link href={"/account?page=addresses"}>
                       <Button
                         name="My Addresses"
                         icon={assets.icons.location}
