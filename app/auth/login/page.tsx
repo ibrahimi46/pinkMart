@@ -85,6 +85,11 @@ const Login = () => {
                       placeholder="Enter your password"
                       className="border-2 w-full h-10 p-4 text-body-md rounded-md"
                       onChange={(e) => setPassword(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleLogin();
+                        }
+                      }}
                     />
                   </div>
                 ) : (
@@ -102,6 +107,11 @@ const Login = () => {
                       placeholder="Enter your password"
                       className="border-2 w-full h-10 p-4 text-body-md rounded-md"
                       onChange={(e) => setPassword(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleLogin();
+                        }
+                      }}
                     />
                   </div>
                 )}

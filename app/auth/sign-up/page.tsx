@@ -101,6 +101,11 @@ const SignUp = () => {
                           placeholder="Enter your email"
                           className="border-2 w-full h-10 p-4 text-body-md rounded-md mt-2"
                           onChange={(e) => setEmail(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && email) {
+                              setShowCreatePassword(true);
+                            }
+                          }}
                         />
                       </>
                     ) : (
@@ -113,6 +118,11 @@ const SignUp = () => {
                           pattern="[0-9]{10}"
                           className="border-2 w-full h-10 p-4 text-body-md rounded-md mt-2"
                           onChange={(e) => setPhone(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && phone) {
+                              setShowCreatePassword(true);
+                            }
+                          }}
                         />
                       </>
                     )}
