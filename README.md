@@ -1,6 +1,8 @@
 # 🛒 PinkMart - Modern E-Commerce Grocery Store
 
-A full-featured, modern e-commerce grocery store built with Next.js, featuring user authentication, shopping cart, payment processing, admin dashboard, and comprehensive order management.
+A full-featured e-commerce grocery store built with Next.js, TypeScript, Tailwind CSS, PostgreSQL (via Drizzle ORM), and Stripe. Includes user authentication, shopping cart, payment integration, and an admin dashboard for product and order management.
+
+🔗 **Live Demo:** [pink-mart.vercel.app](https://pink-mart.vercel.app)
 
 ## ✨ Features
 
