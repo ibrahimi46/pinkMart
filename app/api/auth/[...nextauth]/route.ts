@@ -24,7 +24,7 @@ const handler = NextAuth({
     secret: process.env.NEXTAUTH_SECRET!,
     callbacks: 
     {
-        async signIn({user, account, profile}: {
+  async signIn({user, account, profile}: {
   user: User | AdapterUser, 
   account: Account | null, 
   profile?: Profile
