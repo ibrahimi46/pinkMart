@@ -1,6 +1,6 @@
 import Image from "next/image";
 import assets from "@/assets";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "@/app/context/AuthContext";
 import Loading from "@/app/components/Loading";
 
@@ -108,18 +108,92 @@ const ProfilePictureUpload = () => {
 interface AccDetailItems {
   field1?: string;
   field2?: string;
+  type: string;
 }
 
-const AccDetailItems = ({ field1, field2 }: AccDetailItems) => {
+const AccDetailItems = ({ field1, field2, type }: AccDetailItems) => {
+  const authContext = useContext(AuthContext);
+  const { token, getUserDetails, loading, setLoading } = authContext!;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [value, setValue] = useState<string>(field2 || "");
+  const [error, setError] = useState<string>("");
+
+  const handleSubmit = async () => {
+    if (!value.trim() || value === field2) {
+      setIsEditing(false);
+      return;
+    }
+    
+    if (type === "fullName" && setLoading) {
+      setLoading(true);
+    }
+    
+    try {
+      const res = await fetch("/api/users/me", {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ [type]: value }),
+      });
+      if (res.ok) {
+        await getUserDetails();
+        setIsEditing(false);
+      } else {
+        const data = await res.json();
+        setError(data.error || "Failed to update");
+        setValue(field2 || "");
+      }
+    } finally {
+      if (type === "fullName" && setLoading) {
+        setLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    setValue(field2 || "");
+  }, [field2]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
   return (
-    <div className="flex justify-between border border-black-300 p-3 bg-white  rounded-2xl">
-      <div className="">
+    <div className="flex justify-between border items-center border-black-300 p-3 bg-white rounded-2xl relative">
+      {type === "fullName" && loading && (
+        <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center z-10">
+          <div className="w-8 h-8 border-4 border-t-primary-600 border-b-primary-600 border-l-gray-300 border-r-gray-300 rounded-full animate-spin"></div>
+        </div>
+      )}
+      <div>
         <h1 className="font-bold text-body-md">{field1}</h1>
-        <p className="text-black-400 font-bold text-body-sm">
-          {field2 ? field2 : `NA`}
-        </p>
+        {isEditing ? (
+          <input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            maxLength={type === "phone" ? 10 : 36}
+            type={
+              type === "phone" ? "number" : type === "email" ? "email" : "text"
+            }
+            className={`text-black-400 font-bold text-body-sm w-full  mt-1 px-4 py-2 border border-primary-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600
+              ${error ? "border-red-500 focus:ring-red-500" : "border-primary-600 focus:ring-primary-600"}
+              `}
+          />
+        ) : (
+          <p className="text-black-400 font-bold text-body-sm">
+            {field2 ? field2 : `NA`}
+          </p>
+        )}
       </div>
-      <Image src={assets.icons.edit} height={20} width={20} alt="edit" />
+      <button onClick={() => setIsEditing(!isEditing)}>
+        <Image src={assets.icons.edit} height={20} width={20} alt="edit" />
+      </button>
     </div>
   );
 };
@@ -137,9 +211,21 @@ const MyAccountComp = () => {
       )}
       <div className="flex flex-col gap-3">
         <h1 className="font-bold mb-2 text-body-2xl">Account Details</h1>
-        <AccDetailItems field1="Full Name" field2={userDetails?.fullName} />
-        <AccDetailItems field1="Mobile Number" field2={userDetails?.phone} />
-        <AccDetailItems field1="Email Address" field2={userDetails?.email} />
+        <AccDetailItems
+          field1="Full Name"
+          field2={userDetails?.fullName}
+          type="fullName" // db takeeeess fullName
+        />
+        <AccDetailItems
+          field1="Mobile Number"
+          field2={userDetails?.phone}
+          type="phone"
+        />
+        <AccDetailItems
+          field1="Email Address"
+          field2={userDetails?.email}
+          type="email"
+        />
       </div>
       <div>
         <ProfilePictureUpload />

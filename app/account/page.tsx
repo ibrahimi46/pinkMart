@@ -91,7 +91,7 @@ function MyAccountContent() {
   return (
     <main className="flex gap-6 px-8 overflow-hidden min-h-[calc(100vh-120px)] w-screen">
       {/** left sidebar */}
-      <div className="hidden md:flex w-1/4 max-w-64 py-2 h-[480px] items-start justify-between flex-col">
+      <div className="hidden md:flex w-1/4 max-w-64 py-2 h-[480px] items-start flex-col">
         <div className="flex w-full flex-col items-start p-4 bg-black-100 border border-black-300 rounded-2xl">
           <div className="flex items-center gap-2 mb-4">
             <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
@@ -149,7 +149,7 @@ function MyAccountContent() {
             handleOnClick={() => setActiveSection("help-center")}
           />
         </div>
-        <div className="w-full">
+        <div className="w-full mt-4">
           <Button
             name="Logout"
             icon={assets.icons.logout}

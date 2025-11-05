@@ -16,6 +16,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   userPfp: string;
   loading: boolean;
+  getUserDetails: () => Promise<void>;
   setLoading: (value: boolean) => void;
   setUserPfp: React.Dispatch<React.SetStateAction<string>>;
   fetchUserPfp: () => Promise<void>;
@@ -135,6 +136,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoggedIn,
         userPfp,
         loading,
+        getUserDetails,
         setLoading,
         setUserPfp,
         fetchUserPfp,
