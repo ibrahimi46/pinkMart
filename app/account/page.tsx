@@ -6,7 +6,6 @@ import Image from "next/image";
 import MyAccountComp from "./components/MyAccountComp";
 import OrdersComp from "./components/OrdersComp";
 import MyAddresses from "./components/MyAddresses";
-import AdminDashboard from "./(admin)/AdminDashboard";
 import ManageProducts from "./(admin)/ManageProducts";
 import ManageOrders from "./(admin)/ManageOrders";
 import ManageUsers from "./(admin)/ManageUsers";
@@ -28,9 +27,9 @@ const userMenu = [
 
 const adminMenu = [
   {
-    name: "Admin Dashboard",
-    icon: assets.icons.dashboard,
-    key: "admin-dashboard",
+    name: "Analytics & Reports",
+    icon: assets.icons.analytics,
+    key: "analytics",
   },
   { name: "Admin Addresses", icon: assets.icons.location, key: "addresses" },
   {
@@ -40,11 +39,6 @@ const adminMenu = [
   },
   { name: "Manage Orders", icon: assets.icons.orders, key: "manage-orders" },
   { name: "Manage Users", icon: assets.icons.users, key: "manage-users" },
-  {
-    name: "Analytics & Reports",
-    icon: assets.icons.analytics,
-    key: "analytics",
-  },
 ];
 
 function MyAccountContent() {
@@ -59,7 +53,7 @@ function MyAccountContent() {
       setActiveSection(section);
     } else {
       if (user?.isAdmin) {
-        setActiveSection("admin-dashboard");
+        setActiveSection("analytics");
       } else {
         setActiveSection("account-details");
       }
@@ -74,8 +68,6 @@ function MyAccountContent() {
         return <OrdersComp />;
       case "addresses":
         return <MyAddresses />;
-      case "admin-dashboard":
-        return <AdminDashboard />;
       case "manage-products":
         return <ManageProducts />;
       case "manage-orders":
