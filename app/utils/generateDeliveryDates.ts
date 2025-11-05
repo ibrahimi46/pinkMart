@@ -1,5 +1,12 @@
-export function generateDeliveryDates(processingDays: number = 2, numOfDates: number = 7) {
-    const dates = [];
+type DeliveryDate = {
+  date: Date;
+  dayName: string;
+  dateStr: string;
+  fullDate: string;
+};
+
+export function generateDeliveryDates(processingDays: number = 2, numOfDates: number = 7) : DeliveryDate[] {
+    const dates: DeliveryDate[] = [];
     const todayDate = new Date();
     const currentDate = new Date(todayDate);
 
