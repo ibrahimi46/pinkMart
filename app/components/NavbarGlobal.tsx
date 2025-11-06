@@ -78,6 +78,7 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
             </div>
           </div>
           {/** hamburger */}
+
           <div
             onClick={toggleSidebar}
             className="border lg:hidden border-black-400 p-2 rounded-full hover:bg-black-100 transition-all duration-300 cursor-pointer"
@@ -175,6 +176,15 @@ const NavbarGlobal = ({ toggleSidebar }: NavbarGlobalProps) => {
 
           {/** cart and logo container shows lg onwards */}
           <div className="items-center hidden lg:flex md:gap-4">
+            <Link href="/ai-search">
+              <Button
+                name="AI Image Search"
+                icon={assets.icons.ai_search_icon}
+                iconPosition="left"
+                textStyles="text-body-sm"
+                extraStyles="h-10 px-3 bg-white hover:border-black-800 border border-primary-500 transition-all duration-300"
+              />
+            </Link>
             {isLoggedIn ? (
               <>
                 <div

@@ -62,11 +62,11 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                 {user.isAdmin ? (
                   <>
                     <div className="flex flex-col gap-2 text-body-md">
-                      <Link href={"/account?page=admin-dashboard"}>
+                      <Link href={"/account?page=analytics"}>
                         <Button
-                          name="Admin Dashboard"
+                          name="Analytics & Reports"
                           iconPosition="left"
-                          icon={assets.icons.dashboard}
+                          icon={assets.icons.analytics}
                           extraStyles="px-3 py-1 border border-black-200 w-full border hover:border hover:border-black-600
                   transition-all duration-300"
                           handleOnClick={closeSidebar}
@@ -102,13 +102,14 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                           handleOnClick={closeSidebar}
                         />
                       </Link>
-                      <Link href={"/account?page=analytics"}>
+
+                      <Link href={"/ai-search"}>
                         <Button
-                          name="Analytics & Reports"
+                          name="AI Image Search"
+                          icon={assets.icons.ai_search_icon}
                           iconPosition="left"
-                          icon={assets.icons.analytics}
-                          extraStyles="px-3 py-1 border border-black-200 w-full border hover:border hover:border-black-600
-                  transition-all duration-300"
+                          extraStyles="px-4 py-2 border border-black-200 hover:border-primary-600 transition-all duration-300 w-full"
+                          textStyles="text-body-md"
                           handleOnClick={closeSidebar}
                         />
                       </Link>
@@ -146,6 +147,16 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                         textStyles="text-body-md"
                       />
                     </Link>
+                    <Link href={"/ai-search"}>
+                      <Button
+                        name="AI Image Search"
+                        icon={assets.icons.ai_search_icon}
+                        iconPosition="left"
+                        extraStyles="px-4 py-2 border border-black-200 hover:border-primary-600 transition-all duration-300 w-full"
+                        textStyles="text-body-md"
+                        handleOnClick={closeSidebar}
+                      />
+                    </Link>
                   </div>
                 )}
               </>
@@ -170,6 +181,16 @@ const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                       extraStyles="px-3 py-1 border border-black-200 w-full border hover:border hover:border-black-600
                   transition-all duration-300"
                       handleOnClick={() => {}}
+                    />
+                  </Link>
+                  <Link href={"/ai-search"}>
+                    <Button
+                      name="AI Image Search"
+                      icon={assets.icons.ai_search_icon}
+                      iconPosition="left"
+                      extraStyles="px-4 py-2 border border-black-200 hover:border-primary-600 transition-all duration-300 w-full"
+                      textStyles="text-body-md"
+                      handleOnClick={closeSidebar}
                     />
                   </Link>
                 </div>
