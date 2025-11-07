@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text, numeric, timestamp, boolean, integer, varchar, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, numeric, timestamp, boolean, integer, varchar, primaryKey, vector } from "drizzle-orm/pg-core";
 
 export const products = pgTable("products", {
     id: serial("id").primaryKey(),
@@ -12,6 +12,7 @@ export const products = pgTable("products", {
     stock: numeric("stock").default("0").notNull(),
     imageUrl: text("image_url"),
     buyCount: integer("buy_count").default(0).notNull(),
+    imageVector: vector("image_vector", {dimensions: 128})
 })
 
 

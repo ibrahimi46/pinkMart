@@ -22,7 +22,19 @@ const ProductCard = ({
     <div className="flex flex-col gap-3 justify-between w-full">
       {/** Item image container */}
       <div className="relative flex items-center bg-white border shadow-sm rounded-3xl justify-center aspect-square">
-        <Image src={icon} fill alt="" className="rounded-3xl" />
+        {icon && icon.trim() !== "" ? (
+          <Image
+            src={icon}
+            height={100}
+            width={100}
+            alt="product-image"
+            className="rounded-3xl"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-3xl">
+            <span className="text-gray-400 text-sm">No Image</span>
+          </div>
+        )}
 
         <div
           className="absolute sm:hidden bottom-2 right-2 bg-black-100 border border-primary-600 rounded-full p-2"

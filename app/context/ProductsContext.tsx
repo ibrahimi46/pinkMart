@@ -6,6 +6,7 @@ interface ProductsProps {
   products: Product[];
   loading: boolean;
   refetchProducts: () => Promise<void>;
+  setLoading: (value: boolean) => void;
 }
 
 export const ProductsContext = createContext<ProductsProps | null>(null);
@@ -39,7 +40,7 @@ export const ProductProvider = ({
 
   return (
     <ProductsContext.Provider
-      value={{ products, loading, refetchProducts: fetchProducts }}
+      value={{ products, loading, setLoading, refetchProducts: fetchProducts }}
     >
       {children}
     </ProductsContext.Provider>
