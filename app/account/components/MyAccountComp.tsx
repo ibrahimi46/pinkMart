@@ -124,11 +124,11 @@ const AccDetailItems = ({ field1, field2, type }: AccDetailItems) => {
       setIsEditing(false);
       return;
     }
-    
+
     if (type === "fullName" && setLoading) {
       setLoading(true);
     }
-    
+
     try {
       const res = await fetch("/api/users/me", {
         method: "PATCH",
