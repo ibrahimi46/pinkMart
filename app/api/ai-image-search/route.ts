@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
-const PYTHON_AI_SERVICE_URL = "http://127.0.0.1:5001/get-vector";
+const PYTHON_AI_SERVICE_URL = "https://pinkmart-ai-image-search.onrender.com/get-vector";
 
 export async function POST(req: NextRequest) {
   try {
