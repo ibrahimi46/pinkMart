@@ -15,6 +15,7 @@ import { ProductProvider } from "./context/ProductsContext";
 import { AdminProvider } from "./context/AdminContext";
 import { CartContextProvider } from "./context/CartContext";
 import { UserAccountContextProvider } from "./context/UserAccountContext";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -75,6 +76,7 @@ export default function RootLayout({
             </CartContextProvider>
           </AuthProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
