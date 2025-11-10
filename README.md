@@ -25,6 +25,13 @@ A full-featured e-commerce grocery store built with Next.js, TypeScript, Tailwin
   - Search functionality with real-time filtering
   - Advanced filters (price range, stock availability)
   - Product cards with images, prices, and stock information
+ 
+#### 🖼️ AI Image Search
+
+- **Visual Search**: Upload an image to find visually similar products instantly
+- **CNN-Powered**: Uses a MobileNetV2-based feature extractor to compare product images
+- **Fast & Accurate**: Returns top 10 similar products based on visual similarity
+- **Seamless Integration**: Works alongside category filters and search functionality
 - **Category-Based Sections**:
   - Dynamic category sections on homepage
   - Top 35 best-selling products based on purchase count
