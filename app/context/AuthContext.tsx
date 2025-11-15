@@ -9,6 +9,18 @@ import { User, UserDetails } from "@/types";
 import { jwtDecode } from "jwt-decode";
 import { useSession } from "next-auth/react";
 
+const isTokenExpired = (token: string): boolean => {
+  try {
+    const decoded = jwtDecode<{ exp?: number }>(token);
+    if (!decoded.exp) return true;
+
+    const currentTime = Date.now() / 1000;
+    return decoded.exp < currentTime;
+  } catch (err) {
+    return true;
+  }
+};
+
 interface AuthContextType {
   user: User | null;
   userDetails: UserDetails | null;
@@ -39,11 +51,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const userToken = localStorage.getItem("token");
     if (userToken) {
+      // Check if token is expired before using it
+      if (isTokenExpired(userToken)) {
+        // Token expired, clear it from localStorage
+        localStorage.removeItem("token");
+        setToken("");
+        return;
+      }
       setToken(userToken);
       return;
     }
     if (session?.user?.customToken) {
-      setToken(session?.user?.customToken);
+      if (isTokenExpired(session.user.customToken)) {
+        return;
+      }
+      setToken(session.user.customToken);
     }
   }, [session]);
 
@@ -71,21 +93,59 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // User Functions
   const getUser = useCallback(() => {
     try {
+      // Check if token is expired before decoding
+      if (isTokenExpired(token)) {
+        // Token expired, clear everything
+        localStorage.removeItem("token");
+        setToken("");
+        setUser(null);
+        setUserDetails(null);
+        setUserPfp("");
+        return;
+      }
       const decoded = jwtDecode<User>(token);
       setUser(decoded);
     } catch (err) {
       console.error("Invalid token", err);
       setUser(null);
+      // Clear invalid token
+      localStorage.removeItem("token");
+      setToken("");
     }
   }, [token]);
 
   const getUserDetails = useCallback(async () => {
     try {
+      // Check if token is expired before making API call
+      if (!token || isTokenExpired(token)) {
+        // Token expired, clear everything
+        localStorage.removeItem("token");
+        setToken("");
+        setUser(null);
+        setUserDetails(null);
+        setUserPfp("");
+        return;
+      }
+
       const res = await fetch("/api/users/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        setToken("");
+        setUser(null);
+        setUserDetails(null);
+        setUserPfp("");
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch user details");
+      }
+
       const data = await res.json();
       setUserDetails(data.user);
     } catch (err) {
@@ -97,11 +157,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       if (!token) return;
 
+      if (isTokenExpired(token)) {
+        localStorage.removeItem("token");
+        setToken("");
+        setUser(null);
+        setUserDetails(null);
+        setUserPfp("");
+        return;
+      }
+
       const res = await fetch("/api/users/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        setToken("");
+        setUser(null);
+        setUserDetails(null);
+        setUserPfp("");
+        return;
+      }
+
+      if (!res.ok) {
+        return;
+      }
 
       const data = await res.json();
       if (data?.user?.image) {
